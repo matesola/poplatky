@@ -93,3 +93,11 @@ npm run e2e      # regresní testy stránky (Playwright + Chromium)
 ```
 
 Testy pokrývají nulový příjem, hranici, překročení stropu, zákonná osvobození (příjmový limit před a po 1. 10. 2026, děti, slepota či hluchota s konkrétními příklady oprávněných a neoprávněných osob, bez zařízení, ruční čistý příjem), individuální výpočet místo příjmu domácnosti, nulové náklady rozpočtového modelu, shodu rozdělení se zveřejněnými kvantily a průměrem, bilanci simulátoru, kalibraci a valorizaci v projekci.
+
+## Ukazatel zátěže (evropské srovnání)
+
+Zátěž = roční poplatek domácnosti v eurech (stav 2026) / medián ekvivalizovaného čistého ročního příjmu (Eurostat, ilc_di03, EU-SILC 2024, příjmy roku 2023). Je to orientační ukazatel: medián na osobu není příjem domácnosti a roky se liší. Počítá se jen pro 13 zemí s paušálním poplatkem za domácnost a s údajem v EU-SILC (CH, DE, AT, SI, HR, CZ, IE, PL, IT, GR, PT, RS, AL). Nesrovnatelné jsou: daně na osobu podle příjmu (FI, SE, IS), daň při nákupu (TR), rozpočtové financování (26 zemí, přímá platba 0 €, veřejné výdaje nenulové), Spojené království (v EU-SILC po roce 2019 chybí) a Bosna a Hercegovina (v EU-SILC chybí). Česko: 101 € / 15 133 € = 0,67 %.
+
+## Pravidla zahrnutí zemí
+
+45 států: 27 států EU, Island, Norsko, Lichtenštejnsko, Švýcarsko, Spojené království, Albánie, Bosna a Hercegovina, Černá Hora, Severní Makedonie, Srbsko, Kosovo, Turecko, Ukrajina, Moldavsko, Bělorusko, Andorra, Monako, San Marino. Nezahrnuty: Rusko, Vatikán, Gruzie, Arménie, Ázerbájdžán, Kazachstán. Belgie je jeden stát. Jiné přehledy s 46 zeměmi zahrnují některý z vynechaných států nebo počítají belgická společenství zvlášť.

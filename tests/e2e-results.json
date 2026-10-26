@@ -1,5 +1,5 @@
 {
- "date": "2026-10-26T12:04:26.357Z",
+ "date": "2026-10-26T16:58:54.970Z",
  "browser": "Chromium (Playwright 1.63.0)",
  "results": [
   {
@@ -275,6 +275,70 @@
    "ok": true
   },
   {
+   "name": "ux2: pořadí kapitol podle nové informační hierarchie",
+   "ok": true
+  },
+  {
+   "name": "ux2: všechny dříve veřejné kotvy (main 865685d) dál existují",
+   "ok": true
+  },
+  {
+   "name": "ux2: blok Aktuální Česko (bez JS i s JS): poplatek, stav návrhu, datum, odkaz",
+   "ok": true
+  },
+  {
+   "name": "ux2: stav legislativy ve 4 krocích, aktuální je projednávání",
+   "ok": true
+  },
+  {
+   "name": "[ux2 desktop] rychlá odpověď = plný výsledek kalkulačky",
+   "ok": true
+  },
+  {
+   "name": "[ux2 mobil] rychlá odpověď = plný výsledek kalkulačky",
+   "ok": true
+  },
+  {
+   "name": "ux2: sdílení bez příjmů: odkaz neobsahuje příjmy, po otevření sedí domácnost a parametry",
+   "ok": true
+  },
+  {
+   "name": "ux2: sdílení s příjmy (souhlas): stejný výsledek C po otevření odkazu",
+   "ok": true
+  },
+  {
+   "name": "ux2: neplatný odkaz nerozbije stránku",
+   "ok": true
+  },
+  {
+   "name": "ux2: odkaz simulátoru nese jen parametry",
+   "ok": true
+  },
+  {
+   "name": "ux2: karta výsledku se vygeneruje jako PNG 1200×630",
+   "ok": true
+  },
+  {
+   "name": "[ux2 desktop] porovnání zemí: výběr, odkaz, čitelnost",
+   "ok": true
+  },
+  {
+   "name": "[ux2 mobil] porovnání zemí: výběr, odkaz, čitelnost",
+   "ok": true
+  },
+  {
+   "name": "ux2: mapa, pohled Zátěž: jen srovnatelné země, poznámka a zdroj",
+   "ok": true
+  },
+  {
+   "name": "ux2: detail rozpočtové země: přímá platba vs. veřejné výdaje, údaje a omezení",
+   "ok": true
+  },
+  {
+   "name": "ux2: klávesnice: hlavní cesty mají viditelný fokus",
+   "ok": true
+  },
+  {
    "name": "[mobil 320px] bez vodorovného přetečení, ovladatelné prvky",
    "ok": true
   },
@@ -296,6 +360,14 @@
   },
   {
    "name": "[mobil 430px] bez vodorovného přetečení, ovladatelné prvky",
+   "ok": true
+  },
+  {
+   "name": "[mobil 768px] bez vodorovného přetečení, ovladatelné prvky",
+   "ok": true
+  },
+  {
+   "name": "[mobil 1440px] bez vodorovného přetečení, ovladatelné prvky",
    "ok": true
   }
  ]

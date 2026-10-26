@@ -239,3 +239,25 @@
       .verdict .note { font: 600 11px "IBM Plex Mono", monospace; opacity: .85; margin-top: 6px; }
       .chart .ax-title { font: 600 10.5px "IBM Plex Mono", monospace; fill: var(--ink-2); text-transform: uppercase; }
       @media (max-width: 640px) { .scrub { top: calc(46px + env(safe-area-inset-top)); } }
+
+      /* Rychlá odpověď kalkulačky (jen na užších displejích, kde je plný výsledek pod formulářem) */
+      .hh-quick { display: none; }
+      @media (max-width: 900px) {
+        .hh-quick { display: block; margin: 16px 0 6px; border: var(--bw) solid var(--line); background: var(--card); box-shadow: var(--sh-s); padding: 12px 14px; }
+        .hh-quick .q-h { font: 700 12px "IBM Plex Mono", monospace; text-transform: uppercase; margin-bottom: 6px; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+        .hh-quick .q-h .small { font-weight: 500; text-transform: none; color: var(--ink-3); }
+        .hh-quick .q-row { display: grid; grid-template-columns: 1fr auto; gap: 0 10px; padding: 7px 0; border-top: 1px solid var(--line-soft); }
+        .hh-quick .q-row span { font-size: 14px; }
+        .hh-quick .q-row b { font-family: "IBM Plex Mono", monospace; font-size: 16px; text-align: right; white-space: nowrap; }
+        .hh-quick .q-row small { grid-column: 1 / -1; font-size: 12.5px; color: var(--ink-3); }
+        .hh-quick .q-more { display: inline-block; margin-top: 8px; font: 700 12px "IBM Plex Mono", monospace; text-transform: uppercase; color: var(--ink); padding: 6px 0; }
+      }
+
+      /* Sdílení */
+      .share-box { margin-top: 20px; border: var(--bw) solid var(--line); background: var(--card); padding: 14px 16px; }
+      .share-box h4 { margin: 0 0 6px; font: 700 13px "IBM Plex Mono", monospace; text-transform: uppercase; }
+      .share-box .small { margin: 6px 0; }
+      .share-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 10px; }
+      .share-row input[type=text] { flex: 1 1 260px; min-width: 0; font: 500 13px "IBM Plex Mono", monospace; padding: 10px; border: 2px solid var(--line); background: var(--paper); color: var(--ink); text-overflow: ellipsis; }
+      .share-row .btn { min-height: 44px; }
+      .sim-share { margin-top: 14px; }

@@ -88,11 +88,6 @@
         .stat:nth-child(3) { border-left: 0; }
         .stat:nth-child(n+3) { border-top: var(--bw) solid var(--line); }
       }
-      .live-banner { margin: 28px 0 0; background: var(--hi); color: var(--on-hi); border: var(--bw) solid var(--line); box-shadow: var(--sh); padding: 18px 22px; display: grid; grid-template-columns: 1fr 1.3fr; gap: 6px 26px; align-items: start; }
-      .live-banner .k { font: 700 12px "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .05em; display: inline-block; background: #0b0b0b; color: var(--hi); padding: 2px 8px; margin-bottom: 8px; }
-      .live-banner .t { font-weight: 900; font-stretch: 112%; font-size: clamp(20px, 2.6vw, 28px); line-height: 1.1; text-transform: uppercase; }
-      .live-banner .d { font-size: 15px; }
-      @media (max-width: 760px) { .live-banner { grid-template-columns: 1fr; } }
 
       /* nav */
       nav.toc { position: sticky; top: 0; z-index: 40; margin-top: 44px; background: var(--paper); border-top: var(--bw) solid var(--line); border-bottom: var(--bw) solid var(--line); }
@@ -469,11 +464,77 @@
         .avg-line span { top: auto; bottom: 100%; white-space: normal; width: max-content; max-width: 44vw; font-size: 10px; }
       }
       .hero .hero-sub { font-weight: 800; font-stretch: 110%; font-size: clamp(22px, 3.2vw, 36px); line-height: 1.15; margin: 18px 0 0; letter-spacing: -.01em; }
-      .hero-go { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0 0; }
-      .hero-go a { font: 700 13px "IBM Plex Mono", monospace; text-transform: uppercase; color: var(--ink); text-decoration: none; border: var(--bw) solid var(--line); background: var(--card); padding: 10px 14px; min-height: 44px; display: inline-flex; align-items: center; box-shadow: var(--sh-s); }
-      .hero-go a:hover, .hero-go a:focus-visible { background: var(--hi); color: var(--on-hi); }
-      .hero-go a.go-calc { background: var(--accent); color: #0b0b0b; }
-      @media (max-width: 480px) { .hero-go { display: grid; grid-template-columns: 1fr 1fr; } .hero-go a { justify-content: center; text-align: center; } }
+      /* Aktuální Česko a dvě hlavní cesty (úvod) */
+      .now-cz { margin: 30px 0 0; border: var(--bw) solid var(--line); background: var(--card); box-shadow: var(--sh); padding: 18px 20px 16px; }
+      .now-h { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; }
+      .now-h h2 { margin: 0; font-weight: 900; font-stretch: 112%; font-size: 22px; text-transform: uppercase; letter-spacing: -.01em; }
+      .now-date { font: 600 12px "IBM Plex Mono", monospace; color: var(--ink-3); text-transform: uppercase; }
+      .now-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 28px; margin: 14px 0 0; }
+      .now-i p { margin: 6px 0 0; font-size: 16px; line-height: 1.5; }
+      .now-more { display: inline-block; margin: 14px 0 0; font: 700 13px "IBM Plex Mono", monospace; text-transform: uppercase; color: var(--ink); text-underline-offset: 3px; }
+      .now-more::after { content: " \2193"; }
+      .paths { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 22px 0 0; }
+      .path { display: grid; gap: 6px; align-content: start; padding: 18px 20px; border: var(--bw) solid var(--line); background: var(--card); color: var(--ink); text-decoration: none; box-shadow: var(--sh); min-height: 44px; }
+      .path-me { background: var(--accent); color: #0b0b0b; }
+      .path-k { font: 700 12px "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .04em; }
+      .path-t { font-weight: 900; font-stretch: 112%; font-size: clamp(24px, 3vw, 34px); line-height: 1.05; letter-spacing: -.02em; }
+      .path-d { font-size: 15.5px; line-height: 1.45; }
+      .path:hover, .path:focus-visible { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--ink); }
+      .paths-more { display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 14px 0 0; font: 600 13px "IBM Plex Mono", monospace; text-transform: uppercase; }
+      .paths-more a { color: var(--ink); text-underline-offset: 3px; padding: 6px 0; }
+      @media (max-width: 700px) { .now-grid, .paths { grid-template-columns: 1fr; } }
+      @media (prefers-reduced-motion: reduce) { .path:hover, .path:focus-visible { transform: none; } }
+      /* Stav legislativy ve čtyřech krocích */
+      .legis { margin: 8px 0 28px; border: var(--bw) solid var(--line); background: var(--card); box-shadow: var(--sh); padding: 18px 20px; }
+      .legis h3 { margin: 0; font-weight: 900; font-stretch: 112%; font-size: 22px; text-transform: uppercase; }
+      .legis-steps { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); border: var(--bw) solid var(--line); }
+      .legis-steps li { display: grid; gap: 6px; align-content: start; padding: 12px 14px; border-left: var(--bw) solid var(--line); font-size: 14.5px; line-height: 1.4; }
+      .legis-steps li:first-child { border-left: 0; }
+      .legis-steps b { font-size: 15.5px; }
+      .legis-k { font: 700 11px "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .04em; }
+      .legis-k::before { display: inline-block; width: 1.4em; font-weight: 700; }
+      .st-done .legis-k::before { content: "\2713"; }
+      .st-now { background: var(--hi); color: var(--on-hi); }
+      .st-now .legis-k::before { content: "\25CF"; }
+      .st-todo { color: var(--ink-3); }
+      .st-todo .legis-k::before { content: "\25CB"; }
+      .legis .src { margin: 12px 0 0; }
+      @media (max-width: 900px) { .legis-steps { grid-template-columns: 1fr 1fr; } .legis-steps li:nth-child(3) { border-left: 0; } .legis-steps li:nth-child(n+3) { border-top: var(--bw) solid var(--line); } }
+      @media (max-width: 520px) { .legis-steps { grid-template-columns: 1fr; } .legis-steps li { border-left: 0; } .legis-steps li + li { border-top: var(--bw) solid var(--line); } }
+      /* Porovnání zemí, údaje o zemi, pravidla zahrnutí */
+      .cmp-panel { border: var(--bw) solid var(--line); background: var(--card); box-shadow: var(--sh); padding: 16px 18px; margin: 0 0 18px; }
+      .cmp-panel h3 { margin: 0; font-weight: 900; font-stretch: 112%; font-size: 22px; text-transform: uppercase; }
+      .cmp-pick { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 12px 0; }
+      .cmp-pick label { display: grid; gap: 4px; }
+      .cmp-pick select { width: 100%; min-height: 44px; font: 600 15px "Archivo", sans-serif; border: 2px solid var(--line); background: var(--paper); color: var(--ink); padding: 6px 8px; }
+      .ct { border: var(--bw) solid var(--line); }
+      .ct-row { display: grid; grid-template-columns: 200px repeat(var(--n), minmax(0, 1fr)); border-top: 1px solid var(--line-soft); }
+      .ct-row:first-child { border-top: 0; }
+      .ct-k { font: 700 11.5px "IBM Plex Mono", monospace; text-transform: uppercase; color: var(--ink-3); padding: 10px 12px; }
+      .ct-v { padding: 10px 12px; font-size: 14.5px; line-height: 1.4; border-left: 1px solid var(--line-soft); overflow-wrap: anywhere; }
+      .ct-head .ct-v { background: var(--paper-2); }
+      .ct-name { font: 900 17px "Archivo", sans-serif; font-stretch: 110%; background: none; border: 0; padding: 0; color: var(--ink); text-align: left; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; min-height: 24px; }
+      .ct-c { display: none; }
+      .ct .na { color: var(--ink-3); }
+      @media (max-width: 760px) {
+        .cmp-pick { grid-template-columns: 1fr 1fr; }
+        .ct-row.ct-head { display: none; }
+        .ct-row { display: block; padding: 8px 12px 10px; }
+        .ct-k { padding: 0 0 4px; }
+        .ct-v { border-left: 0; padding: 3px 0; display: grid; grid-template-columns: minmax(90px, 38%) 1fr; gap: 8px; }
+        .ct-c { display: block; font-weight: 700; }
+      }
+      .incl { margin: 0 0 18px; border: var(--bw) solid var(--line); background: var(--card); padding: 0 16px; }
+      .incl summary { cursor: pointer; font: 700 13px "IBM Plex Mono", monospace; text-transform: uppercase; padding: 12px 0; min-height: 24px; }
+      .incl p { margin: 0 0 12px; font-size: 15px; }
+      .trust { border: var(--bw) solid var(--line); padding: 12px 14px; margin: 14px 0 0; }
+      .trust-k { font: 700 12px "IBM Plex Mono", monospace; text-transform: uppercase; margin-bottom: 6px; }
+      .trust dl { display: grid; grid-template-columns: 130px 1fr; gap: 6px 12px; margin: 0; font-size: 14px; }
+      .trust dt { font: 600 11.5px "IBM Plex Mono", monospace; text-transform: uppercase; color: var(--ink-3); padding-top: 2px; }
+      .trust dd { margin: 0; overflow-wrap: anywhere; }
+      @media (max-width: 520px) { .trust dl { grid-template-columns: 1fr; gap: 2px; } .trust dd { margin-bottom: 6px; } }
+      .map-note { margin: 10px 0 0; max-width: 900px; }
+      .stat-src { font: 600 11px "IBM Plex Mono", monospace; text-transform: uppercase; color: var(--ink); white-space: nowrap; display: inline-block; padding: 2px 0; }
     </style>
   </head>
   <body>
@@ -481,54 +542,56 @@
       <div class="wrap">
         <div class="hero-meta">
           <span>Přehled</span>
-          <span>45 zemí Evropy</span>
-          <span>Stav k <b>24. 10. 2026</b></span>
+          <span><span data-n-countries>45</span> zemí Evropy</span>
+          <span>Evropská data k <b>24. 10. 2026</b></span>
           <span>Zdroj u každého údaje</span>
         </div>
         <h1>Kdo <span class="hl">platí?</span></h1>
         <p class="hero-sub">Jak financujeme média veřejné služby.</p>
-        <p class="lede">Od televizních poplatků po státní rozpočet. Prozkoumejte 45 evropských zemí, spočítejte si české alternativy a zjistěte, co jednotlivé modely znamenají pro nezávislost médií.</p>
-        <nav class="hero-go" aria-label="Kam dál">
-          <a href="#mapa">Evropské srovnání</a>
-          <a href="#cesko">Český kontext</a>
-          <a href="#kalkulacka" class="go-calc">Kalkulačka</a>
-          <a href="#zdroje">Metodika a zdroje</a>
+        <p class="lede">Od televizních poplatků po státní rozpočet. Prozkoumejte <span data-n-countries>45</span> evropských zemí, spočítejte si české alternativy a zjistěte, co jednotlivé modely znamenají pro nezávislost médií.</p>
+        <section class="now-cz" aria-labelledby="nowTitle">
+          <div class="now-h"><h2 id="nowTitle">Aktuální Česko</h2><span class="now-date">ověřeno k <time datetime="2026-10-26" data-cfg="legalDateLabel">26. 10. 2026</time></span></div>
+          <div class="now-grid">
+            <div class="now-i">
+              <span class="tag fakt">Platná legislativa</span>
+              <p><b><span data-fee-annual>2&nbsp;460</span> Kč ročně</b> za domácnost: 150 Kč televize a 55 Kč rozhlas měsíčně (zákon č. 348/2005 Sb.). Platí se v plné výši.</p>
+            </div>
+            <div class="now-i">
+              <span class="tag navrh">Projednávaný návrh</span>
+              <p><b>Zrušení poplatků</b> a financování ČT a ČRo ze státního rozpočtu (sněmovní tisk 231). Prošel 1. čtením 24. 10. 2026, teď ho projednává výbor. Schválený není.</p>
+            </div>
+          </div>
+          <a class="now-more" href="#legislativa">Stav legislativy a chronologie</a>
+        </section>
+
+        <nav class="paths" aria-label="Hlavní cesty">
+          <a class="path path-me" href="#kalkulacka"><span class="path-k">Pro vaši domácnost</span><span class="path-t">Kolik bych platil já?</span><span class="path-d">Dnešní poplatek, financování z rozpočtu a odvod z příjmu. Stačí zadat příjmy.</span></a>
+          <a class="path path-eu" href="#mapa"><span class="path-k"><span data-n-countries>45</span> zemí</span><span class="path-t">Jak platí Evropa?</span><span class="path-d">Mapa modelů financování, částky a porovnání zemí.</span></a>
         </nav>
+        <p class="paths-more"><a href="#cesko">Česko podrobně</a><a href="#pojistky">Nezávislost médií</a><a href="#zdroje">Metodika a zdroje</a></p>
 
         <div class="stat-strip">
-          <div class="stat"><div class="num"><span>103</span> <em>let</em></div><div class="lbl">od zahájení pravidelného rozhlasového vysílání v Československu (Radiojournal, 18. 5. 1923)</div></div>
-          <div class="stat"><div class="num">€<span>363</span></div><div class="lbl">nejvyšší poplatek v Evropě: Švýcarsko, 335 CHF ročně za domácnost</div></div>
-          <div class="stat"><div class="num"><span>17</span></div><div class="lbl">zemí z přehledu od roku 1999 zrušilo poplatek nebo jej převedlo na daň či rozpočet; žádná nezavedla nový přístrojový</div></div>
-          <div class="stat"><div class="num"><span>2&nbsp;633</span></div><div class="lbl">hlasů dělilo zachování a zrušení poplatku ve slovinském referendu 11. 10. 2026 (neoficiálně, včetně hlasů ze zahraničí; úřední potvrzení do 30. 10.)</div></div>
+          <div class="stat"><div class="num"><span>103</span> <em>let</em></div><div class="lbl">od zahájení pravidelného rozhlasového vysílání v Československu (Radiojournal, 18. 5. 1923) <a class="stat-src" href="#cesko">historie poplatku</a></div></div>
+          <div class="stat"><div class="num">€<span>363</span></div><div class="lbl">nejvyšší poplatek v Evropě: Švýcarsko, 335 CHF ročně za domácnost <a class="stat-src" href="https://merlin.obs.coe.int/article/10525" target="_blank" rel="noopener">zdroj</a></div></div>
+          <div class="stat"><div class="num"><span>17</span></div><div class="lbl">zemí z přehledu od roku 1999 zrušilo poplatek nebo jej převedlo na daň či rozpočet; žádná nezavedla nový přístrojový <a class="stat-src" href="#osa">časová osa</a></div></div>
+          <div class="stat"><div class="num"><span>2&nbsp;633</span></div><div class="lbl">hlasů dělilo zachování a zrušení poplatku ve slovinském referendu 11. 10. 2026 (neoficiálně, včetně hlasů ze zahraničí; úřední potvrzení do 30. 10.) <a class="stat-src" href="https://www.rtvslo.si/slovenija/referendumi-2026/po-prestetih-glasovnicah-iz-tujine-se-izidi-referendumov-niso-spremenili/797428" target="_blank" rel="noopener">RTV SLO</a></div></div>
         </div>
 
-        <div class="live-banner">
-          
-          <div>
-            <div class="k">Česko · 24. 10. 2026</div>
-            <div class="t">Zrušení poplatků prošlo prvním čtením</div>
-          </div>
-          <div class="d">Vládní návrh (sněmovní tisk 231) prošel prvním čtením 24. 10. 2026 ve 4:36 a jde do Výboru pro média a kulturu. Poplatky se dál platí v plné výši. Podrobnosti v kapitole 03.</div>
-        </div>
-        <a class="cz-cta" href="#kalkulacka">
-          <span class="cz-cta-k">Česko · kalkulačka</span>
-          <span class="cz-cta-t">Kolik byste platili při jiném systému?</span>
-          <span class="cz-cta-d">Porovnejte současné poplatky, financování ze státního rozpočtu a odvod podle příjmu.</span>
-          <span class="cz-cta-b">Spočítat rozdíl</span>
-        </a>
       </div>
     </header>
 
     <nav class="toc" aria-label="Kapitoly">
       <div class="wrap bar"><div class="links">
-        <a href="#mapa">01 Mapa</a>
-        <a href="#zebricek">02 Částky</a>
-        <a href="#cesko">03 Česko</a>
-        <a href="#simulace">04 Jak platit</a>
-        <a href="#osa">05 Časová osa</a>
-        <a href="#hlasy">06 Referenda a soudy</a>
-        <a href="#kontext">07 Na obyvatele</a>
-        <a href="#zeme">08 Země</a>
+        <a href="#simulace">01 Kalkulačka</a>
+        <a href="#cesko">02 Česko</a>
+        <a href="#mapa">03 Mapa</a>
+        <a href="#zebricek">04 Částky</a>
+        <a href="#zeme">05 Země</a>
+        <a href="#kontext">06 Na obyvatele</a>
+        <a href="#pojistky">07 Nezávislost</a>
+        <a href="#osa">08 Časová osa</a>
+        <a href="#hlasy">09 Referenda a soudy</a>
+        <a href="#cele-cesko">10 Modelování</a>
         <a href="#zdroje">Zdroje</a>
       </div>
         <button class="theme-btn" id="themeBtn" type="button" aria-label="Přepnout světlý a tmavý režim" title="Světlý / tmavý režim"></button>
@@ -537,84 +600,142 @@
     </nav>
 
     <main>
-      <!-- ================= KAPITOLA 1 · MAPA ================= -->
-      <section class="ch" id="mapa">
+      <section class="ch lab" id="simulace" aria-labelledby="labTitle">
         <div class="wrap">
-          <div class="ch-head reveal">
+          <div class="ch-head">
             <div class="ch-num">01</div>
             <div>
-              <h2>Šest modelů financování</h2>
-              <p class="sub">Platba je navázaná na domácnost, na přístroj, na účet za elektřinu, na daň z příjmu nebo na nákup přijímače. Ve 26 zemích ze 45 samostatná platba není a vysílání financuje rozpočet. Najeďte nebo ťukněte na zemi pro detail.</p>
+              <h2 id="labTitle">Kolik bych platil já?</h2>
+              <p class="sub">Zadejte dospělé v domácnosti a jejich příjmy. Uvidíte, kolik byste přímo platili dnes, při financování ze státního rozpočtu a při účelovém odvodu z příjmu. Celostátní dopad odvodu je v kapitole 10.</p>
             </div>
           </div>
 
-          <div class="map-tools">
-            <div class="seg" role="group" aria-label="Režim mapy">
-              <button id="mapModeModel" aria-pressed="true">Model financování</button>
-              <button id="mapModeAmount" aria-pressed="false">Kolik platí domácnost (€/rok)</button>
-            </div>
-            <span class="small">Najeďte nebo ťukněte na zemi. Klik na legendu zvýrazní model.</span>
+          <div class="tags-legend" aria-label="Typy údajů v této kapitole">
+            <span class="tag fakt">Ověřený fakt</span><span class="tl-txt">zákon, oficiální statistika, dohledatelný zdroj</span>
+            <span class="tag navrh">Legislativní návrh</span><span class="tl-txt">projednávaný text, nemusí projít</span>
+            <span class="tag model">Modelový výpočet</span><span class="tl-txt">výsledek ze zveřejněných předpokladů</span>
+            <span class="tag autor">Autorský návrh</span><span class="tl-txt">možné řešení k diskusi, není zákon ani vládní návrh</span>
           </div>
-          <div class="map-shell reveal">
-            <div class="map-box" id="mapBox">
-              <svg id="mapSvg" role="group" aria-label="Mapa Evropy: modely financování veřejnoprávních médií ve 45 zemích"></svg>
-              <div class="map-tip" id="mapTip"></div>
-              <div class="map-hint">šedá = mimo přehled</div>
-            </div>
-            <aside class="card info" id="mapInfo" aria-live="polite"></aside>
-          </div>
-          <div class="legend" id="mapLegend"></div>
 
-          <div class="prose reveal" style="margin-top:34px">
-            <p><b>Elektřina.</b> Poplatek na účtu za elektřinu je běžný v jižní Evropě a na Balkáně (Itálie, Řecko, Portugalsko, Srbsko, Bosna, Albánie). Zaváděl se tam, kde se klasická licence ve velkém neplatila. Itálie po přesunu v roce 2016 snížila úniky z odhadovaných 30 % na jednotky procent.</p>
-            <p><b>Daň.</b> Finsko (2013), Švédsko (2019) a Island (2009) poplatek nahradily účelovou daní z příjmu, která se vybírá odděleně a jde jen vysílateli. Dánsko a Norsko poplatek zrušily a financují vysílání z obecných daní bez samostatné položky.</p>
-            <p><b>Přístroj.</b> Od roku 1999 žádná země v přehledu nezavedla nový poplatek za přístroj. Turecko vybírá <i>bandrol</i>: daň 16 % z ceny televize nebo rádia, placenou jednou při nákupu.</p>
+          <!-- tři scénáře v kostce -->
+          <div id="pro-me"></div>
+
+          <div class="scen3" role="list">
+            <article class="scen" role="listitem">
+              <div class="scen-k"><span class="scen-l">A</span><span class="tag fakt">Ověřený fakt</span></div>
+              <h3>Dnešní poplatek</h3>
+              <p class="scen-big">205 Kč <small>měsíčně přímo za domácnost; výběr 2026 plán 9,21 mld. Kč</small></p>
+              <p>Platí se jednou za domácnost bez ohledu na příjem a počet lidí. Peníze jdou přímo ČT a ČRo, mimo státní rozpočet.</p>
+              <p class="src">Zákon č. 348/2005 Sb., znění účinné od <span data-cfg="effectiveLabel">1. 5. 2025</span>; legislativa ověřena k <time datetime="2026-10-26" data-cfg="legalDateLabel">26. 10. 2026</time>.</p>
+            </article>
+            <article class="scen" role="listitem">
+              <div class="scen-k"><span class="scen-l">B</span><span class="tag navrh">Legislativní návrh</span></div>
+              <h3>Ze státního rozpočtu</h3>
+              <p class="scen-big">7,81 mld. Kč <small>ročně z veřejných rozpočtů; přímá platba domácnosti 0 Kč</small></p>
+              <p>Domácnost nic samostatně neplatí. Ministerstvo kultury posílá ČT a ČRo pevnou částku stanovenou zákonem. Náklad nese rozpočet, tedy všichni daňoví poplatníci.</p>
+              <p class="src">Sněmovní tisk 231 po 1. čtení. Není zákonem.</p>
+            </article>
+            <article class="scen" role="listitem">
+              <div class="scen-k"><span class="scen-l">C</span><span class="tag autor">Autorský návrh</span></div>
+              <h3>Účelový odvod z příjmu</h3>
+              <p class="scen-big">% z příjmu <small>přímo za každého dospělého nad hranicí, se stropem</small></p>
+              <p>Každý dospělý nad hranicí příjmu odvede malé procento, nejvýš do stropu. Vybírá Finanční správa, výnos jde zákonem jen médiím. Inspirace: Finsko a Švédsko.</p>
+              <p class="src">Analytický návrh tohoto webu. Parametry vyžadují fiskální kalibraci níže.</p>
+            </article>
           </div>
+
+          <!-- ============ 1. KALKULAČKA DOMÁCNOSTI ============ -->
+          <div class="lab-block" id="kalkulacka">
+            <div class="lab-h"><span class="lab-n">1</span><h3>Kolik platím dnes a kolik bych platil jinak?</h3></div>
+            <div class="hh-grid">
+              <form class="hh-in" id="hhForm" onsubmit="return false" aria-label="Složení a příjmy domácnosti">
+                <fieldset>
+                  <legend>Dospělí v domácnosti</legend>
+                  <div id="adultRows"></div>
+                  <div class="row-btns">
+                    <button type="button" class="btn ghost" id="addAdult">+ Přidat dospělého</button>
+                  </div>
+                </fieldset>
+                <div class="hh-quick" id="hhQuick" aria-live="polite"></div>
+                <details class="more" id="hhMore">
+                  <summary>Podrobnější zadání: děti, přesný čistý příjem, právní stav</summary>
+                  <div class="kids">
+                    <label>Děti do 6 let <span class="stepper"><button type="button" data-k="kids0_6" data-d="-1" aria-label="Méně dětí do 6 let">−</button><span id="kids0_6">0</span><button type="button" data-k="kids0_6" data-d="1" aria-label="Více dětí do 6 let">+</button></span></label>
+                    <label>Děti 6 až 15 let <span class="stepper"><button type="button" data-k="kids6_15" data-d="-1" aria-label="Méně dětí 6 až 15 let">−</button><span id="kids6_15">0</span><button type="button" data-k="kids6_15" data-d="1" aria-label="Více dětí 6 až 15 let">+</button></span></label>
+                    <label>Nezaopatřené děti 15 až 26 let <span class="stepper"><button type="button" data-k="kids15_26" data-d="-1" aria-label="Méně starších dětí">−</button><span id="kids15_26">0</span><button type="button" data-k="kids15_26" data-d="1" aria-label="Více starších dětí">+</button></span></label>
+                  </div>
+                  <label class="chk"><input type="checkbox" id="hhNoDev" /> Nemáme žádné zařízení schopné příjmu (ani mobil či počítač s internetem)</label>
+                  <label class="chk"><input type="checkbox" id="hhNetOn" /> Znám přesný čistý měsíční příjem domácnosti</label>
+                  <div class="net-ovr" id="netOvrBox" hidden><input type="number" id="hhNet" inputmode="numeric" min="0" step="100" aria-label="Čistý měsíční příjem domácnosti v Kč" /> <span class="small">Kč čistého měsíčně za celou domácnost</span></div>
+                  <div class="legal-date"><span class="small">Právní stav životního minima:</span>
+                    <div class="seg" role="group" aria-label="Datum právního stavu">
+                      <button type="button" data-date="2026-09-30" aria-pressed="false">do 30. 9. 2026</button>
+                      <button type="button" data-date="2026-10-26" aria-pressed="true">od 1. 10. 2026</button>
+                    </div>
+                  </div>
+                </details>
+                <p class="privacy">Výpočet běží jen ve vašem prohlížeči. Příjmy se nikam neodesílají ani neukládají.</p>
+              </form>
+
+              <div class="hh-out" id="hhOut" aria-live="polite"></div>
+            </div>
+            <div class="share-box" id="hhShare">
+              <h4>Sdílet výsledek</h4>
+              <p class="small">Odkaz otevře kalkulačku se stejnou domácností a stejnými parametry modelu. Přesný čistý příjem se nesdílí nikdy.</p>
+              <label class="chk"><input type="checkbox" id="shInc" /> Přidat do odkazu i hrubé příjmy, zaokrouhlené na 1 000 Kč. Bez zaškrtnutí odkaz nese jen složení domácnosti a příjemce uvidí výchozí příjmy.</label>
+              <div class="share-row">
+                <input type="text" id="shUrl" readonly aria-label="Odkaz ke sdílení" />
+                <button type="button" class="btn" id="shCopy">Kopírovat odkaz</button>
+                <button type="button" class="btn ghost" id="shNative" hidden>Sdílet</button>
+                <button type="button" class="btn ghost" id="shCard">Stáhnout kartu výsledku</button>
+              </div>
+              <p class="small" id="shMsg" aria-live="polite"></p>
+              <p class="small" id="shNote" hidden></p>
+            </div>
+          </div>
+
+          <!-- ============ 2. GRAFY A + B ============ -->
+          <div class="lab-block" id="kdoKolik">
+            <div class="lab-h"><span class="lab-n">2</span><h3>Kdo kolik zaplatí a kdo získá</h3></div>
+            <div class="scrub">
+              <label for="scrub">Hrubý měsíční příjem jednoho dospělého <b id="scrubVal"></b></label>
+              <input type="range" id="scrub" min="0" max="150000" step="1000" value="45000" />
+            </div>
+            <div class="charts2">
+              <figure class="fig">
+                <figcaption><b>A · Roční přímá platba podle příjmu</b> <span class="tag model">Modelový výpočet</span><br /><span class="small">Jednočlenná domácnost zaměstnance: dnešní poplatek (A) a hypotetický odvod (C). Rozpočtový model (B) nemá individuální platbu, proto v grafu není; jeho náklady nesou veřejné rozpočty. Dnešní poplatek u nízkých příjmů počítá s orientačním odhadem osvobození.</span></figcaption>
+                <div class="chart" id="chartA"></div>
+                <div class="readout" id="readA" aria-live="polite"></div>
+              </figure>
+              <figure class="fig">
+                <figcaption><b>B · Rozdíl přímých plateb domácnosti: odvod minus dnešní poplatek</b> <span class="tag model">Modelový výpočet</span><br /><span class="small">Každá čára srovnává celou domácnost s celou domácností (odvod všech dospělých proti jednomu poplatku za domácnost). Nad nulou domácnost zaplatí přímo víc, pod nulou méně.</span></figcaption>
+                <div class="chart" id="chartB"></div>
+                <div class="readout" id="readB" aria-live="polite"></div>
+              </figure>
+            </div>
+          </div>
+
         </div>
       </section>
 
-      <!-- ================= KAPITOLA 2 · ŽEBŘÍČEK ================= -->
-      <section class="ch" id="zebricek">
+      <section class="ch" id="cesko">
         <div class="wrap">
           <div class="ch-head reveal">
             <div class="ch-num">02</div>
             <div>
-              <h2>Kolik platí domácnost za rok</h2>
-              <p class="sub">Roční platba přepočtená na eura referenčními kurzy ECB k 23. 10. 2026. Ve Švédsku, Finsku a na Islandu se platí za osobu, dvoučlenná domácnost tedy platí až dvojnásobek stropu. Česko s 2 460 Kč (asi 101 €) je pod průměrem zbývajících poplatků, který EBU uvádí kolem 116 € ročně.</p>
-            </div>
-          </div>
-          <div class="chart-tools reveal">
-            <div class="seg" role="group" aria-label="Řazení žebříčku">
-              <button id="sortDesc" aria-pressed="true">Od nejdražšího</button>
-              <button id="sortAsc" aria-pressed="false">Od nejlevnějšího</button>
-              <button id="sortName" aria-pressed="false">Abecedně</button>
-            </div>
-            <div class="chips" id="modelFilter" role="group" aria-label="Filtr podle modelu"></div>
-          </div>
-          <div class="card hh off reveal" id="hhPanel">
-            <label class="switch"><input type="checkbox" id="hhOn" /> Přepočítat na moji domácnost</label>
-            <div class="ctl">
-              <label>Dospělých v domácnosti</label>
-              <div class="stepper"><button type="button" id="hhMinus" aria-label="Méně dospělých">−</button><span id="hhAdults">2</span><button type="button" id="hhPlus" aria-label="Více dospělých">+</button></div>
-            </div>
-            <div class="ctl">
-              <label for="hhIncome">Hrubý příjem na dospělého <b id="hhIncomeLbl">30 000 € / rok</b></label>
-              <input type="range" id="hhIncome" min="0" max="90000" step="1000" value="30000" />
-            </div>
-          </div>
-          <div id="barChart" role="list" aria-label="Žebříček ročních poplatků podle zemí"></div>
-          <p class="src" style="margin-top:14px">Kliknutí na řádek otevře detail země. Přepočty referenčními kurzy ECB k 23. 10. 2026: 1 € = 24,327 Kč · 0,8373 £ · 0,9227 CHF · 4,3945 zł · 11,131 SEK · 136,20 ISK. Srbský dinár, albánský lek a bosenskou marku ECB v denním seznamu neuvádí, u nich platí kurzy národních bank (marka je pevně navázaná, 1,956 za 1 €). Zdroj částek: zákony a oficiální stránky vysílatelů a výběrčích.</p>
-        </div>
-      </section>
-      <!-- ================= KAPITOLA 3 · ČESKO ================= -->
-      <section class="ch" id="cesko">
-        <div class="wrap">
-          <div class="ch-head reveal">
-            <div class="ch-num">03</div>
-            <div>
               <h2>Česko a sněmovní tisk 231</h2>
-              <p class="sub">Zatímco Evropa poplatky rušila, Česko je v květnu 2025 po sedmnácti letech zvýšilo a rozšířilo na mobily a firmy podle počtu zaměstnanců. O sedmnáct měsíců později tatáž Sněmovna, jen v jiném složení, jedná o jejich úplném zrušení. Obě novely vedle sebe:</p>
+              <p class="sub">Zatímco Evropa poplatky rušila, Česko je v květnu 2025 po sedmnácti letech zvýšilo a rozšířilo na mobily a firmy podle počtu zaměstnanců. O sedmnáct měsíců později tatáž Sněmovna, jen v jiném složení, jedná o jejich úplném zrušení.</p>
             </div>
+          </div>
+          <div class="legis reveal" id="legislativa" aria-labelledby="legTitle">
+            <div class="now-h"><h3 id="legTitle">Stav legislativy</h3><span class="now-date">ověřeno k <time datetime="2026-10-26" data-cfg="legalDateLabel">26. 10. 2026</time></span></div>
+            <ol class="legis-steps">
+              <li class="st-done"><span class="legis-k">Platná legislativa</span><b>Zákon č. 348/2005 Sb. ve znění zákona č. 119/2025 Sb.</b><span>150 Kč televize a 55 Kč rozhlas měsíčně, účinné od 1. 5. 2025.</span></li>
+              <li class="st-done"><span class="legis-k">Předložený návrh</span><b>Sněmovní tisk 231: zrušení poplatků, financování z rozpočtu</b><span>Vláda návrh schválila 15. 6. 2026.</span></li>
+              <li class="st-now"><span class="legis-k">Projednávání a hlasování</span><b>Po 1. čtení 24. 10. 2026, ve výboru pro média a kulturu</b><span>Čeká druhé a třetí čtení, Senát a podpis prezidenta.</span></li>
+              <li class="st-todo"><span class="legis-k">Schválená změna a účinnost</span><b>Zatím žádná</b><span>Datum účinnosti není stanovené. Do té doby se poplatky platí v plné výši.</span></li>
+            </ol>
+            <p class="src">Zdroje: <a href="https://www.mk.gov.cz/doc/cms_library/zakon-c-348_2005-sb-o-rozhlasovych-a-televiznich-poplatcich-1412.docx" target="_blank" rel="noopener">úplné znění zákona (MK)</a> · <a href="https://www.ceskenoviny.cz/zpravy/koalice-poslala-do-druheho-cteni-navrh-zrusit-poplatky-pro-ct-a-cro/2891827" target="_blank" rel="noopener">ČTK, 24. 10. 2026: první čtení</a> · <a href="https://www.mediar.cz/hrozi-vyssi-zavislost-ct-a-rozhlasu-na-statu-pripousti-samotny-klempiruv-navrh/" target="_blank" rel="noopener">Médiář: text návrhu a RIA</a>. Podrobná chronologie je níže.</p>
           </div>
 
           <div class="cz-grid">
@@ -734,198 +855,170 @@
           </div>
         </div>
       </section>
-      <!-- ================= KAPITOLA 04 · JAK BY MOHLO ČESKO PLATIT ================= -->
-      <section class="ch lab" id="simulace" aria-labelledby="labTitle">
+
+      <section class="ch" id="mapa">
         <div class="wrap">
-          <div class="ch-head">
+          <div class="ch-head reveal">
+            <div class="ch-num">03</div>
+            <div>
+              <h2>Šest modelů financování</h2>
+              <p class="sub">Platba je navázaná na domácnost, na přístroj, na účet za elektřinu, na daň z příjmu nebo na nákup přijímače. Ve 26 zemích ze 45 samostatná platba není a vysílání financuje rozpočet. Najeďte nebo ťukněte na zemi pro detail.</p>
+            </div>
+          </div>
+
+          <div class="map-tools">
+            <div class="seg" role="group" aria-label="Režim mapy">
+              <button id="mapModeModel" aria-pressed="true">Model financování</button>
+              <button id="mapModeAmount" aria-pressed="false">Kolik platí domácnost (€/rok)</button>
+              <button id="mapModeBurden" aria-pressed="false">Zátěž (% příjmu)</button>
+            </div>
+            <span class="small">Najeďte nebo ťukněte na zemi. Klik na legendu zvýrazní model.</span>
+          </div>
+          <div class="map-shell reveal">
+            <div class="map-box" id="mapBox">
+              <svg id="mapSvg" role="group" aria-label="Mapa Evropy: modely financování veřejnoprávních médií ve 45 zemích"></svg>
+              <div class="map-tip" id="mapTip"></div>
+              <div class="map-hint">šedá = mimo přehled</div>
+            </div>
+            <aside class="card info" id="mapInfo" aria-live="polite"></aside>
+          </div>
+          <div class="legend" id="mapLegend"></div>
+          <p class="src map-note" id="mapNote" hidden></p>
+
+          <div class="prose reveal" style="margin-top:34px">
+            <p><b>Elektřina.</b> Poplatek na účtu za elektřinu je běžný v jižní Evropě a na Balkáně (Itálie, Řecko, Portugalsko, Srbsko, Bosna, Albánie). Zaváděl se tam, kde se klasická licence ve velkém neplatila. Itálie po přesunu v roce 2016 snížila úniky z odhadovaných 30 % na jednotky procent.</p>
+            <p><b>Daň.</b> Finsko (2013), Švédsko (2019) a Island (2009) poplatek nahradily účelovou daní z příjmu, která se vybírá odděleně a jde jen vysílateli. Dánsko a Norsko poplatek zrušily a financují vysílání z obecných daní bez samostatné položky.</p>
+            <p><b>Přístroj.</b> Od roku 1999 žádná země v přehledu nezavedla nový poplatek za přístroj. Turecko vybírá <i>bandrol</i>: daň 16 % z ceny televize nebo rádia, placenou jednou při nákupu.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="ch" id="zebricek">
+        <div class="wrap">
+          <div class="ch-head reveal">
             <div class="ch-num">04</div>
             <div>
-              <h2 id="labTitle">Co kdybychom platili jinak?</h2>
-              <p class="sub">Tři způsoby, jak financovat Českou televizi a Český rozhlas: dnešní poplatek, vládní rozpočtový model a analytický návrh účelového odvodu z příjmu. Zadejte svou domácnost, pak se podívejte, kolik by který model vybral a jak chrání nezávislost.</p>
+              <h2>Kolik platí domácnost za rok</h2>
+              <p class="sub">Roční platba přepočtená na eura referenčními kurzy ECB k 23. 10. 2026. Ve Švédsku, Finsku a na Islandu se platí za osobu, dvoučlenná domácnost tedy platí až dvojnásobek stropu. Česko s 2 460 Kč (asi 101 €) je pod průměrem zbývajících poplatků, který EBU uvádí kolem 116 € ročně.</p>
             </div>
           </div>
-
-          <div class="tags-legend" aria-label="Typy údajů v této kapitole">
-            <span class="tag fakt">Ověřený fakt</span><span class="tl-txt">zákon, oficiální statistika, dohledatelný zdroj</span>
-            <span class="tag navrh">Legislativní návrh</span><span class="tl-txt">projednávaný text, nemusí projít</span>
-            <span class="tag model">Modelový výpočet</span><span class="tl-txt">výsledek ze zveřejněných předpokladů</span>
-            <span class="tag autor">Autorský návrh</span><span class="tl-txt">možné řešení k diskusi, není zákon ani vládní návrh</span>
+          <div class="chart-tools reveal">
+            <div class="seg" role="group" aria-label="Řazení žebříčku">
+              <button id="sortDesc" aria-pressed="true">Od nejdražšího</button>
+              <button id="sortAsc" aria-pressed="false">Od nejlevnějšího</button>
+              <button id="sortName" aria-pressed="false">Abecedně</button>
+            </div>
+            <div class="chips" id="modelFilter" role="group" aria-label="Filtr podle modelu"></div>
           </div>
-
-          <!-- tři scénáře v kostce -->
-          <div class="level" id="pro-me">
-            <span class="level-k">Úroveň 1</span>
-            <h3 class="level-t">Co by změna znamenala pro mě?</h3>
-            <p class="level-d">Zadejte dospělé a jejich příjmy. Uvidíte přímou platbu ve třech modelech.</p>
-          </div>
-
-          <div class="scen3" role="list">
-            <article class="scen" role="listitem">
-              <div class="scen-k"><span class="scen-l">A</span><span class="tag fakt">Ověřený fakt</span></div>
-              <h3>Dnešní poplatek</h3>
-              <p class="scen-big">205 Kč <small>měsíčně přímo za domácnost; výběr 2026 plán 9,21 mld. Kč</small></p>
-              <p>Platí se jednou za domácnost bez ohledu na příjem a počet lidí. Peníze jdou přímo ČT a ČRo, mimo státní rozpočet.</p>
-              <p class="src">Zákon č. 348/2005 Sb., znění účinné od <span data-cfg="effectiveLabel">1. 5. 2025</span>; legislativa ověřena k <time datetime="2026-10-26" data-cfg="legalDateLabel">26. 10. 2026</time>.</p>
-            </article>
-            <article class="scen" role="listitem">
-              <div class="scen-k"><span class="scen-l">B</span><span class="tag navrh">Legislativní návrh</span></div>
-              <h3>Ze státního rozpočtu</h3>
-              <p class="scen-big">7,81 mld. Kč <small>ročně z veřejných rozpočtů; přímá platba domácnosti 0 Kč</small></p>
-              <p>Domácnost nic samostatně neplatí. Ministerstvo kultury posílá ČT a ČRo pevnou částku stanovenou zákonem. Náklad nese rozpočet, tedy všichni daňoví poplatníci.</p>
-              <p class="src">Sněmovní tisk 231 po 1. čtení. Není zákonem.</p>
-            </article>
-            <article class="scen" role="listitem">
-              <div class="scen-k"><span class="scen-l">C</span><span class="tag autor">Autorský návrh</span></div>
-              <h3>Účelový odvod z příjmu</h3>
-              <p class="scen-big">% z příjmu <small>přímo za každého dospělého nad hranicí, se stropem</small></p>
-              <p>Každý dospělý nad hranicí příjmu odvede malé procento, nejvýš do stropu. Vybírá Finanční správa, výnos jde zákonem jen médiím. Inspirace: Finsko a Švédsko.</p>
-              <p class="src">Analytický návrh tohoto webu. Parametry vyžadují fiskální kalibraci níže.</p>
-            </article>
-          </div>
-
-          <!-- ============ 1. KALKULAČKA DOMÁCNOSTI ============ -->
-          <div class="lab-block" id="kalkulacka">
-            <div class="lab-h"><span class="lab-n">1</span><h3>Kolik platím dnes a kolik bych platil jinak?</h3></div>
-            <div class="hh-grid">
-              <form class="hh-in" id="hhForm" onsubmit="return false" aria-label="Složení a příjmy domácnosti">
-                <fieldset>
-                  <legend>Dospělí v domácnosti</legend>
-                  <div id="adultRows"></div>
-                  <div class="row-btns">
-                    <button type="button" class="btn ghost" id="addAdult">+ Přidat dospělého</button>
-                  </div>
-                </fieldset>
-                <details class="more" id="hhMore">
-                  <summary>Děti, osvobození a upřesnění</summary>
-                  <div class="kids">
-                    <label>Děti do 6 let <span class="stepper"><button type="button" data-k="kids0_6" data-d="-1" aria-label="Méně dětí do 6 let">−</button><span id="kids0_6">0</span><button type="button" data-k="kids0_6" data-d="1" aria-label="Více dětí do 6 let">+</button></span></label>
-                    <label>Děti 6 až 15 let <span class="stepper"><button type="button" data-k="kids6_15" data-d="-1" aria-label="Méně dětí 6 až 15 let">−</button><span id="kids6_15">0</span><button type="button" data-k="kids6_15" data-d="1" aria-label="Více dětí 6 až 15 let">+</button></span></label>
-                    <label>Nezaopatřené děti 15 až 26 let <span class="stepper"><button type="button" data-k="kids15_26" data-d="-1" aria-label="Méně starších dětí">−</button><span id="kids15_26">0</span><button type="button" data-k="kids15_26" data-d="1" aria-label="Více starších dětí">+</button></span></label>
-                  </div>
-                  <label class="chk"><input type="checkbox" id="hhNoDev" /> Nemáme žádné zařízení schopné příjmu (ani mobil či počítač s internetem)</label>
-                  <label class="chk"><input type="checkbox" id="hhNetOn" /> Znám přesný čistý měsíční příjem domácnosti</label>
-                  <div class="net-ovr" id="netOvrBox" hidden><input type="number" id="hhNet" inputmode="numeric" min="0" step="100" aria-label="Čistý měsíční příjem domácnosti v Kč" /> <span class="small">Kč čistého měsíčně za celou domácnost</span></div>
-                  <div class="legal-date"><span class="small">Právní stav životního minima:</span>
-                    <div class="seg" role="group" aria-label="Datum právního stavu">
-                      <button type="button" data-date="2026-09-30" aria-pressed="false">do 30. 9. 2026</button>
-                      <button type="button" data-date="2026-10-26" aria-pressed="true">od 1. 10. 2026</button>
-                    </div>
-                  </div>
-                </details>
-                <p class="privacy">Výpočet běží jen ve vašem prohlížeči. Příjmy se nikam neodesílají ani neukládají.</p>
-              </form>
-
-              <div class="hh-out" id="hhOut" aria-live="polite"></div>
+          <div class="card hh off reveal" id="hhPanel">
+            <label class="switch"><input type="checkbox" id="hhOn" /> Přepočítat na moji domácnost</label>
+            <div class="ctl">
+              <label>Dospělých v domácnosti</label>
+              <div class="stepper"><button type="button" id="hhMinus" aria-label="Méně dospělých">−</button><span id="hhAdults">2</span><button type="button" id="hhPlus" aria-label="Více dospělých">+</button></div>
+            </div>
+            <div class="ctl">
+              <label for="hhIncome">Hrubý příjem na dospělého <b id="hhIncomeLbl">30 000 € / rok</b></label>
+              <input type="range" id="hhIncome" min="0" max="90000" step="1000" value="30000" />
             </div>
           </div>
+          <div id="barChart" role="list" aria-label="Žebříček ročních poplatků podle zemí"></div>
+          <p class="src" style="margin-top:14px">Kliknutí na řádek otevře detail země. Přepočty referenčními kurzy ECB k 23. 10. 2026: 1 € = 24,327 Kč · 0,8373 £ · 0,9227 CHF · 4,3945 zł · 11,131 SEK · 136,20 ISK. Srbský dinár, albánský lek a bosenskou marku ECB v denním seznamu neuvádí, u nich platí kurzy národních bank (marka je pevně navázaná, 1,956 za 1 €). Zdroj částek: zákony a oficiální stránky vysílatelů a výběrčích.</p>
+        </div>
+      </section>
 
-          <!-- ============ 2. GRAFY A + B ============ -->
-          <div class="lab-block" id="kdoKolik">
-            <div class="lab-h"><span class="lab-n">2</span><h3>Kdo kolik zaplatí a kdo získá</h3></div>
-            <div class="scrub">
-              <label for="scrub">Hrubý měsíční příjem jednoho dospělého <b id="scrubVal"></b></label>
-              <input type="range" id="scrub" min="0" max="150000" step="1000" value="45000" />
-            </div>
-            <div class="charts2">
-              <figure class="fig">
-                <figcaption><b>A · Roční přímá platba podle příjmu</b> <span class="tag model">Modelový výpočet</span><br /><span class="small">Jednočlenná domácnost zaměstnance: dnešní poplatek (A) a hypotetický odvod (C). Rozpočtový model (B) nemá individuální platbu, proto v grafu není; jeho náklady nesou veřejné rozpočty. Dnešní poplatek u nízkých příjmů počítá s orientačním odhadem osvobození.</span></figcaption>
-                <div class="chart" id="chartA"></div>
-                <div class="readout" id="readA" aria-live="polite"></div>
-              </figure>
-              <figure class="fig">
-                <figcaption><b>B · Rozdíl přímých plateb domácnosti: odvod minus dnešní poplatek</b> <span class="tag model">Modelový výpočet</span><br /><span class="small">Každá čára srovnává celou domácnost s celou domácností (odvod všech dospělých proti jednomu poplatku za domácnost). Nad nulou domácnost zaplatí přímo víc, pod nulou méně.</span></figcaption>
-                <div class="chart" id="chartB"></div>
-                <div class="readout" id="readB" aria-live="polite"></div>
-              </figure>
+      <section class="ch" id="zeme">
+        <div class="wrap">
+          <div class="ch-head reveal">
+            <div class="ch-num">05</div>
+            <div>
+              <h2><span data-n-countries>45</span> zemí</h2>
+              <p class="sub">Každá karta má model, částku, výběrčího, vysílatele a stručnou historii včetně toho, co se v zemi děje právě v roce 2026. Klikněte pro detail se zdroji.</p>
             </div>
           </div>
-
-          <!-- ============ ÚROVEŇ 2 ============ -->
-          <div class="level level-2" id="cele-cesko">
-            <span class="level-k">Úroveň 2</span>
-            <h3 class="level-t">Co by změna znamenala pro celé Česko?</h3>
-            <p class="level-d">Pro podrobné zkoumání: kolik by odvod vybral, kdo by ho nesl, jak se modely vyvíjejí v čase a jak chrání nezávislost.</p>
-            <nav class="level-nav" aria-label="Části úrovně 2">
-              <a href="#simulator">Simulátor výnosu</a><a href="#zCeho">Z čeho se platí ČT a ČRo</a><a href="#deset">Deset let dopředu</a><a href="#nezavislost">Pojistky nezávislosti</a><a href="#inspirace">Evropské inspirace</a><a href="#metodika">Metodika a zdroje</a>
-            </nav>
+          <div class="cmp-panel" id="porovnani" aria-labelledby="cmpTitle">
+            <div class="now-h"><h3 id="cmpTitle">Porovnat země</h3><span class="now-date">2 až 4 země vedle sebe</span></div>
+            <div class="cmp-pick" id="cmpPick"></div>
+            <div id="cmpOut" aria-live="polite"></div>
+            <div class="share-row"><button type="button" class="btn ghost" id="cmpShare">Kopírovat odkaz na porovnání</button><span class="small" id="cmpMsg" aria-live="polite"></span></div>
           </div>
-
-          <!-- ============ 3. FISKÁLNÍ SIMULÁTOR ============ -->
-          <div class="lab-block" id="simulator">
-            <div class="lab-h"><span class="lab-n">3</span><h3>Vybere odvod dost peněz?</h3><span class="tag model">Modelový výpočet</span></div>
-            <p class="lab-sub">Celostátní simulace pro rok 2026 nad rozdělením mezd (ISPV 2025, přepočteno růstem mezd 2026) a důchodů (ČSSZ). Výsledek je vždy rozpětí tří scénářů, ne jedno číslo; nejde o statistický interval spolehlivosti. Parametry sdílí s kalkulačkou výše.</p>
-            <div class="sim-grid">
-              <div class="sim-in" id="simIn">
-                <div class="ctrl"><label for="pRate">Sazba odvodu <b id="pRateV"></b></label><input type="range" id="pRate" min="0" max="0.03" step="0.0005" /></div>
-                <div class="ctrl"><label for="pThr">Hranice osvobození <b id="pThrV"></b></label><input type="range" id="pThr" min="0" max="600000" step="10000" /></div>
-                <div class="ctrl"><label for="pCap">Roční strop na osobu <b id="pCapV"></b></label><input type="range" id="pCap" min="0" max="15000" step="100" /></div>
-                <div class="ctrl-row">
-                  <label class="chk"><input type="checkbox" id="pMarg" /> Sazba jen z části nad hranicí (finský typ)</label>
-                  <label class="chk"><input type="checkbox" id="pPens" /> Zahrnout důchody</label>
-                  <label class="chk warn"><input type="checkbox" id="pSelf" /> Zahrnout OSVČ <span class="tag model">neověřený předpoklad</span></label>
-                </div>
-                <details class="more">
-                  <summary>Správní náklady a rezerva</summary>
-                  <div class="ctrl"><label for="pAdm">Správní náklady <b id="pAdmV"></b></label><input type="range" id="pAdm" min="0" max="0.03" step="0.001" /></div>
-                  <div class="ctrl"><label for="pRes">Stabilizační rezerva <b id="pResV"></b></label><input type="range" id="pRes" min="0" max="0.1" step="0.005" /></div>
-                </details>
-                <div class="ctrl"><label for="pTarget">Požadovaný čistý výnos</label>
-                    <select id="pTarget">
-                      <option value="budget">Tisk 231 pro rok 2027: 7,81 mld. Kč</option>
-                      <option value="plan2026">Plán výběru ČT + ČRo 2026: 9,21 mld. Kč</option>
-                      <option value="custom">Vlastní částka</option>
-                    </select>
-                    <input type="number" id="pTargetCustom" min="0" step="0.1" inputmode="decimal" value="8" hidden aria-label="Vlastní cílový výnos v mld. Kč" />
-                  </div>
-                <div class="calib">
-                  <span class="small">Kalibrace na cíl (centrální scénář, s kontrolou v pesimistickém):</span>
-                  <button type="button" class="btn" id="calRate">Najít sazbu při tomto stropu</button>
-                  <button type="button" class="btn ghost" id="calCap">Najít strop při této sazbě</button>
-                  <p class="small" id="calOut" aria-live="polite"></p>
-                </div>
-              </div>
-              <div class="sim-out" id="simOut" aria-live="polite"></div>
+          <details class="incl" id="zahrnuti">
+            <summary>Proč <span data-n-countries>45</span> zemí a ne 46</summary>
+            <p>Přehled pokrývá 27 států EU, Island, Norsko a Lichtenštejnsko, Švýcarsko, Spojené království, šest států západního Balkánu včetně Kosova, Turecko, Ukrajinu, Moldavsko, Bělorusko a tři mikrostáty Andorru, Monako a San Marino. To je 45 států. Nejsou v něm Rusko, Vatikán, Gruzie, Arménie, Ázerbájdžán a Kazachstán. Belgie se počítá jako jeden stát, i když se poplatek zrušil ve dvou krocích (Flandry a Brusel 2001, Valonsko 2018).</p>
+            <p>Jiné přehledy uvádějí 46 nebo jiný počet zemí, když některý z vynechaných států zahrnou nebo když počítají belgická společenství zvlášť. Rozdíl v počtu proto nemusí být chyba, jen jiné pravidlo zahrnutí.</p>
+          </details>
+          <div class="explorer-tools reveal">
+            <div class="search">
+              <span aria-hidden="true">⌕</span>
+              <input type="search" id="countrySearch" placeholder="Hledat zemi nebo vysílatele (třeba ORF, Serafe, elektřina…)" aria-label="Hledat v zemích" />
             </div>
-            <details class="more deep">
-              <summary>Kdo by odvod nesl a jak citlivý je výsledek</summary>
-            <div class="charts2">
-              <figure class="fig">
-                <figcaption><b>Zatížení podle příjmových decilů</b> <span class="tag model">Modelový výpočet</span><br /><span class="small">Osoby v okruhu odvodu seřazené podle ročního hrubého příjmu. Sloupec = průměrný odvod, číslo = podíl na příjmu.</span></figcaption>
-                <div class="chart" id="chartDec"></div>
-              </figure>
-              <figure class="fig">
-                <figcaption><b>Citlivost čistého výnosu</b> <span class="tag model">Modelový výpočet</span><br /><span class="small">O kolik se změní centrální odhad při posunu jednoho parametru.</span></figcaption>
-                <div class="chart" id="chartSens"></div>
-              </figure>
+            <div class="seg" role="group" aria-label="Řazení zemí">
+              <button type="button" data-gs="eur" aria-pressed="true">Podle částky</button>
+              <button type="button" data-gs="name" aria-pressed="false">A-Z</button>
+              <button type="button" data-gs="model" aria-pressed="false">Podle modelu</button>
             </div>
-            </details>
           </div>
+          <div class="chips" id="modelFilter2" role="group" aria-label="Filtr podle modelu" style="margin:-4px 0 14px"></div>
+          <p class="small" id="countryCount" style="margin:0 0 12px"></p>
+          <div class="grid-cards" id="countryGrid"></div>
+          <p class="small" id="noResults" style="display:none;margin-top:18px">Nic neodpovídá hledání ani filtru. Zkuste jiný výraz nebo zapněte filtry modelů výše (sdílejí se s žebříčkem).</p>
+        </div>
+      </section>
 
-          <!-- ============ 4. GRAF C ============ -->
-          <div class="lab-block" id="zCeho">
-            <div class="lab-h"><span class="lab-n">4</span><h3>Z čeho se zaplatí ČT a ČRo</h3></div>
-            <p class="lab-sub">Skutečný výběr, plán, legislativní návrh a modelovaný výnos odvodu vedle sebe. U každé položky je období a typ údaje.</p>
-            <div class="chart" id="chartC" role="group" aria-label="Graf C: zdroje financování ČT a ČRo"></div>
-          </div>
-
-          <!-- ============ 5. GRAF D ============ -->
-          <div class="lab-block" id="deset">
-            <div class="lab-h"><span class="lab-n">5</span><h3>Co se stane za deset let</h3><span class="tag model">Projekce, ne prognóza</span></div>
-            <div class="proj-tools">
-              <div class="seg" role="group" aria-label="Scénář inflace" id="projInf"></div>
-              <div class="seg" role="group" aria-label="Zobrazení" id="projMode">
-                <button type="button" data-m="nominal" aria-pressed="false">Nominálně</button>
-                <button type="button" data-m="real" aria-pressed="true">Reálně (ceny 2026)</button>
-              </div>
-              <label class="chk"><input type="checkbox" id="projIdx" checked /> Hranici a strop odvodu valorizovat růstem mezd</label>
+      <section class="ch" id="kontext">
+        <div class="wrap">
+          <div class="ch-head reveal">
+            <div class="ch-num">06</div>
+            <div>
+              <h2>Kolik stojí veřejnoprávní média na jednoho obyvatele</h2>
+              <p class="sub">Poplatek domácnosti je jen část příběhu: vysílatelé mají i reklamu, sponzoring a dotace. EBU ve zprávě <i>Funding of Public Service Media</i> (únor 2026, data za rok 2024) počítá veřejné financování na obyvatele. Celkem jde v prostoru EBU o 41 miliard eur ročně a financování za dekádu reálně kleslo asi o 9 %.</p>
             </div>
-            <div class="chart" id="chartD"></div>
-            <p class="small" id="projNote"></p>
+          </div>
+          <div class="card reveal" style="padding:24px 26px;margin-top:22px">
+            <h3 class="serif" style="margin:0 0 4px;font-size:21px">Veřejné financování na obyvatele a měsíc (€, údaje EBU 2026)</h3>
+            <div class="mc-row"><span>Německo</span><div class="mc-track"><div class="mc-fill grow" style="width:100%;background:var(--tax)"></div></div><span class="mc-val">8,70 €</span></div>
+            <div class="mc-row"><span>Spojené království</span><div class="mc-track"><div class="mc-fill grow" style="width:70.1%;background:var(--tax)"></div></div><span class="mc-val">6,10 €</span></div>
+            <div class="mc-row"><span>Belgie, frankofonní část</span><div class="mc-track"><div class="mc-fill grow" style="width:58.6%;background:var(--tax)"></div></div><span class="mc-val">5,10 €</span></div>
+            <div class="mc-row"><span>Francie</span><div class="mc-track"><div class="mc-fill grow" style="width:48.3%;background:var(--tax)"></div></div><span class="mc-val">4,20 €</span></div>
+            <div class="mc-row"><span>Vlámsko (jen VRT)</span><div class="mc-track"><div class="mc-fill grow" style="width:42.5%;background:var(--tax)"></div></div><span class="mc-val">3,70 €</span></div>
+            <div class="mc-row"><span>Průměr EU-27</span><div class="mc-track"><div class="mc-fill grow" style="width:41.6%;background:var(--bud)"></div></div><span class="mc-val">3,62 €</span></div>
+            <p class="small" style="margin:12px 0 0">Pro Česko EBU v citovaných výstupech hodnotu na obyvatele neuvádí a dopočítávat ji z neúplných dat by byla chyba: přesný výběr rozhlasového poplatku za rok 2026 se ověřit nepodařilo (viz Zdroje a nejistoty). Podíl financování veřejnoprávních médií na HDP ve 45 zemích klesl z 0,18 % (2014) na 0,14 % (2024).</p>
           </div>
 
-          <!-- ============ 6. NEZÁVISLOST ============ -->
+          <div class="versus">
+            <div class="card col reveal">
+              <h3>Evropské standardy</h3>
+              <ul>
+                <li>Ani EBU, ani Rada Evropy nehájí poplatek jako takový. Hájí tři vlastnosti financování: <b>přiměřené, udržitelné a předvídatelné</b>.</li>
+                <li>Doporučení Rady Evropy R (96) 10: rozhodnutí o financování se nesmí používat k ovlivňování redakční nezávislosti, přímo ani nepřímo.</li>
+                <li><b>Evropský akt o svobodě médií (EMFA), článek 5</b>, platí od srpna 2025 a ukládá členským státům EU zajistit veřejnoprávním médiím právě takové financování plus nezávislé jmenovací procedury. Právě na něj odkazovaly spory roku 2026 v Česku, Slovinsku i Vlámsku.</li>
+                <li>EBU opakovaně kritizuje škrty uprostřed platných smluv: v říjnu 2026 protestovala proti vlámskému návrhu vzít VRT dalších až 10 mil. € do roku 2029 nad rámec dohodnutých úspor 16,6 mil. €.</li>
+              </ul>
+            </div>
+            <div class="card col reveal">
+              <h3>Výběr a úniky</h3>
+              <ul>
+                <li><b>Británie:</b> licenční příjem 3,84 mld. £ v roce 2024/25 je 65 % příjmů BBC. Únik se odhaduje na 12,52 % (2019/20 to bylo 6,95 %) a dalších 3,6 mil. domácností se přihlásilo k „licenci nepotřebuji“: dohromady přes 1,1 mld. £ teoretického výběru ročně.</li>
+                <li><b>Polsko:</b> na konci roku 2024 platilo jen <b>32,1 % povinných</b>. Kontroloři nesmějí vstoupit do bytu, takže neregistrace je prakticky bez rizika. Skutečným financovatelem TVP je rozpočet, ne poplatek.</li>
+                <li><b>Itálie:</b> přesun poplatku na účet za elektřinu (2016) srazil úniky z odhadovaných 30 % na jednotky procent.</li>
+                <li><b>Bosna:</b> vybírá se asi polovina. Politické strany otevřeně nabádají k neplacení a BHRT hrozí zmrazení účtů u EBU.</li>
+                <li><b>Irsko:</b> po skandálu s odměnami v RTÉ (2023) klesl prodej licencí mezi 2022 a 2025 o 19 %; stát od roku 2024 dorovnává výpadek z rozpočtu v rámci balíku 725 mil. € na 2025-2027.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="ch lab" id="pojistky" aria-labelledby="pojTitle">
+        <div class="wrap">
+          <div class="ch-head">
+            <div class="ch-num">07</div>
+            <div>
+              <h2 id="pojTitle">Nezávislost a pojistky</h2>
+              <p class="sub">Způsob financování sám nezávislost nezaručí ani neohrozí. Rozhoduje, kdo určuje výši peněz, jak snadno ji lze změnit a kdo jmenuje vedení. Srovnání tří českých modelů a pojistek, které používají jiné evropské země.</p>
+            </div>
+          </div>
           <div class="lab-block" id="nezavislost">
-            <div class="lab-h"><span class="lab-n">6</span><h3>Jak model chrání před politickým tlakem</h3></div>
+            <div class="lab-h"><span class="lab-n">1</span><h3>Jak model chrání před politickým tlakem</h3></div>
             <p class="lab-sub">Žádné skóre. Věcné srovnání konkrétních pojistek, každá buňka nese typ údaje. Rozhodující měřítko dává čl. 5 Evropského aktu o svobodě médií.</p>
             <div class="indep" id="indep"></div>
             <aside class="emfa">
@@ -942,24 +1035,19 @@
 
           <!-- ============ 7. EVROPSKÉ INSPIRACE ============ -->
           <div class="lab-block" id="inspirace">
-            <div class="lab-h"><span class="lab-n">7</span><h3>Co si vzít z Evropy</h3></div>
+            <div class="lab-h"><span class="lab-n">2</span><h3>Co si vzít z Evropy</h3></div>
             <p class="lab-sub">Konstrukce, kontrola a co se dělo potom. Vývoj v zemi nepřisuzujeme modelu financování, pokud příčinnou souvislost nelze doložit.</p>
             <div class="insp" id="insp"></div>
           </div>
 
           <!-- ============ 8. METODIKA ============ -->
-          <details class="lab-block method" id="metodika">
-            <summary><span class="lab-n">§</span> Metodika, předpoklady a zdroje výpočtů</summary>
-            <div id="methodBody"></div>
-          </details>
         </div>
       </section>
 
-      <!-- ================= KAPITOLA 05 · ČASOVÁ OSA ================= -->
       <section class="ch" id="osa">
         <div class="wrap">
           <div class="ch-head reveal">
-            <div class="ch-num">05</div>
+            <div class="ch-num">08</div>
             <div>
               <h2>Rušení poplatků 1999 až 2026</h2>
               <p class="sub">Každý bod je rok, ve kterém aspoň jedna země poplatek zrušila, převedla na daň, nebo zásadně přestavěla; větší bod znamená víc změn v jednom roce. Klikněte na rok, posuňte posuvník nebo osu přehrajte. Česko 2025 je jediný červený bod: poplatek se tam nezrušil, ale zvýšil.</p>
@@ -1016,11 +1104,10 @@
         </div>
       </section>
 
-      <!-- ================= KAPITOLA 5 · REFERENDA A SOUDY ================= -->
       <section class="ch" id="hlasy">
         <div class="wrap">
           <div class="ch-head reveal">
-            <div class="ch-num">06</div>
+            <div class="ch-num">09</div>
             <div>
               <h2>Referenda a soudy</h2>
               <p class="sub">Všude, kde se o poplatku hlasovalo v referendu, poplatek přežil: Švýcarsko 2018 i 2026, Slovinsko 2026. A všude, kde se rušil jen parlamentní většinou, to šlo rychle, ale s otazníky nad nezávislostí. Druhý pilíř tvoří ústavní soudy: v Německu a Rakousku poplatek nejen podržely, ale i přestavěly.</p>
@@ -1091,80 +1178,92 @@
         </div>
       </section>
 
-      <!-- ================= KAPITOLA 6 · KONTEXT ================= -->
-      <section class="ch" id="kontext">
+      <section class="ch lab" id="cele-cesko" aria-labelledby="modelTitle">
         <div class="wrap">
-          <div class="ch-head reveal">
-            <div class="ch-num">07</div>
+          <div class="ch-head">
+            <div class="ch-num">10</div>
             <div>
-              <h2>Kolik stojí veřejnoprávní média na jednoho obyvatele</h2>
-              <p class="sub">Poplatek domácnosti je jen část příběhu: vysílatelé mají i reklamu, sponzoring a dotace. EBU ve zprávě <i>Funding of Public Service Media</i> (únor 2026, data za rok 2024) počítá veřejné financování na obyvatele. Celkem jde v prostoru EBU o 41 miliard eur ročně a financování za dekádu reálně kleslo asi o 9 %.</p>
+              <h2 id="modelTitle">Pokročilé modelování</h2>
+              <p class="sub">Co by účelový odvod znamenal pro celé Česko: kolik by vybral, kdo by ho nesl, z čeho se dnes ČT a ČRo platí a jak se modely vyvíjejí v čase. Všechna čísla v této kapitole jsou modelové výpočty ze zveřejněných předpokladů, ne fiskální odhad.</p>
             </div>
           </div>
-          <div class="card reveal" style="padding:24px 26px;margin-top:22px">
-            <h3 class="serif" style="margin:0 0 4px;font-size:21px">Veřejné financování na obyvatele a měsíc (€, údaje EBU 2026)</h3>
-            <div class="mc-row"><span>Německo</span><div class="mc-track"><div class="mc-fill grow" style="width:100%;background:var(--tax)"></div></div><span class="mc-val">8,70 €</span></div>
-            <div class="mc-row"><span>Spojené království</span><div class="mc-track"><div class="mc-fill grow" style="width:70.1%;background:var(--tax)"></div></div><span class="mc-val">6,10 €</span></div>
-            <div class="mc-row"><span>Belgie, frankofonní část</span><div class="mc-track"><div class="mc-fill grow" style="width:58.6%;background:var(--tax)"></div></div><span class="mc-val">5,10 €</span></div>
-            <div class="mc-row"><span>Francie</span><div class="mc-track"><div class="mc-fill grow" style="width:48.3%;background:var(--tax)"></div></div><span class="mc-val">4,20 €</span></div>
-            <div class="mc-row"><span>Vlámsko (jen VRT)</span><div class="mc-track"><div class="mc-fill grow" style="width:42.5%;background:var(--tax)"></div></div><span class="mc-val">3,70 €</span></div>
-            <div class="mc-row"><span>Průměr EU-27</span><div class="mc-track"><div class="mc-fill grow" style="width:41.6%;background:var(--bud)"></div></div><span class="mc-val">3,62 €</span></div>
-            <p class="small" style="margin:12px 0 0">Pro Česko EBU v citovaných výstupech hodnotu na obyvatele neuvádí a dopočítávat ji z neúplných dat by byla chyba: přesný výběr rozhlasového poplatku za rok 2026 se ověřit nepodařilo (viz Zdroje a nejistoty). Podíl financování veřejnoprávních médií na HDP ve 45 zemích klesl z 0,18 % (2014) na 0,14 % (2024).</p>
+          <div class="lab-block" id="simulator">
+            <div class="lab-h"><span class="lab-n">1</span><h3>Vybere odvod dost peněz?</h3><span class="tag model">Modelový výpočet</span></div>
+            <p class="lab-sub">Celostátní simulace pro rok 2026 nad rozdělením mezd (ISPV 2025, přepočteno růstem mezd 2026) a důchodů (ČSSZ). Výsledek je vždy rozpětí tří scénářů, ne jedno číslo; nejde o statistický interval spolehlivosti. Parametry sdílí s kalkulačkou výše.</p>
+            <div class="sim-grid">
+              <div class="sim-in" id="simIn">
+                <div class="ctrl"><label for="pRate">Sazba odvodu <b id="pRateV"></b></label><input type="range" id="pRate" min="0" max="0.03" step="0.0005" /></div>
+                <div class="ctrl"><label for="pThr">Hranice osvobození <b id="pThrV"></b></label><input type="range" id="pThr" min="0" max="600000" step="10000" /></div>
+                <div class="ctrl"><label for="pCap">Roční strop na osobu <b id="pCapV"></b></label><input type="range" id="pCap" min="0" max="15000" step="100" /></div>
+                <div class="ctrl-row">
+                  <label class="chk"><input type="checkbox" id="pMarg" /> Sazba jen z části nad hranicí (finský typ)</label>
+                  <label class="chk"><input type="checkbox" id="pPens" /> Zahrnout důchody</label>
+                  <label class="chk warn"><input type="checkbox" id="pSelf" /> Zahrnout OSVČ <span class="tag model">neověřený předpoklad</span></label>
+                </div>
+                <details class="more">
+                  <summary>Správní náklady a rezerva</summary>
+                  <div class="ctrl"><label for="pAdm">Správní náklady <b id="pAdmV"></b></label><input type="range" id="pAdm" min="0" max="0.03" step="0.001" /></div>
+                  <div class="ctrl"><label for="pRes">Stabilizační rezerva <b id="pResV"></b></label><input type="range" id="pRes" min="0" max="0.1" step="0.005" /></div>
+                </details>
+                <div class="ctrl"><label for="pTarget">Požadovaný čistý výnos</label>
+                    <select id="pTarget">
+                      <option value="budget">Tisk 231 pro rok 2027: 7,81 mld. Kč</option>
+                      <option value="plan2026">Plán výběru ČT + ČRo 2026: 9,21 mld. Kč</option>
+                      <option value="custom">Vlastní částka</option>
+                    </select>
+                    <input type="number" id="pTargetCustom" min="0" step="0.1" inputmode="decimal" value="8" hidden aria-label="Vlastní cílový výnos v mld. Kč" />
+                  </div>
+                <div class="calib">
+                  <span class="small">Kalibrace na cíl (centrální scénář, s kontrolou v pesimistickém):</span>
+                  <button type="button" class="btn" id="calRate">Najít sazbu při tomto stropu</button>
+                  <button type="button" class="btn ghost" id="calCap">Najít strop při této sazbě</button>
+                  <p class="small" id="calOut" aria-live="polite"></p>
+                </div>
+              </div>
+              <div class="sim-out" id="simOut" aria-live="polite"></div>
+            </div>
+            <details class="more deep">
+              <summary>Kdo by odvod nesl a jak citlivý je výsledek</summary>
+            <div class="charts2">
+              <figure class="fig">
+                <figcaption><b>Zatížení podle příjmových decilů</b> <span class="tag model">Modelový výpočet</span><br /><span class="small">Osoby v okruhu odvodu seřazené podle ročního hrubého příjmu. Sloupec = průměrný odvod, číslo = podíl na příjmu.</span></figcaption>
+                <div class="chart" id="chartDec"></div>
+              </figure>
+              <figure class="fig">
+                <figcaption><b>Citlivost čistého výnosu</b> <span class="tag model">Modelový výpočet</span><br /><span class="small">O kolik se změní centrální odhad při posunu jednoho parametru.</span></figcaption>
+                <div class="chart" id="chartSens"></div>
+              </figure>
+            </div>
+            </details>
+            <div class="share-row sim-share"><button type="button" class="btn ghost" id="simShare">Kopírovat odkaz na tento scénář</button><span class="small" id="simShareMsg" aria-live="polite">Odkaz nese jen parametry modelu, žádné příjmy.</span></div>
           </div>
 
-          <div class="versus">
-            <div class="card col reveal">
-              <h3>Evropské standardy</h3>
-              <ul>
-                <li>Ani EBU, ani Rada Evropy nehájí poplatek jako takový. Hájí tři vlastnosti financování: <b>přiměřené, udržitelné a předvídatelné</b>.</li>
-                <li>Doporučení Rady Evropy R (96) 10: rozhodnutí o financování se nesmí používat k ovlivňování redakční nezávislosti, přímo ani nepřímo.</li>
-                <li><b>Evropský akt o svobodě médií (EMFA), článek 5</b>, platí od srpna 2025 a ukládá členským státům EU zajistit veřejnoprávním médiím právě takové financování plus nezávislé jmenovací procedury. Právě na něj odkazovaly spory roku 2026 v Česku, Slovinsku i Vlámsku.</li>
-                <li>EBU opakovaně kritizuje škrty uprostřed platných smluv: v říjnu 2026 protestovala proti vlámskému návrhu vzít VRT dalších až 10 mil. € do roku 2029 nad rámec dohodnutých úspor 16,6 mil. €.</li>
-              </ul>
-            </div>
-            <div class="card col reveal">
-              <h3>Výběr a úniky</h3>
-              <ul>
-                <li><b>Británie:</b> licenční příjem 3,84 mld. £ v roce 2024/25 je 65 % příjmů BBC. Únik se odhaduje na 12,52 % (2019/20 to bylo 6,95 %) a dalších 3,6 mil. domácností se přihlásilo k „licenci nepotřebuji“: dohromady přes 1,1 mld. £ teoretického výběru ročně.</li>
-                <li><b>Polsko:</b> na konci roku 2024 platilo jen <b>32,1 % povinných</b>. Kontroloři nesmějí vstoupit do bytu, takže neregistrace je prakticky bez rizika. Skutečným financovatelem TVP je rozpočet, ne poplatek.</li>
-                <li><b>Itálie:</b> přesun poplatku na účet za elektřinu (2016) srazil úniky z odhadovaných 30 % na jednotky procent.</li>
-                <li><b>Bosna:</b> vybírá se asi polovina. Politické strany otevřeně nabádají k neplacení a BHRT hrozí zmrazení účtů u EBU.</li>
-                <li><b>Irsko:</b> po skandálu s odměnami v RTÉ (2023) klesl prodej licencí mezi 2022 a 2025 o 19 %; stát od roku 2024 dorovnává výpadek z rozpočtu v rámci balíku 725 mil. € na 2025-2027.</li>
-              </ul>
-            </div>
+          <!-- ============ 4. GRAF C ============ -->
+          <div class="lab-block" id="zCeho">
+            <div class="lab-h"><span class="lab-n">2</span><h3>Z čeho se zaplatí ČT a ČRo</h3></div>
+            <p class="lab-sub">Skutečný výběr, plán, legislativní návrh a modelovaný výnos odvodu vedle sebe. U každé položky je období a typ údaje.</p>
+            <div class="chart" id="chartC" role="group" aria-label="Graf C: zdroje financování ČT a ČRo"></div>
           </div>
+
+          <!-- ============ 5. GRAF D ============ -->
+          <div class="lab-block" id="deset">
+            <div class="lab-h"><span class="lab-n">3</span><h3>Co se stane za deset let</h3><span class="tag model">Projekce, ne prognóza</span></div>
+            <div class="proj-tools">
+              <div class="seg" role="group" aria-label="Scénář inflace" id="projInf"></div>
+              <div class="seg" role="group" aria-label="Zobrazení" id="projMode">
+                <button type="button" data-m="nominal" aria-pressed="false">Nominálně</button>
+                <button type="button" data-m="real" aria-pressed="true">Reálně (ceny 2026)</button>
+              </div>
+              <label class="chk"><input type="checkbox" id="projIdx" checked /> Hranici a strop odvodu valorizovat růstem mezd</label>
+            </div>
+            <div class="chart" id="chartD"></div>
+            <p class="small" id="projNote"></p>
+          </div>
+
+          <!-- ============ 6. NEZÁVISLOST ============ -->
         </div>
       </section>
 
-      <!-- ================= KAPITOLA 7 · DOSIERY ================= -->
-      <section class="ch" id="zeme">
-        <div class="wrap">
-          <div class="ch-head reveal">
-            <div class="ch-num">08</div>
-            <div>
-              <h2>45 zemí</h2>
-              <p class="sub">Každá karta má model, částku, výběrčího, vysílatele a stručnou historii včetně toho, co se v zemi děje právě v roce 2026. Klikněte pro detail se zdroji.</p>
-            </div>
-          </div>
-          <div class="explorer-tools reveal">
-            <div class="search">
-              <span aria-hidden="true">⌕</span>
-              <input type="search" id="countrySearch" placeholder="Hledat zemi nebo vysílatele (třeba ORF, Serafe, elektřina…)" aria-label="Hledat v zemích" />
-            </div>
-            <div class="seg" role="group" aria-label="Řazení zemí">
-              <button type="button" data-gs="eur" aria-pressed="true">Podle částky</button>
-              <button type="button" data-gs="name" aria-pressed="false">A-Z</button>
-              <button type="button" data-gs="model" aria-pressed="false">Podle modelu</button>
-            </div>
-          </div>
-          <div class="chips" id="modelFilter2" role="group" aria-label="Filtr podle modelu" style="margin:-4px 0 14px"></div>
-          <p class="small" id="countryCount" style="margin:0 0 12px"></p>
-          <div class="grid-cards" id="countryGrid"></div>
-          <p class="small" id="noResults" style="display:none;margin-top:18px">Nic neodpovídá hledání ani filtru. Zkuste jiný výraz nebo zapněte filtry modelů výše (sdílejí se s žebříčkem).</p>
-        </div>
-      </section>
-
-      <!-- ================= ZDROJE ================= -->
       <section class="ch" id="zdroje">
         <div class="wrap">
           <div class="ch-head reveal">
@@ -1174,6 +1273,10 @@
               <p class="sub">Každá částka má zdroj, přednostně primární: zákon, oficiální stránku vysílatele, regulátora nebo výběrčího. Kde jde o sekundární zpravodajství, je to u země uvedeno. Níže je seznam údajů, které se k 24. 10. 2026 nepodařilo ověřit.</p>
             </div>
           </div>
+          <details class="lab-block method method-z" id="metodika">
+            <summary><span class="lab-n">§</span> Metodika, předpoklady a zdroje výpočtů</summary>
+            <div id="methodBody"></div>
+          </details>
           <div class="versus">
             <div class="card col reveal">
               <h3 style="font-size:19px">Co zůstává otevřené</h3>
@@ -1264,6 +1367,18 @@
       bud: { label: "Rozpočet / obecná daň (bez přímé platby)", color: "var(--bud)" },
       buy: { label: "Daň při nákupu přístroje", color: "var(--buy)" }
     };
+    /* Medián ekvivalizovaného čistého ročního příjmu, EUR, EU-SILC 2024 (příjmy roku 2023).
+       Eurostat ilc_di03 (statinfo MED_EI), aktualizace datové sady 20. 10. 2026.
+       Jen země s paušálním poplatkem za domácnost a s údajem v EU-SILC. */
+    var INCOME = { CH:51926, DE:27619, AT:33210, SI:19620, HR:12344, CZ:15133, IE:33013, PL:11921, IT:20605, GR:10850, PT:12646, RS:6073, AL:4968 };
+    var INCOME_SRC = { t: "Eurostat ilc_di03: medián ekvivalizovaného čistého příjmu, EU-SILC 2024", u: "https://ec.europa.eu/eurostat/databrowser/view/ilc_di03/default/table" };
+    function burdenOf(c){
+      if (c.model === "bud") return { v: null, why: "bez přímé platby, náklady nese státní rozpočet" };
+      if (c.model === "buy") return { v: null, why: "daň při nákupu přístroje, roční částka neexistuje" };
+      if (c.model === "tax") return { v: null, why: "daň na osobu podle příjmu, nesrovnatelná s platbou za domácnost" };
+      if (!INCOME[c.iso]) return { v: null, why: c.iso === "GB" ? "Spojené království po roce 2019 v EU-SILC chybí" : "srovnatelný údaj EU-SILC chybí" };
+      return { v: c.eur / INCOME[c.iso] * 100, why: "" };
+    }
     var COUNTRIES = [
       { iso:"CH", name:"Švýcarsko", model:"dom", local:"CHF 335 / rok", eur:363, basis:"Bydliště (registr obyvatel)", collector:"Serafe AG", bc:"SRG SSR a licencovaná lokální média",
         note:"Nejdražší poplatek v Evropě. Voliči ho v roce 2026 odmítli snížit na polovinu, přesto klesá: vládou slíbený protinávrh ho stáhne na 312 CHF (2027) a 300 CHF (2029).",
@@ -1306,7 +1421,7 @@
         facts:["Od 1. 1. 2019; předtím domácí poplatek 2 400 SEK ročně s únikem odhadovaným na 11-15 %.","Stropu 1 184 SEK se dosáhne při příjmu 118 428 SEK.","Výběrčí Radiotjänst i Kiruna byla ke konci 2019 zrušena."],
         src:{t:"Skatteverket: public service-avgift 2026", u:"https://www.skatteverket.se/4.676f4884175c97df4193041.html"} },
       { iso:"CZ", name:"Česko", model:"dom", local:"2 460 Kč / rok (150 Kč TV + 55 Kč rozhlas měsíčně)", eur:101, basis:"Společná domácnost; firmy podle počtu zaměstnanců", collector:"Česká televize a Český rozhlas samy", bc:"ČT, ČRo",
-        note:"Jediná země, která poplatek v roce 2025 zvýšila a rozšířila i na mobily. A právě teď Sněmovna projednává jeho zrušení (tisk 231). Celá kapitola 3 je o Česku.",
+        note:"Jediná země, která poplatek v roce 2025 zvýšila a rozšířila i na mobily. A právě teď Sněmovna projednává jeho zrušení (tisk 231). Česku se věnuje samostatná kapitola.",
         facts:["Zákon č. 348/2005 Sb.; novela č. 119/2025 Sb. účinná od 1. 5. 2025.","První zvýšení TV poplatku od 2008, rozhlasového od 2005.","Nově platí i domácnost bez televize, pokud má zařízení s internetem; firmy od 25 zaměstnanců v násobcích 5× až 100×.","Automatická valorizace o 6 % při kumulované inflaci nad 6 % zatím nenastala.","ČT očekává výběr asi 6,7 mld. Kč v roce 2026; přesný výběr ČRo není veřejně ověřen."],
         src:{t:"Ministerstvo kultury: rozhlasové a televizní poplatky", u:"https://www.mk.gov.cz/488.html"} },
       { iso:"IT", name:"Itálie", model:"ele", local:"90 € / rok (10 × 9 €)", eur:90, basis:"Smlouva na elektřinu k bydlení (domněnka vlastnictví TV)", collector:"Dodavatelé elektřiny, leden až říjen", bc:"RAI",
@@ -1523,6 +1638,9 @@
     }, {threshold:.08, rootMargin:"0px 0px -6% 0px"});
     document.querySelectorAll(".reveal, .czc").forEach(function(el){ revealIO.observe(el); });
 
+    /* počet zemí v textech vždy z datové sady */
+    document.querySelectorAll("[data-n-countries]").forEach(function(el){ el.textContent = COUNTRIES.length; });
+
     /* ---------- navigace ---------- */
     var tocLinks = {}, linksBox = document.querySelector("nav.toc .links");
     document.querySelectorAll("nav.toc a").forEach(function(a){ tocLinks[a.getAttribute("href").slice(1)] = a; });
@@ -1598,15 +1716,18 @@
     var NCOUNT = COUNTRIES.length, MAXEUR = Math.max.apply(null, COUNTRIES.map(eurVal));
     var NPAY = COUNTRIES.filter(function(c){ return c.eur !== null && c.eur > 0; }).length;
     function rankTxt(c){ return c.eur > 0 ? RANK[c.iso] + '. nejvyšší z ' + NPAY + ' zemí s přímou platbou' : 'bez přímé platby domácností'; }
-    var AMOUNT_BUCKETS = [[0,"--a0","0 €"],[30,"--a1","do 30 €"],[80,"--a2","31-80 €"],[140,"--a3","81-140 €"],[210,"--a4","141-210 €"],[9999,"--a5","nad 210 €"]];
+    var AMOUNT_BUCKETS = [[0,"--a0","bez přímé platby (rozpočet)"],[30,"--a1","do 30 €"],[80,"--a2","31-80 €"],[140,"--a3","81-140 €"],[210,"--a4","141-210 €"],[9999,"--a5","nad 210 €"]];
     function amountColor(c){
       if (c.eur === null) return "url(#hatchBuy)";
       for (var i = 0; i < AMOUNT_BUCKETS.length; i++) if (c.eur <= AMOUNT_BUCKETS[i][0]) return "var(" + AMOUNT_BUCKETS[i][1] + ")";
     }
+    var BURDEN_BUCKETS = [[0.3,"--a1","do 0,3 %"],[0.5,"--a2","0,3 až 0,5 %"],[0.7,"--a3","0,5 až 0,7 %"],[0.9,"--a4","0,7 až 0,9 %"],[99,"--a5","nad 0,9 %"]];
+    function burdenColor(c){ var b = burdenOf(c); if (b.v === null) return "var(--a0)"; for (var i = 0; i < BURDEN_BUCKETS.length; i++) if (b.v <= BURDEN_BUCKETS[i][0]) return "var(" + BURDEN_BUCKETS[i][1] + ")"; }
+    function fmtPct(v){ return v.toLocaleString("cs-CZ", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " %"; }
     function paintMap(){
       Object.keys(mapPaths).forEach(function(iso){
         var p = mapPaths[iso], c = byIso[iso];
-        fillEl(p, mapMode === "model" ? (c.model === "buy" ? "url(#hatchBuy)" : MODELS[c.model].color) : amountColor(c));
+        fillEl(p, mapMode === "model" ? (c.model === "buy" ? "url(#hatchBuy)" : MODELS[c.model].color) : mapMode === "burden" ? burdenColor(c) : amountColor(c));
         var off = !activeModels[c.model] || (legendHot && legendHot !== c.model);
         p.classList.toggle("dim", off); if (p._twin) p._twin.classList.toggle("dim", off);
         p.classList.toggle("sel", iso === mapSel);
@@ -1627,33 +1748,50 @@
           li.addEventListener("blur", function(){ legendHot = null; paintMap(); });
           li.addEventListener("click", function(){ legendHot = legendHot === k && lastPointer !== "mouse" ? null : k; paintMap(); });
         });
+      } else if (mapMode === "burden") {
+        box.innerHTML = '<span class="li static">Roční poplatek domácnosti jako podíl na mediánovém příjmu:</span>' + BURDEN_BUCKETS.map(function(b){
+          return '<span class="li static"><span class="sw" style="background:var(' + b[1] + ')"></span>' + b[2] + '</span>';
+        }).join("") + '<span class="li static"><span class="sw" style="background:var(--a0)"></span>nesrovnatelné nebo bez přímé platby</span>';
       } else {
         box.innerHTML = '<span class="li static">Roční platba domácnosti:</span>' + AMOUNT_BUCKETS.map(function(b){
           return '<span class="li static"><span class="sw" style="background:var(' + b[1] + ')"></span>' + b[2] + '</span>';
         }).join("") + '<span class="li static"><span class="sw" style="background:repeating-linear-gradient(135deg,var(--buy) 0 3px,transparent 3px 5px)"></span>Turecko: daň při nákupu přístroje</span>';
       }
     }
-    function fmtEur(c){ return c.eur === null ? "při nákupu" : (c.eur === 0 ? "0 €" : c.eur + " €"); }
+    function fmtEur(c){
+      if (mapMode === "burden") { var b = burdenOf(c); return b.v === null ? b.why : fmtPct(b.v) + " mediánového příjmu"; }
+      return c.eur === null ? "při nákupu" : (c.eur === 0 ? "bez přímé platby, financuje rozpočet" : c.eur + " €");
+    }
     function renderInfo(iso){
       var c = byIso[iso], m = MODELS[c.model], box = $("mapInfo");
       var pct = c.eur === null ? 0 : c.eur / MAXEUR * 100;
       box.innerHTML = '<div class="k"><span class="dot" style="display:inline-block;width:9px;height:9px;border-radius:0;background:' + m.color + ';margin-right:6px"></span>' + esc(m.label) + '</div>'
         + '<h3>' + esc(c.name) + '</h3>'
-        + '<div class="big">' + (c.eur === null ? '16 %<small> z ceny přijímače</small>' : (c.eur === 0 ? '0 €' : c.eur + ' €') + '<small> / rok' + (c.perPerson ? ', max. na osobu' : '') + '</small>') + '</div>'
-        + '<div class="meter" aria-hidden="true"><i style="width:' + pct + '%;background:' + m.color + '"></i></div>'
-        + '<div class="loc">' + esc(c.local) + (c.eur ? ' · ' + rankTxt(c) : '') + '</div>'
+        + (mapMode === "burden" ? burdenInfo(c) : '<div class="big">' + (c.eur === null ? '16 %<small> z ceny přijímače</small>' : (c.eur === 0 ? '0 €<small> přímo; financuje rozpočet</small>' : c.eur + ' €' + '<small> / rok' + (c.perPerson ? ', max. na osobu' : '') + '</small>')) + '</div>')
+        + (mapMode === "burden" ? '' : '<div class="meter" aria-hidden="true"><i style="width:' + pct + '%;background:' + m.color + '"></i></div>'
+        + '<div class="loc">' + esc(c.local) + (c.eur ? ' · ' + rankTxt(c) : '') + '</div>')
         + '<p>' + esc(c.note) + '</p>'
         + '<button class="btn" type="button" data-open="' + iso + '">Otevřít detail</button>';
       box.querySelector("[data-open]").addEventListener("click", function(){ openDialog(iso); });
+    }
+    function burdenInfo(c){
+      var b = burdenOf(c);
+      if (b.v === null) return '<div class="big" style="font-size:22px">nesrovnatelné</div><div class="loc">' + esc(b.why) + '</div>';
+      return '<div class="big">' + fmtPct(b.v) + '<small> příjmu</small></div><div class="loc">' + c.eur + ' € ročně / medián ' + INCOME[c.iso].toLocaleString("cs-CZ") + ' € (EU-SILC 2024)</div>';
     }
     function setMapMode(mode){
       if (mapMode === mode) return; mapMode = mode;
       $("mapModeModel").setAttribute("aria-pressed", String(mode === "model"));
       $("mapModeAmount").setAttribute("aria-pressed", String(mode === "amount"));
-      legendHot = null; renderLegend(); paintMap();
+      $("mapModeBurden").setAttribute("aria-pressed", String(mode === "burden"));
+      var note = $("mapNote");
+      note.hidden = mode !== "burden";
+      if (mode === "burden") note.innerHTML = 'Zátěž: roční poplatek domácnosti (stav 2026) dělený mediánem ekvivalizovaného čistého příjmu na osobu (EU-SILC 2024, příjmy roku 2023). Jde o orientační ukazatel: medián na osobu není příjem domácnosti a roky se liší. Srovnává jen ' + Object.keys(INCOME).length + ' zemí s paušálním poplatkem za domácnost a s údajem v EU-SILC; daně na osobu (Finsko, Švédsko, Island), Spojené království a Bosna a Hercegovina srovnatelný údaj nemají. Zdroj: <a href="' + INCOME_SRC.u + '" target="_blank" rel="noopener">' + esc(INCOME_SRC.t) + '</a>.';
+      legendHot = null; renderLegend(); paintMap(); renderInfo(mapSel);
     }
     $("mapModeModel").addEventListener("click", function(){ setMapMode("model"); });
     $("mapModeAmount").addEventListener("click", function(){ setMapMode("amount"); });
+    $("mapModeBurden").addEventListener("click", function(){ setMapMode("burden"); });
     Object.keys(mapPaths).forEach(function(iso){
       var p = mapPaths[iso], c = byIso[iso];
       p.setAttribute("tabindex", "0"); p.setAttribute("role", "button");
@@ -2072,6 +2210,92 @@
     /* ---------- dialog ---------- */
     var dlg = $("detail"), dlgIso = null;
     function dlgList(){ return gridOrder.length ? gridOrder : COUNTRIES.map(function(c){ return c.iso; }); }
+    /* Omezení a nejistota údajů u konkrétních zemí (převzato ze seznamu „Co zůstává otevřené“ v kapitole Zdroje). */
+    var UNC = {
+      CZ: "Přesný výběr rozhlasového poplatku ČRo za rok 2026 není veřejně ověřený. Stav tisku 231 je doložen zprávami z 24. 10. 2026, ne přímo sněmovním rejstříkem.",
+      SI: "Výsledek referenda z 11. 10. 2026 je neoficiální, dokud ho volební komise úředně nepotvrdí (do 30. 10. 2026).",
+      DE: "Rozsudek Spolkového ústavního soudu ke stížnostem na nepřijetí zvýšení na 18,94 € k 24. 10. 2026 nepadl.",
+      PL: "Stav návrhu „opłaty audiowizualnej“ se v rejstříku Sejmu ověřit nepodařilo; uvádí se jen jako oznamovaný záměr.",
+      HU: "Detaily rozpuštění fondu MTVA (26. 7. 2026) stojí na jediném sekundárním zdroji.",
+      AT: "Že k říjnu 2026 neprošel zákon o zrušení poplatku, vychází z absence v prohledaných zdrojích, ne z rejstříku Národní rady.",
+      MD: "Státní alokace TRM na rok 2026 (221 mil. MDL) není potvrzená z rozpočtového zákona.",
+      BY: "Rozpočtovou položku BTRC na rok 2026 se dohledat nepodařilo.",
+      SM: "Aktuální výše veřejného financování RTV není ověřená.",
+      LU: "Částka pro Média 100,7 pochází ze sekundárního přehledu State Media Monitor.",
+      CY: "Přesné datum konce odvodu přes elektřinu (1. 7. 2000) stojí na jediném zdroji; samotné zrušení je potvrzené."
+    };
+    var DATA_DATE = "24. 10. 2026";
+    function fxNote(c){
+      if (!c.eur) return "";
+      if (/€/.test(c.local)) return "částka v eurech";
+      if (c.iso === "RS" || c.iso === "AL" || c.iso === "BA") return "přepočet kurzem národní banky (ECB tuto měnu neuvádí)";
+      return "přepočet referenčním kurzem ECB k 23. 10. 2026";
+    }
+    function directPay(c){
+      if (c.model === "bud") return "0 € přímo; financuje státní rozpočet";
+      if (c.eur === null) return "16 % z ceny přijímače při nákupu";
+      return c.eur + " € ročně" + (c.model === "tax" ? " (max. na osobu)" : "");
+    }
+    function trustBlock(c){
+      var b = burdenOf(c);
+      return '<div class="trust"><div class="trust-k">Údaje o zemi</div><dl>'
+        + '<dt>Model</dt><dd>' + esc(MODELS[c.model].label) + '</dd>'
+        + '<dt>Stav údajů</dt><dd>' + DATA_DATE + (fxNote(c) ? '; ' + esc(fxNote(c)) : '') + '</dd>'
+        + '<dt>Zátěž</dt><dd>' + (b.v === null ? esc(b.why) : fmtPct(b.v) + ' mediánového příjmu (EU-SILC 2024)') + '</dd>'
+        + '<dt>Primární zdroj</dt><dd><a href="' + esc(c.src.u) + '" target="_blank" rel="noopener">' + esc(c.src.t) + '</a></dd>'
+        + '<dt>Omezení</dt><dd>' + (UNC[c.iso] ? esc(UNC[c.iso]) : 'Žádné známé nad rámec obecné metody (kapitola Zdroje).') + '</dd>'
+        + '</dl></div>';
+    }
+
+    /* ---------- porovnání 2 až 4 zemí ---------- */
+    var cmpSel = ["CZ", "SK", "DE"];
+    /* lab/share.js se načítá až za tímto skriptem, proto start porovnání po načtení dokumentu */
+    function whenReady(fn){ if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fn); else fn(); }
+    whenReady(function(){
+      var fromUrl = window.PoplatkyShare ? window.PoplatkyShare.decodeCompare(location.search, COUNTRIES.map(function(c){ return c.iso; })) : [];
+      if (fromUrl.length >= 2) cmpSel = fromUrl;
+      var sorted = COUNTRIES.slice().sort(function(a, b){ return a.name.localeCompare(b.name, "cs"); });
+      function opts(val, allowEmpty){ return (allowEmpty ? '<option value="">nevybráno</option>' : '') + sorted.map(function(c){ return '<option value="' + c.iso + '"' + (c.iso === val ? ' selected' : '') + '>' + esc(c.name) + '</option>'; }).join(""); }
+      function renderPick(){
+        var html = "";
+        for (var i = 0; i < 4; i++) html += '<label><span class="small">Země ' + (i + 1) + (i >= 2 ? ' (nepovinná)' : '') + '</span><select data-ci="' + i + '" aria-label="Porovnávaná země ' + (i + 1) + '">' + opts(cmpSel[i] || "", i >= 2) + '</select></label>';
+        $("cmpPick").innerHTML = html;
+      }
+      function rows(){
+        var list = cmpSel.filter(Boolean).map(function(i){ return byIso[i]; });
+        var R = [
+          ["Model financování", function(c){ return esc(MODELS[c.model].label); }],
+          ["Přímá platba domácnosti", function(c){ return esc(directPay(c)); }],
+          ["V místní měně", function(c){ return esc(c.local); }],
+          ["Zátěž (% mediánového příjmu)", function(c){ var b = burdenOf(c); return b.v === null ? '<span class="na">nesrovnatelné</span>' : fmtPct(b.v); }],
+          ["Základ povinnosti", function(c){ return esc(c.basis); }],
+          ["Kdo vybírá", function(c){ return esc(c.collector); }],
+          ["Stav údajů a zdroj", function(c){ return DATA_DATE + ' · <a href="' + esc(c.src.u) + '" target="_blank" rel="noopener">zdroj</a>' + (UNC[c.iso] ? ' · <span class="na">s výhradou</span>' : ''); }]
+        ];
+        var head = '<div class="ct-row ct-head" role="row"><div class="ct-k" role="columnheader">Údaj</div>' + list.map(function(c){ return '<div class="ct-v" role="columnheader"><button type="button" class="ct-name" data-open="' + c.iso + '">' + esc(c.name) + '</button></div>'; }).join("") + '</div>';
+        $("cmpOut").innerHTML = '<div class="ct" style="--n:' + list.length + '" role="table" aria-label="Porovnání zemí">' + head
+          + R.map(function(r){ return '<div class="ct-row" role="row"><div class="ct-k" role="rowheader">' + r[0] + '</div>' + list.map(function(c){ return '<div class="ct-v" role="cell"><span class="ct-c">' + esc(c.name) + '</span><span class="ct-x">' + r[1](c) + '</span></div>'; }).join("") + '</div>'; }).join("")
+          + '</div><p class="src">U zemí financovaných z rozpočtu je přímá platba nulová, veřejné výdaje ale ne; srovnání veřejných výdajů na obyvatele je v kapitole 06 (EBU).</p>';
+        $("cmpOut").querySelectorAll("[data-open]").forEach(function(b){ b.addEventListener("click", function(){ openDialog(b.getAttribute("data-open")); }); });
+      }
+      renderPick(); rows();
+      $("cmpPick").addEventListener("change", function(e){
+        var t = e.target, i = +t.getAttribute("data-ci"); if (isNaN(i)) return;
+        cmpSel[i] = t.value;
+        var seen = {}; cmpSel = cmpSel.map(function(x){ if (!x || seen[x]) return ""; seen[x] = 1; return x; });
+        if (cmpSel.filter(Boolean).length < 2) { $("cmpMsg").textContent = "Vyberte aspoň dvě různé země."; }
+        else $("cmpMsg").textContent = "";
+        renderPick(); rows();
+      });
+      $("cmpShare").addEventListener("click", function(){
+        var url = location.href.split(/[?#]/)[0] + "?srovnat=" + cmpSel.filter(Boolean).join(".") + "#porovnani";
+        var msg = $("cmpMsg");
+        function ok(){ msg.textContent = "Odkaz na porovnání je zkopírovaný."; }
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(ok, function(){ msg.textContent = url; });
+        else msg.textContent = url;
+      });
+    });
+
     function openDialog(iso){
       var c = byIso[iso]; if (!c) return;
       dlgIso = iso;
@@ -2085,15 +2309,16 @@
         + '<span style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--ink-2)"><span style="width:9px;height:9px;border-radius:0;background:' + m.color + ';display:inline-block"></span>' + esc(m.label) + (c.eur ? ' · ' + rankTxt(c) : '') + '</span>'
         + '</div></div>'
         + '<div class="fact-grid">'
-        + '<div class="fact"><div class="k">Domácnost platí</div><div class="v">' + esc(c.local) + (c.eur !== null && c.eur > 0 ? ' <span style="color:var(--ink-3);font-weight:400">≈ ' + c.eur + ' €</span>' : '') + '</div>' + (c.eurNote ? '<div class="small">' + esc(c.eurNote) + '</div>' : '') + (c.perPerson ? '<div class="small">Částka je na osobu, ne na domácnost.</div>' : '') + '</div>'
+        + '<div class="fact"><div class="k">Přímá platba domácnosti</div><div class="v">' + esc(c.local) + (c.eur !== null && c.eur > 0 ? ' <span style="color:var(--ink-3);font-weight:400">≈ ' + c.eur + ' €</span>' : '') + '</div>' + (c.eurNote ? '<div class="small">' + esc(c.eurNote) + '</div>' : '') + (c.perPerson ? '<div class="small">Částka je na osobu, ne na domácnost.</div>' : '') + '</div>'
         + '<div class="fact"><div class="k">Základ povinnosti</div><div class="v">' + esc(c.basis) + '</div></div>'
         + '<div class="fact"><div class="k">Kdo vybírá</div><div class="v">' + esc(c.collector) + '</div></div>'
         + '<div class="fact"><div class="k">Kdo dostává</div><div class="v">' + esc(c.bc) + '</div></div>'
         + '</div>'
+        + (c.model === "bud" ? '<p class="small" style="margin:-6px 0 14px">Bez samostatné platby neznamená bez nákladů: vysílání platí státní rozpočet z daní. Veřejné výdaje na obyvatele srovnává kapitola 06.</p>' : '')
         + compareCZ(c)
         + '<p style="font-size:15.5px;margin:0">' + esc(c.note) + '</p>'
         + '<ul>' + facts + '</ul>'
-        + '<p class="src">Zdroj: <a href="' + esc(c.src.u) + '" target="_blank" rel="noopener">' + esc(c.src.t) + '</a> · Údaje ověřené k 24. 10. 2026.</p>';
+        + trustBlock(c);
       $("dlgIn").scrollTop = 0;
       var L = dlgList(), i = L.indexOf(iso);
       $("dlgPrev").disabled = false; $("dlgNext").disabled = false;
@@ -2109,8 +2334,8 @@
     function compareCZ(c){
       if (c.iso === "CZ" || c.eur === null) return "";
       var cz = byIso.CZ, mx = Math.max(cz.eur, c.eur, 1), diff = c.eur - cz.eur;
-      var txt = c.eur === 0 ? "Domácnost tu neplatí nic, česká dá 101 € ročně." : (diff === 0 ? "Stejně jako v Česku." : (diff > 0 ? "O " + diff + " € ročně víc než česká domácnost (" + (c.eur / cz.eur).toLocaleString("cs-CZ", {maximumFractionDigits:1}) + "×)." : "O " + (-diff) + " € ročně méně než česká domácnost."));
-      return '<div class="cmp"><div class="cmp-k">Srovnání s Českem</div>'
+      var txt = c.eur === 0 ? "Domácnost tu nemá samostatnou platbu (náklady nese rozpočet); česká domácnost platí přímo 101 € ročně." : (diff === 0 ? "Stejně jako v Česku." : (diff > 0 ? "O " + diff + " € ročně víc než česká domácnost (" + (c.eur / cz.eur).toLocaleString("cs-CZ", {maximumFractionDigits:1}) + "×)." : "O " + (-diff) + " € ročně méně než česká domácnost."));
+      return '<div class="cmp"><div class="cmp-k">Přímá platba: srovnání s Českem</div>'
         + '<div class="cmp-row"><span>' + esc(c.name) + '</span><div class="cmp-t"><i style="width:' + (c.eur / mx * 100) + '%;background:' + MODELS[c.model].color + '"></i></div><b>' + c.eur + ' €</b></div>'
         + '<div class="cmp-row"><span>Česko</span><div class="cmp-t"><i style="width:' + (cz.eur / mx * 100) + '%;background:var(--dom)"></i></div><b>' + cz.eur + ' €</b></div>'
         + '<div class="small" style="margin-top:6px">' + txt + (c.perPerson ? " Pozor: částka je na osobu." : "") + '</div></div>';
@@ -2141,6 +2366,7 @@
     </script>
     <script src="lab/params.js"></script>
     <script src="lab/engine.js"></script>
+    <script src="lab/share.js"></script>
     <script src="lab/ui.js"></script>
   </body>
 </html>

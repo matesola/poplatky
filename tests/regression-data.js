@@ -30,6 +30,7 @@ function diff(a, b, p, acc) {
 const ALLOWED = {
   "COUNTRIES.SI.note": "Slovinské referendum: rozdíl 2 633 hlasů po započtení zahraničí (RTV SLO, 19. 10. 2026), dříve průběžných 546",
   "COUNTRIES.SI.facts.3": "tamtéž",
+  "COUNTRIES.CZ.note": "Odkaz „kapitola 3“ nahrazen obecným odkazem po přečíslování kapitol (ux-2)",
 };
 const cur = extract(fs.readFileSync(path.join(ROOT, "index.html"), "utf8"));
 const refs = process.argv.slice(2).length ? process.argv.slice(2) : ["4718d17", "main"];

@@ -71,7 +71,7 @@ const kc = (s) => Number(String(s).replace(/[^\d-]/g, ""));
       await q.close();
     });
     await t(`[${label}] vstup z úvodu vede do kalkulačky`, async () => {
-      const href = await p.getAttribute(".cz-cta", "href"); assert(href === "#kalkulacka", href);
+      const href = await p.getAttribute(".path-me", "href"); assert(href === "#kalkulacka", href);
     });
 
     // výchozí stav kalkulačky: 45 000 + 36 000 Kč, dva zaměstnanci
@@ -163,7 +163,7 @@ const kc = (s) => Number(String(s).replace(/[^\d-]/g, ""));
     const p = await ctx.newPage(); await p.goto(base);
     const nums = await p.$$eval(".stat .num", (els) => els.map((e) => e.textContent.replace(/[\s\u00a0]+/g, "")));
     assert(nums.join("|") === "103let|€363|17|2633", nums.join("|"));
-    assert((await p.textContent("#simulace")).includes("Co kdybychom platili jinak?"));
+    assert((await p.textContent("#simulace")).includes("Kolik bych platil já?"));
     await ctx.close();
   });
 
@@ -187,7 +187,7 @@ const kc = (s) => Number(String(s).replace(/[^\d-]/g, ""));
       assert((await p.title()).length > 5, "title");
     });
     await t(`[flow ${label}] 2 přechod na kalkulačku z úvodu`, async () => {
-      await p.click(".cz-cta");
+      await p.click(".path-me");
       let top = 1e9; // plynulé posouvání přes celou stránku trvá až ~2 s; čekáme, až se ustálí
       for (let i = 0, prev = -1; i < 40; i++) { await p.waitForTimeout(150); top = await p.$eval("#kalkulacka", (e) => e.getBoundingClientRect().top); if (Math.abs(top - prev) < 1) break; prev = top; }
       assert(top > -5 && top < 200, "pozice " + top);
@@ -329,8 +329,8 @@ const kc = (s) => Number(String(s).replace(/[^\d-]/g, ""));
       assert(sub === "Jak financujeme média veřejné služby.", "podtitulek: " + sub);
       assert(lede === "Od televizních poplatků po státní rozpočet. Prozkoumejte 45 evropských zemí, spočítejte si české alternativy a zjistěte, co jednotlivé modely znamenají pro nezávislost médií.", "perex: " + lede);
       assert((await p.$$("h1")).length === 1, "jediné H1");
-      const go = await p.$$eval(".hero-go a", (as) => as.map((a) => a.textContent.trim() + ">" + a.getAttribute("href")));
-      assert(go.join("|") === "Evropské srovnání>#mapa|Český kontext>#cesko|Kalkulačka>#kalkulacka|Metodika a zdroje>#zdroje", go.join("|"));
+      const go = await p.$$eval(".paths .path-t, .paths-more a", (as) => as.map((a) => a.textContent.trim() + ">" + (a.closest("a") || a).getAttribute("href")));
+      assert(go.join("|") === "Kolik bych platil já?>#kalkulacka|Jak platí Evropa?>#mapa|Česko podrobně>#cesko|Nezávislost médií>#pojistky|Metodika a zdroje>#zdroje", go.join("|"));
       for (const g of go) assert(await p.$(g.split(">")[1]), "cíl " + g);
       await c.close();
     }
@@ -359,12 +359,12 @@ const kc = (s) => Number(String(s).replace(/[^\d-]/g, ""));
   for (const [vp, label] of [[{ width: 1366, height: 900 }, "desktop"], [{ width: 390, height: 844 }, "mobil"]]) {
     await t(`[flow ${label}] přechod do evropského srovnání a sdílení konkrétní sekce`, async () => {
       const c = await browser.newContext({ viewport: vp, isMobile: label === "mobil", hasTouch: label === "mobil" }); const p = await c.newPage(); await p.goto(base);
-      await p.click('.hero-go a[href="#mapa"]');
+      await p.click('.path-eu');
       let top = 1e9; for (let i = 0, prev = -1; i < 40; i++) { await p.waitForTimeout(150); top = await p.$eval("#mapa", (e) => e.getBoundingClientRect().top); if (Math.abs(top - prev) < 1) break; prev = top; }
       assert(top > -5 && top < 200, "mapa " + top);
       assert((await p.$$("#mapSvg path.c")).length >= 40, "mapa vykreslena");
       const navHashes = await p.$$eval("nav.toc .links a", (as) => as.map((a) => a.getAttribute("href")));
-      assert(navHashes.length === 9, "navigace " + navHashes.length);
+      assert(navHashes.length === 11, "navigace " + navHashes.length);
       for (const [h, sel] of [["#zeme-CZ", "#dlgName"], ["#kalkulacka", "#kalkulacka"], ["#metodika", "#metodika"]].concat(navHashes.map((x) => [x, x]))) {
         const q = await c.newPage(); await q.goto(base + h); await q.waitForTimeout(1100);
         if (h === "#zeme-CZ") assert((await q.textContent(sel)).trim() === "Česko", "dialog CZ");
@@ -388,10 +388,145 @@ const kc = (s) => Number(String(s).replace(/[^\d-]/g, ""));
     await c.close();
   });
 
+  /* ================= KDO PLATÍ? 2.0 (větev ux-2) ================= */
+  await t("ux2: pořadí kapitol podle nové informační hierarchie", async () => {
+    const c = await browser.newContext(); const p = await c.newPage(); await p.goto(base);
+    const ids = await p.$$eval("main section[id]", (ss) => ss.map((x) => x.id));
+    assert(ids.join(",") === "simulace,cesko,mapa,zebricek,zeme,kontext,pojistky,osa,hlasy,cele-cesko,zdroje", ids.join(","));
+    await c.close();
+  });
+  await t("ux2: všechny dříve veřejné kotvy (main 865685d) dál existují", async () => {
+    const old = require("child_process").execSync("git show 865685d:index.html", { cwd: ROOT, encoding: "utf8", maxBuffer: 64e6 });
+    const anchors = [...new Set([...old.matchAll(/href="#([A-Za-z][\w-]*)"/g)].map((m) => m[1]))];
+    const c = await browser.newContext(); const p = await c.newPage(); await p.goto(base);
+    const missing = []; for (const a of anchors) if (!(await p.$("#" + a))) missing.push(a);
+    assert(missing.length === 0, "chybí: " + missing.join(", "));
+    assert(anchors.length >= 16, "kotev " + anchors.length);
+    await c.close();
+  });
+  await t("ux2: blok Aktuální Česko (bez JS i s JS): poplatek, stav návrhu, datum, odkaz", async () => {
+    for (const js of [false, true]) {
+      const c = await browser.newContext({ javaScriptEnabled: js }); const p = await c.newPage(); await p.goto(base);
+      const tx = (await p.innerText(".now-cz")).replace(/\s+/g, " ");
+      assert(/2 460 Kč ročně/.test(tx) && /Schválený není/.test(tx) && /26\. 10\. 2026/.test(tx) && /tisk 231/.test(tx), tx);
+      assert(!/schválen[oa]? (zrušení|změna)/i.test(tx), "návrh nesmí znít jako schválený");
+      assert((await p.getAttribute(".now-more", "href")) === "#legislativa" && await p.$("#legislativa"), "odkaz");
+      await c.close();
+    }
+  });
+  await t("ux2: stav legislativy ve 4 krocích, aktuální je projednávání", async () => {
+    const c = await browser.newContext(); const p = await c.newPage(); await p.goto(base);
+    const k = await p.$$eval(".legis-steps li", (ls) => ls.map((l) => l.className + ":" + l.querySelector(".legis-k").textContent.trim()));
+    assert(k.join("|") === "st-done:Platná legislativa|st-done:Předložený návrh|st-now:Projednávání a hlasování|st-todo:Schválená změna a účinnost", k.join("|"));
+    await c.close();
+  });
+  for (const [vp, label] of [[{ width: 1366, height: 900 }, "desktop"], [{ width: 390, height: 844 }, "mobil"]]) {
+    await t(`[ux2 ${label}] rychlá odpověď = plný výsledek kalkulačky`, async () => {
+      const c = await browser.newContext({ viewport: vp, isMobile: label === "mobil", hasTouch: label === "mobil" }); const p = await c.newPage(); await p.goto(base); await p.waitForTimeout(400);
+      await p.fill("#inc0", "52000"); await p.waitForTimeout(150);
+      const q = await p.$$eval("#hhQuick .q-row b", (bs) => bs.map((b) => b.textContent));
+      const fullA = kc(await txt(p, "#hhOut .res.a .res-mid")), fullC = kc(await txt(p, "#hhOut .res.c .res-big"));
+      assert(kc(q[0]) === fullA && kc(q[2]) === fullC, q.join("|") + " vs " + fullA + "/" + fullC);
+      const vis = await p.$eval("#hhQuick", (e) => getComputedStyle(e).display !== "none");
+      assert(vis === (label === "mobil"), "rychlá odpověď viditelná jen na úzkém displeji");
+      await c.close();
+    });
+  }
+  await t("ux2: sdílení bez příjmů: odkaz neobsahuje příjmy, po otevření sedí domácnost a parametry", async () => {
+    const c = await browser.newContext(); const p = await c.newPage(); await p.goto(base); await p.waitForTimeout(300);
+    await p.fill("#inc0", "61234"); await p.selectOption('#adultRows .adult[data-i="1"] select', "pens"); await p.fill("#inc1", "23456");
+    await (await p.$$('#adultRows [data-f="sensory"]'))[1].check();
+    await p.evaluate(() => { const r = document.getElementById("pRate"); r.value = "0.015"; r.dispatchEvent(new Event("input", { bubbles: true })); });
+    await p.waitForTimeout(200);
+    const url = await p.inputValue("#shUrl");
+    assert(!/61234|61000|23456|23000/.test(url), url);
+    assert(/a=emp\.pens/.test(url) && /s=1/.test(url) && /r=0\.015/.test(url) && url.endsWith("#kalkulacka"), url);
+    const q = await c.newPage(); await q.goto(url); await q.waitForTimeout(600);
+    assert((await q.$$("#adultRows .adult")).length === 2, "dospělí");
+    assert((await q.$eval('#adultRows .adult[data-i="1"] select', (s) => s.value)) === "pens", "typ");
+    assert(await q.$eval('#adultRows .adult[data-i="1"] [data-f="sensory"]', (x) => x.checked), "osvobození");
+    assert((await q.inputValue("#pRate")) === "0.015", "sazba");
+    assert(!/61234|23456/.test(await q.inputValue("#inc0") + await q.inputValue("#inc1")), "příjmy se nepřenesly");
+    assert(/Příjmy v odkazu nejsou/.test(await q.textContent("#shNote")), "upozornění");
+    await c.close();
+  });
+  await t("ux2: sdílení s příjmy (souhlas): stejný výsledek C po otevření odkazu", async () => {
+    const c = await browser.newContext(); const p = await c.newPage(); await p.goto(base); await p.waitForTimeout(300);
+    await p.fill("#inc0", "58000"); await p.fill("#inc1", "41000"); await p.check("#shInc"); await p.waitForTimeout(150);
+    const url = await p.inputValue("#shUrl"); assert(/[?&]p=1(&|#|$)/.test(url) && /emp-58000\.emp-41000/.test(url), url);
+    const cA = await txt(p, "#hhOut .res.c .res-big");
+    const q = await c.newPage(); await q.goto(url); await q.waitForTimeout(600);
+    assert(await txt(q, "#hhOut .res.c .res-big") === cA, "C se liší");
+    await c.close();
+  });
+  await t("ux2: neplatný odkaz nerozbije stránku", async () => {
+    const c = await browser.newContext(); const p = await c.newPage(); const err = []; p.on("pageerror", (e) => err.push(e.message));
+    await p.goto(base + "?v=1&a=%3Cimg%20src=x%3E.emp-1e99&r=abc&k=99.99.99&cil=-5&srovnat=XX.%3Cb%3E#kalkulacka"); await p.waitForTimeout(600);
+    assert(err.length === 0, err.join("|")); assert(!/NaN|undefined/.test(await txt(p, "#simulace")), "NaN");
+    assert(!(await p.$("img[src=x]")), "vložené HTML");
+    await c.close();
+  });
+  await t("ux2: odkaz simulátoru nese jen parametry", async () => {
+    const c = await browser.newContext({ permissions: ["clipboard-read", "clipboard-write"] }); const p = await c.newPage(); await p.goto(base); await p.waitForTimeout(300);
+    await p.evaluate(() => { const r = document.getElementById("pCap"); r.value = "5000"; r.dispatchEvent(new Event("input", { bubbles: true })); });
+    await p.click("#simShare"); await p.waitForTimeout(150);
+    const url = await p.evaluate(() => navigator.clipboard.readText());
+    assert(/c=5000/.test(url) && url.endsWith("#simulator") && !/[?&]p=1(&|#|$)/.test(url) && !/45000|36000/.test(url), url);
+    await c.close();
+  });
+  await t("ux2: karta výsledku se vygeneruje jako PNG 1200×630", async () => {
+    const c = await browser.newContext({ acceptDownloads: true }); const p = await c.newPage(); await p.goto(base); await p.waitForTimeout(300);
+    const [dl] = await Promise.all([p.waitForEvent("download"), p.click("#shCard")]);
+    const buf = fs.readFileSync(await dl.path());
+    assert(dl.suggestedFilename() === "kdo-plati-vysledek.png" && buf.readUInt32BE(16) === 1200 && buf.readUInt32BE(20) === 630, "png");
+    await c.close();
+  });
+  for (const [vp, label] of [[{ width: 1366, height: 900 }, "desktop"], [{ width: 360, height: 800 }, "mobil"]]) {
+    await t(`[ux2 ${label}] porovnání zemí: výběr, odkaz, čitelnost`, async () => {
+      const c = await browser.newContext({ viewport: vp, isMobile: label === "mobil", hasTouch: label === "mobil" }); const p = await c.newPage();
+      await p.goto(base + "?srovnat=CZ.AT.PL.IE#porovnani"); await p.waitForTimeout(800);
+      const names = await p.$$eval("#cmpPick select", (ss) => ss.map((s) => s.value));
+      assert(names.join(",") === "CZ,AT,PL,IE", names.join(","));
+      const rowTxt = (await p.innerText("#cmpOut")).replace(/\s+/g, " ");
+      assert(/0,67 %/.test(rowTxt) && /101 € ročně/.test(rowTxt), "zátěž a platba CZ");
+      await p.selectOption('#cmpPick select[data-ci="1"]', "SK"); await p.waitForTimeout(100);
+      assert(/0 € přímo; financuje státní rozpočet/.test(await p.innerText("#cmpOut")), "rozpočet ne jako nulová cena");
+      const over = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      assert(over <= 0, "přetečení " + over);
+      if (label === "mobil") assert(await p.$eval(".ct-v .ct-c", (e) => getComputedStyle(e).display !== "none"), "na mobilu jméno země u každé hodnoty");
+      await c.close();
+    });
+  }
+  await t("ux2: mapa, pohled Zátěž: jen srovnatelné země, poznámka a zdroj", async () => {
+    const c = await browser.newContext(); const p = await c.newPage(); await p.goto(base); await p.waitForTimeout(400);
+    await p.click("#mapModeBurden"); await p.waitForTimeout(150);
+    assert(/0,67 %/.test(await p.innerText("#mapInfo")), "Česko 0,67 %");
+    assert(!(await p.$eval("#mapNote", (e) => e.hidden)) && /Eurostat/.test(await p.innerText("#mapNote")), "poznámka");
+    await p.evaluate(() => { const e = document.querySelector('#mapSvg path.c[data-iso="SK"]') || null; return !!e; });
+    await p.click("#mapModeModel"); assert(await p.$eval("#mapNote", (e) => e.hidden), "poznámka zmizí");
+    await c.close();
+  });
+  await t("ux2: detail rozpočtové země: přímá platba vs. veřejné výdaje, údaje a omezení", async () => {
+    const c = await browser.newContext(); const p = await c.newPage(); await p.goto(base + "#zeme-SK"); await p.waitForTimeout(700);
+    const d = (await p.innerText("#dlgIn")).replace(/\s+/g, " ");
+    assert(/Přímá platba domácnosti/i.test(d) && /neznamená bez nákladů/.test(d) && !/neplatí nic/.test(d), d.slice(0, 200));
+    assert(/Stav údajů/i.test(d) && /Primární zdroj/i.test(d) && /Omezení/i.test(d), "údaje o zemi");
+    const q = await c.newPage(); await q.goto(base + "#zeme-SI"); await q.waitForTimeout(700);
+    assert(/neoficiální/.test(await q.innerText("#dlgIn")), "omezení u Slovinska");
+    await c.close();
+  });
+  await t("ux2: klávesnice: hlavní cesty mají viditelný fokus", async () => {
+    const c = await browser.newContext(); const p = await c.newPage(); await p.goto(base);
+    await p.focus(".path-me"); await p.keyboard.press("Tab"); await p.keyboard.press("Shift+Tab");
+    const o = await p.$eval(".path-me", (e) => getComputedStyle(e).outlineStyle + " " + getComputedStyle(e).outlineWidth);
+    assert(/solid 3px/.test(o), o);
+    await c.close();
+  });
+
   /* ================= Mobil: šířky 320 až 430 (Chromium, emulace) ================= */
-  for (const w of [320, 360, 375, 390, 414, 430]) {
+  for (const w of [320, 360, 375, 390, 414, 430, 768, 1440]) {
     await t(`[mobil ${w}px] bez vodorovného přetečení, ovladatelné prvky`, async () => {
-      const ctx = await browser.newContext({ viewport: { width: w, height: 800 }, isMobile: true, hasTouch: true, deviceScaleFactor: 3 });
+      const ctx = await browser.newContext({ viewport: { width: w, height: 800 }, isMobile: w < 700, hasTouch: w < 1000, deviceScaleFactor: w < 700 ? 3 : 1 });
       const p = await ctx.newPage(); await p.goto(base + "#kalkulacka"); await p.waitForTimeout(700);
       await p.evaluate(() => { document.querySelectorAll("details").forEach((d) => (d.open = true)); }); await p.waitForTimeout(300);
       const r = await p.evaluate(() => {
@@ -410,7 +545,7 @@ const kc = (s) => Number(String(s).replace(/[^\d-]/g, ""));
       assert(r.over.length === 0, "přetéká: " + r.over.join(", "));
       assert(r.outCard.length === 0, "pole mimo kartu dospělého: " + r.outCard.join(", "));
       assert(r.small.length === 0, "dotykové cíle pod 24 px: " + r.small.join(", "));
-      assert(r.fonts.length === 0, "písmo polí pod 16 px (iOS přiblíží): " + r.fonts.join(", "));
+      if (w < 700) assert(r.fonts.length === 0, "písmo polí pod 16 px (iOS přiblíží): " + r.fonts.join(", "));
       assert(r.numInputs.length === 0, "chybí inputmode: " + r.numInputs.join(", "));
       assert(r.bodyFont >= 13, "čitelnost výsledků " + r.bodyFont);
     });

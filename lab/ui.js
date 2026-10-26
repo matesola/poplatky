@@ -152,6 +152,21 @@
       + '<div class="per">' + per
       + "<div><span>Efektivní podíl na hrubém příjmu domácnosti</span><span>" + (lv.grossAnnual ? pct(lv.effShare, 2) : "-") + "</span></div></div>"
       + "<p>Hypotetický odvod podle parametrů modelu: " + pct(st.lp.rate, 2) + (st.lp.marginal ? " z příjmu nad " : " z celého příjmu nad ") + kc(st.lp.threshold) + " ročně, strop " + kc(st.lp.cap) + " na osobu" + (st.lp.includePensions ? ", včetně důchodů" : ", bez důchodů") + '. <a href="#simulator">Změnit v simulátoru</a></p></div>';
+    renderQuick(cur, lv);
+    if (window.PoplatkyShare && $("shUrl")) $("shUrl").value = location.href.split(/[?#]/)[0] + "?" + window.PoplatkyShare.encodeScenario(st, { includeIncome: $("shInc").checked }) + "#kalkulacka";
+  }
+
+  /* Rychlá odpověď: stejná data jako plný výsledek (jedno volání jádra), jen zhuštěně. Na úzkém displeji
+     je plný výsledek až pod formulářem, proto se zobrazuje hned pod zadáním dospělých. */
+  function renderQuick(cur, lv) {
+    var aTxt = cur.status === "hranice" ? "2 460 nebo 0 Kč" : kc(cur.annual);
+    var aNote = { plati: "platíte", osvobozen: "osvobození", pravdepodobne: "pravděpodobně osvobozeni", hranice: "na hranici osvobození", neplati: "bez přijímače" }[cur.status] || "";
+    var d = lv.diffVsCurrent, dTxt = Math.abs(d) < 0.5 ? "stejně jako dnes" : signKc(d) + " proti dnešku";
+    $("hhQuick").innerHTML = '<div class="q-h">Rychlá odpověď <span class="small">přímá platba domácnosti ročně</span></div>'
+      + '<div class="q-row"><span>A · Dnešní poplatek</span><b>' + aTxt + "</b><small>" + aNote + "</small></div>"
+      + '<div class="q-row"><span>B · Ze státního rozpočtu</span><b>0 Kč přímo</b><small>náklady nese rozpočet</small></div>'
+      + '<div class="q-row"><span>C · Účelový odvod</span><b>' + kc(lv.total) + "</b><small>" + dTxt + "</small></div>"
+      + '<a class="q-more" href="#hhOut">Podrobný výsledek a předpoklady</a>';
   }
 
   /* ================= SVG pomocníci ================= */
@@ -455,6 +470,86 @@
       + '<p class="small">Výpočetní jádro, parametry a testy jsou v repozitáři: <a href="https://github.com/matesola/poplatky" target="_blank" rel="noopener">github.com/matesola/poplatky</a> (lab/engine.js, lab/params.js, tests/). Spuštění testů: <code>npm test</code>.</p>';
     $("methodBody").innerHTML = html;
   })();
+
+  /* ---------- sdílený scénář z odkazu (validovaný v lab/share.js) ---------- */
+  var SH = window.PoplatkyShare, sharedNote = "";
+  if (SH && location.search) {
+    var dec = SH.decodeScenario(location.search, P.levyDefault);
+    if (dec.ok) {
+      var d = dec.state;
+      if (d.adults) st.adults = d.adults.map(function (a) { return { type: a.type, gross: dec.incomes ? a.gross : (a.type === "pens" ? 22000 : 35000), pension: a.pension || 0, sensory: !!a.sensory }; });
+      ["kids0_6", "kids6_15", "kids15_26"].forEach(function (k) { if (d[k] !== undefined) { st[k] = d[k]; $(k).textContent = d[k]; } });
+      if (d.noDev) { st.noDev = true; $("hhNoDev").checked = true; }
+      if (d.date) { st.date = d.date; document.querySelectorAll("[data-date]").forEach(function (x) { x.setAttribute("aria-pressed", String(x.dataset.date === d.date)); }); }
+      if (d.kids0_6 || d.kids6_15 || d.kids15_26 || d.noDev || d.date) $("hhMore").open = true;
+      if (d.lp) st.lp = d.lp;
+      if (d.target) { st.target = d.target; $("pTarget").value = d.target; if (d.target === "custom") { st.targetCustom = d.targetCustom; $("pTargetCustom").hidden = false; $("pTargetCustom").value = String(d.targetCustom / 1e9); } }
+      sharedNote = dec.incomes ? "Otevřeli jste sdílený scénář včetně zaokrouhlených příjmů." : "Otevřeli jste sdílený scénář: složení domácnosti a parametry modelu. Příjmy v odkazu nejsou, jsou výchozí; zadejte své.";
+      if (dec.ignored.length) sharedNote += " Některé neplatné hodnoty z odkazu byly ignorovány.";
+    }
+  }
+  if (sharedNote) { $("shNote").hidden = false; $("shNote").textContent = sharedNote; }
+
+  /* ---------- sdílení: odkaz, kopírování, Web Share, karta ---------- */
+  function baseUrl() { return location.href.split(/[?#]/)[0]; }
+  function shareUrl(hash, withInc) { return baseUrl() + "?" + SH.encodeScenario(st, { includeIncome: !!withInc }) + hash; }
+  function copyText(text, msgEl, inputEl) {
+    function done(ok) { msgEl.textContent = ok ? "Odkaz je zkopírovaný." : "Kopírování se nepodařilo, odkaz označte a zkopírujte ručně."; }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { done(true); }, function () { fallback(); });
+    else fallback();
+    function fallback() { if (inputEl) { inputEl.focus(); inputEl.select(); } var ok = false; try { ok = document.execCommand("copy"); } catch (e) {} done(ok); }
+  }
+  function refreshShare() { if (SH) $("shUrl").value = shareUrl("#kalkulacka", $("shInc").checked); }
+  if (SH) {
+    $("shInc").addEventListener("change", refreshShare);
+    $("shCopy").addEventListener("click", function () { refreshShare(); copyText($("shUrl").value, $("shMsg"), $("shUrl")); });
+    if (navigator.share) {
+      $("shNative").hidden = false;
+      $("shNative").addEventListener("click", function () { refreshShare(); navigator.share({ title: "Kdo platí? Moje domácnost", text: "Kolik by domácnost platila za ČT a ČRo v různých modelech (simulace).", url: $("shUrl").value }).catch(function () {}); });
+    }
+    $("shCard").addEventListener("click", function () { makeCard($("shInc").checked); });
+    $("simShare").addEventListener("click", function () { copyText(shareUrl("#simulator", false), $("simShareMsg"), null); });
+  } else $("hhShare").hidden = true;
+
+  /* Karta výsledku pro sociální sítě: vzniká v prohlížeči (canvas), nic se neodesílá na server. */
+  function makeCard(withInc) {
+    var c = E.compareHousehold(P, household(), st.lp), cur = c.current, lv = c.levy;
+    var W = 1200, H = 630, cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+    var g = cv.getContext("2d"); if (!g) return;
+    var F = '"Archivo", system-ui, sans-serif', M = '"IBM Plex Mono", ui-monospace, monospace';
+    g.fillStyle = "#f2efe6"; g.fillRect(0, 0, W, H);
+    g.fillStyle = "#0b0b0b"; g.font = "700 22px " + M; g.fillText("KDO PLATÍ? · SIMULACE PRO DOMÁCNOST", 60, 70);
+    var who = st.adults.map(function (a) { return typeLabel(a.type).toLowerCase() + (withInc && a.type !== "none" ? " " + num(Math.round((+a.gross || 0) / 1000) * 1000) + " Kč" : ""); }).join(", ");
+    var kids = st.kids0_6 + st.kids6_15 + st.kids15_26;
+    g.font = "500 24px " + F; wrap(g, "Domácnost: " + st.adults.length + " dospělí (" + who + ")" + (kids ? ", " + kids + " děti" : ", bez dětí") + (withInc ? ", hrubě měsíčně" : ""), 60, 112, W - 120, 30);
+    var rows = [["A", "Dnešní poplatek", cur.status === "hranice" ? "2 460 nebo 0 Kč" : kc(cur.annual), "platná legislativa"],
+      ["B", "Ze státního rozpočtu", "0 Kč přímo", "náklady nese rozpočet (návrh, tisk 231)"],
+      ["C", "Účelový odvod", kc(lv.total), "autorský model, " + pct(st.lp.rate, 2) + " nad " + kc(st.lp.threshold) + ", strop " + kc(st.lp.cap)]];
+    rows.forEach(function (r, i) {
+      var y = 190 + i * 112;
+      g.fillStyle = i === 0 ? "#ff3d00" : "#ffffff"; g.fillRect(60, y, W - 120, 92); g.strokeStyle = "#0b0b0b"; g.lineWidth = 4; g.strokeRect(60, y, W - 120, 92);
+      g.fillStyle = "#0b0b0b"; g.font = "700 20px " + M; g.fillText(r[0] + " · " + r[1].toUpperCase(), 84, y + 36);
+      g.font = "500 19px " + F; g.fillText(r[3], 84, y + 70);
+      g.font = "900 46px " + F; g.textAlign = "right"; g.fillText(r[2], W - 84, y + 62); g.textAlign = "left";
+    });
+    g.font = "500 18px " + F; g.fillStyle = "#262626";
+    wrap(g, "Roční přímá platba domácnosti. Modelový výpočet podle zveřejněných předpokladů, ne závazný právní závěr. Legislativa ověřena k " + P.meta.legalDateLabel + ".", 60, 552, W - 340, 24);
+    g.fillStyle = "#0b0b0b"; g.font = "700 26px " + M; g.textAlign = "right"; g.fillText("poplatky.app", W - 60, 590); g.textAlign = "left";
+    cv.toBlob(function (blob) {
+      if (!blob) return;
+      var file = typeof File === "function" ? new File([blob], "kdo-plati-vysledek.png", { type: "image/png" }) : null;
+      if (file && navigator.canShare && navigator.canShare({ files: [file] }) && navigator.share) {
+        navigator.share({ files: [file], title: "Kdo platí?", text: "Simulace přímé platby domácnosti, poplatky.app" }).catch(function () { download(blob); });
+      } else download(blob);
+    }, "image/png");
+    function download(blob) { var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "kdo-plati-vysledek.png"; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500); $("shMsg").textContent = "Karta výsledku je stažená."; }
+  }
+  /** @param {CanvasRenderingContext2D} g */
+  function wrap(g, text, x, y, maxW, lh) {
+    var words = text.split(" "), line = "";
+    words.forEach(function (w) { var t = line ? line + " " + w : w; if (g.measureText(t).width > maxW && line) { g.fillText(line, x, y); y += lh; line = w; } else line = t; });
+    if (line) g.fillText(line, x, y);
+  }
 
   /* ---------- start + překreslení při změně šířky ---------- */
   renderAdults(); syncCtrls(); updateHH(); updateAB(); updateSim(); updateC(); updateD();
