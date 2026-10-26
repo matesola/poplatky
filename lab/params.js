@@ -18,6 +18,9 @@
     zakon348: { t: "Zákon č. 348/2005 Sb., o rozhlasových a televizních poplatcích (ve znění zák. č. 119/2025 Sb.)", u: "https://www.zakonyprolidi.cz/cs/2005-348" },
     novela119: { t: "Zákon č. 119/2025 Sb. (velká mediální novela)", u: "https://data.atlascloud.cz/LCR/Rejstrik/Sb/2025/sb119-2025/119_2025/119_2025.pdf" },
     mk: { t: "Ministerstvo kultury: Rozhlasové a televizní poplatky", u: "https://www.mk.gov.cz/488.html" },
+    zakon348pdf: { t: "Zákon č. 348/2005 Sb., znění účinné od 1. 5. 2025 (PDF, Česká televize)", u: "https://www.ceskatelevize.cz/vse-o-ct/api/media/documents/Zakon_o_rozhlasovych_a_televiznich_poplatcich.pdf" },
+    ctOsvobozeni: { t: "Česká televize: osvobození od platby", u: "https://poplatky.ceskatelevize.cz/osvobozeni-od-platby" },
+    croOsvobozeni: { t: "Český rozhlas: osvobození (částky životního minima od 1. 10. 2026)", u: "https://poplatek.rozhlas.cz/osvobozeni-8752432" },
     zm: { t: "Kurzy.cz: životní minimum od 1. 10. 2026 (zák. č. 110/2006 Sb.)", u: "https://zpravy.kurzy.cz/872430-zivotni-minimum-se-od-rijna-2026-zmeni-ovlivni-superdavku-porodne-i-dalsi-davky-o-valorizaci-ale/" },
     osvobozeni: { t: "aRecenze: osvobození od poplatků 2026 (příjmový limit, ZTP/P)", u: "https://www.arecenze.cz/clanky/poplatky-za-ct-a-rozhlas-2026-nizkoprijmove-domacnosti-je-platit-nemusi-od-rijna-dosahne-na-vyjimku-vic-lidi/" },
     tisk231: { t: "Médiář, 24. 10. 2026: text návrhu a RIA (sněmovní tisk 231)", u: "https://www.mediar.cz/hrozi-vyssi-zavislost-ct-a-rozhlasu-na-statu-pripousti-samotny-klempiruv-navrh/" },
@@ -42,7 +45,7 @@
 
   var P = {
     meta: {
-      version: "2026-10-26.1",
+      version: "2026-10-26.2",
       legalDate: "2026-10-26",
       legalDateLabel: "26. 10. 2026",
       dataNote: "Mzdy ISPV 2025 přepočtené růstem mezd 2026; důchody ČSSZ 6/2026; rozpočty ČT a ČRo 2026; tisk 231 ve znění po 1. čtení."
@@ -53,7 +56,9 @@
     fee: {
       tvMonthly: { value: 150, unit: "Kč/měs.", cat: "fakt", src: SRC.zakon348, date: "od 1. 5. 2025" },
       radioMonthly: { value: 55, unit: "Kč/měs.", cat: "fakt", src: SRC.zakon348, date: "od 1. 5. 2025" },
-      exemptMultiple: { value: 2.15, unit: "× životní minimum", cat: "fakt", src: SRC.osvobozeni, note: "Průměrný měsíční čistý příjem domácnosti za předchozí kalendářní čtvrtletí." },
+      exemptMultiple: { value: 2.15, unit: "× životní minimum", cat: "fakt", src: SRC.zakon348pdf, note: "§ 4 odst. 2: čistý příjem osoby, resp. součet čistých příjmů osob v domácnosti, za uplynulé kalendářní čtvrtletí; příjmy se zjišťují podle zák. č. 110/2006 Sb. Osvobození nejdéle na 6 měsíců, na žádost." },
+      exemptSensory: { value: "úplná nebo praktická slepota obou očí, oboustranná úplná nebo praktická hluchota", cat: "fakt", src: SRC.ctOsvobozeni, note: "§ 4 odst. 1: osoba žijící osaměle nebo jen s osobami se stejným důvodem osvobození; nezaopatřené děti se nepočítají. Samotný průkaz ZTP/P nárok nezakládá, je jen dokladem." },
+      uncertaintyBand: { value: 0.15, cat: "model", note: "Pásmo ±15 % kolem limitu, ve kterém kalkulačka z odhadu čistého příjmu nárok nerozhoduje." },
       valorization: { value: { threshold: 0.06, step: 0.06, from: "1. 7. následujícího roku" }, cat: "fakt", src: SRC.novela119, note: "Zvýšení o 6 %, jakmile kumulovaná inflace od posledního zvýšení přesáhne 6 %." },
       collectionCostCT: { value: 109663000, unit: "Kč/rok", cat: "fakt", src: SRC.ctRozpocet, date: "plán 2026", note: "Správa a výběr TV poplatků vč. odměny České poště za SIPO." },
       payingHouseholdsTV: { value: 3500000, unit: "domácností", cat: "fakt", src: SRC.ctRozpocet, date: "2025", note: "Součet 2,4 mil. přes SIPO a 1,1 mil. přímo, odečteno z grafu v rozpočtu ČT." }
@@ -64,7 +69,7 @@
       { from: "2026-01-01", to: "2026-09-30", single: 4860, firstAdult: 4470, nextAdult: 4040, child0_6: 2480, child6_15: 3050, child15_26: 3490 },
       { from: "2026-10-01", to: null, single: 5500, firstAdult: 5000, nextAdult: 3750, child0_6: 2480, child6_15: 3050, child15_26: 3490 }
     ],
-    zmSrc: SRC.zm,
+    zmSrc: SRC.croOsvobozeni,
 
     /* Orientační výpočet čistého příjmu pro test osvobození (model) */
     netCalc: {
@@ -129,7 +134,7 @@
       }
     },
 
-    /* Předpoklady simulace: centrální odhad a meze intervalu */
+    /* Předpoklady simulace: centrální odhad a meze rozpětí scénářů (nejde o statistický interval spolehlivosti) */
     sim: {
       wageGrowth2026: { value: 0.064, cat: "fakt", src: SRC.csuMzdy, note: "Meziroční růst průměrné mzdy ve 2. čtvrtletí 2026; použit pro přepočet ISPV 2025 na rok 2026." },
       scenarios: {
@@ -137,7 +142,7 @@
         mid: { countF: 1.00, growthAdj: 0, lowTail: 0.40, compliance: 0.99 },
         high: { countF: 1.05, growthAdj: 0.01, lowTail: 0.55, compliance: 1.00 }
       },
-      scenarioNote: "Interval kombinuje: počet osob ±5 % (rozdíl mezi ISPV a evidencí ČSÚ), růst mezd ±1 p. b., tvar dolního chvostu rozdělení (zkrácené úvazky) a úspěšnost výběru 97 až 100 %.",
+      scenarioNote: "Rozpětí kombinuje: počet osob ±5 % (rozdíl mezi ISPV a evidencí ČSÚ), růst mezd ±1 p. b., tvar dolního chvostu rozdělení (zkrácené úvazky) a úspěšnost výběru 97 až 100 %.",
       points: 2000,
       cat: "model"
     },

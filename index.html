@@ -179,7 +179,7 @@
       .switch input:checked { background: var(--hi); }
       .switch input:checked::after { transform: translateX(22px); background: #0b0b0b; }
       .hh .ctl { display: grid; gap: 6px; }
-      .hh.off .ctl { opacity: .45; }
+      .hh.off .ctl { opacity: .8; }
       .hh .ctl label { font: 600 11.5px "IBM Plex Mono", monospace; text-transform: uppercase; color: var(--ink-2); display: flex; justify-content: space-between; gap: 10px; }
       .hh .ctl label b { color: var(--ink); background: var(--hi); color: var(--on-hi); padding: 0 4px; }
       input[type=range] { accent-color: var(--accent); }
@@ -454,10 +454,10 @@
         <p class="lede">Evropské domácnosti platí za veřejnoprávní média šesti různými způsoby. Sedmnáct ze 45 zemí v přehledu od roku 1999 poplatek zrušilo nebo převedlo na daň, dalších jedenáct samostatný poplatek nemělo vůbec. Česká Sněmovna o zrušení poplatků jedná od října 2026. Níže jsou částky, modely, novely, referenda, soudní rozhodnutí a seznam údajů, které se nepodařilo ověřit.</p>
 
         <div class="stat-strip">
-          <div class="stat"><div class="num"><span data-count="103">0</span> <em>let</em></div><div class="lbl">od zahájení pravidelného rozhlasového vysílání v Československu (Radiojournal, 18. 5. 1923)</div></div>
-          <div class="stat"><div class="num">€<span data-count="363">0</span></div><div class="lbl">nejvyšší poplatek v Evropě: Švýcarsko, 335 CHF ročně za domácnost</div></div>
-          <div class="stat"><div class="num"><span data-count="17">0</span></div><div class="lbl">zemí z přehledu od roku 1999 zrušilo poplatek nebo jej převedlo na daň či rozpočet; žádná nezavedla nový přístrojový</div></div>
-          <div class="stat"><div class="num"><span data-count="546">0</span></div><div class="lbl">hlasů dělilo zachování a zrušení poplatku ve slovinském referendu 11. 10. 2026 (předběžně, konečný výsledek do 30. 10.)</div></div>
+          <div class="stat"><div class="num"><span data-count="103">103</span> <em>let</em></div><div class="lbl">od zahájení pravidelného rozhlasového vysílání v Československu (Radiojournal, 18. 5. 1923)</div></div>
+          <div class="stat"><div class="num">€<span data-count="363">363</span></div><div class="lbl">nejvyšší poplatek v Evropě: Švýcarsko, 335 CHF ročně za domácnost</div></div>
+          <div class="stat"><div class="num"><span data-count="17">17</span></div><div class="lbl">zemí z přehledu od roku 1999 zrušilo poplatek nebo jej převedlo na daň či rozpočet; žádná nezavedla nový přístrojový</div></div>
+          <div class="stat"><div class="num"><span data-count="546">546</span></div><div class="lbl">hlasů dělilo zachování a zrušení poplatku ve slovinském referendu 11. 10. 2026 (předběžně, konečný výsledek do 30. 10.)</div></div>
         </div>
 
         <div class="live-banner">
@@ -468,6 +468,12 @@
           </div>
           <div class="d">Vládní návrh (sněmovní tisk 231) prošel prvním čtením 24. 10. 2026 ve 4:36 a jde do Výboru pro média a kulturu. Poplatky se dál platí v plné výši. Podrobnosti v kapitole 03.</div>
         </div>
+        <a class="cz-cta" href="#kalkulacka">
+          <span class="cz-cta-k">Česko · kalkulačka</span>
+          <span class="cz-cta-t">Kolik byste platili při jiném systému?</span>
+          <span class="cz-cta-d">Porovnejte současné poplatky, financování ze státního rozpočtu a odvod podle příjmu.</span>
+          <span class="cz-cta-b">Spočítat rozdíl</span>
+        </a>
       </div>
     </header>
 
@@ -686,7 +692,6 @@
           </div>
         </div>
       </section>
-      <!-- ================= KAPITOLA 4 · ČASOVÁ OSA ================= -->
       <!-- ================= KAPITOLA 04 · JAK BY MOHLO ČESKO PLATIT ================= -->
       <section class="ch lab" id="simulace" aria-labelledby="labTitle">
         <div class="wrap">
@@ -706,25 +711,31 @@
           </div>
 
           <!-- tři scénáře v kostce -->
+          <div class="level" id="pro-me">
+            <span class="level-k">Úroveň 1</span>
+            <h3 class="level-t">Co by změna znamenala pro mě?</h3>
+            <p class="level-d">Zadejte dospělé a jejich příjmy. Uvidíte přímou platbu ve třech modelech.</p>
+          </div>
+
           <div class="scen3" role="list">
             <article class="scen" role="listitem">
               <div class="scen-k"><span class="scen-l">A</span><span class="tag fakt">Ověřený fakt</span></div>
               <h3>Dnešní poplatek</h3>
-              <p class="scen-big">205 Kč <small>měsíčně za domácnost</small></p>
+              <p class="scen-big">205 Kč <small>měsíčně přímo za domácnost; výběr 2026 plán 9,21 mld. Kč</small></p>
               <p>Platí se jednou za domácnost bez ohledu na příjem a počet lidí. Peníze jdou přímo ČT a ČRo, mimo státní rozpočet.</p>
               <p class="src">Zákon č. 348/2005 Sb., stav k <span data-legal-date></span></p>
             </article>
             <article class="scen" role="listitem">
               <div class="scen-k"><span class="scen-l">B</span><span class="tag navrh">Legislativní návrh</span></div>
               <h3>Ze státního rozpočtu</h3>
-              <p class="scen-big">0 Kč <small>přímo, 7,81 mld. Kč z daní</small></p>
+              <p class="scen-big">7,81 mld. Kč <small>ročně z veřejných rozpočtů; přímá platba domácnosti 0 Kč</small></p>
               <p>Domácnost nic samostatně neplatí. Ministerstvo kultury posílá ČT a ČRo pevnou částku stanovenou zákonem. Náklad nese rozpočet, tedy všichni daňoví poplatníci.</p>
               <p class="src">Sněmovní tisk 231 po 1. čtení. Není zákonem.</p>
             </article>
             <article class="scen" role="listitem">
               <div class="scen-k"><span class="scen-l">C</span><span class="tag autor">Autorský návrh</span></div>
               <h3>Účelový odvod z příjmu</h3>
-              <p class="scen-big">% z příjmu <small>se stropem na osobu</small></p>
+              <p class="scen-big">% z příjmu <small>přímo za každého dospělého nad hranicí, se stropem</small></p>
               <p>Každý dospělý nad hranicí příjmu odvede malé procento, nejvýš do stropu. Vybírá Finanční správa, výnos jde zákonem jen médiím. Inspirace: Finsko a Švédsko.</p>
               <p class="src">Analytický návrh tohoto webu. Parametry vyžadují fiskální kalibraci níže.</p>
             </article>
@@ -749,7 +760,6 @@
                     <label>Děti 6 až 15 let <span class="stepper"><button type="button" data-k="kids6_15" data-d="-1" aria-label="Méně dětí 6 až 15 let">−</button><span id="kids6_15">0</span><button type="button" data-k="kids6_15" data-d="1" aria-label="Více dětí 6 až 15 let">+</button></span></label>
                     <label>Nezaopatřené děti 15 až 26 let <span class="stepper"><button type="button" data-k="kids15_26" data-d="-1" aria-label="Méně starších dětí">−</button><span id="kids15_26">0</span><button type="button" data-k="kids15_26" data-d="1" aria-label="Více starších dětí">+</button></span></label>
                   </div>
-                  <label class="chk"><input type="checkbox" id="hhZtp" /> Člen domácnosti má těžké zrakové nebo sluchové postižení (ZTP/P)</label>
                   <label class="chk"><input type="checkbox" id="hhNoDev" /> Nemáme žádné zařízení schopné příjmu (ani mobil či počítač s internetem)</label>
                   <label class="chk"><input type="checkbox" id="hhNetOn" /> Znám přesný čistý měsíční příjem domácnosti</label>
                   <div class="net-ovr" id="netOvrBox" hidden><input type="number" id="hhNet" inputmode="numeric" min="0" step="100" aria-label="Čistý měsíční příjem domácnosti v Kč" /> <span class="small">Kč čistého měsíčně za celou domácnost</span></div>
@@ -776,22 +786,32 @@
             </div>
             <div class="charts2">
               <figure class="fig">
-                <figcaption><b>A · Roční platba podle příjmu</b> <span class="tag model">Modelový výpočet</span><br /><span class="small">Jednočlenná domácnost zaměstnance. Rozpočtový model nemá individuální platbu, proto v grafu není čára.</span></figcaption>
+                <figcaption><b>A · Roční přímá platba podle příjmu</b> <span class="tag model">Modelový výpočet</span><br /><span class="small">Jednočlenná domácnost zaměstnance: dnešní poplatek (A) a hypotetický odvod (C). Rozpočtový model (B) nemá individuální platbu, proto v grafu není; jeho náklady nesou veřejné rozpočty. Dnešní poplatek u nízkých příjmů počítá s orientačním odhadem osvobození.</span></figcaption>
                 <div class="chart" id="chartA"></div>
                 <div class="readout" id="readA" aria-live="polite"></div>
               </figure>
               <figure class="fig">
-                <figcaption><b>B · Rozdíl odvodu proti dnešnímu poplatku</b> <span class="tag model">Modelový výpočet</span><br /><span class="small">Nad nulou domácnost připlatí, pod nulou ušetří. Liší se jednotlivec a domácnost.</span></figcaption>
+                <figcaption><b>B · Rozdíl přímých plateb domácnosti: odvod minus dnešní poplatek</b> <span class="tag model">Modelový výpočet</span><br /><span class="small">Každá čára srovnává celou domácnost s celou domácností (odvod všech dospělých proti jednomu poplatku za domácnost). Nad nulou domácnost zaplatí přímo víc, pod nulou méně.</span></figcaption>
                 <div class="chart" id="chartB"></div>
                 <div class="readout" id="readB" aria-live="polite"></div>
               </figure>
             </div>
           </div>
 
+          <!-- ============ ÚROVEŇ 2 ============ -->
+          <div class="level level-2" id="cele-cesko">
+            <span class="level-k">Úroveň 2</span>
+            <h3 class="level-t">Co by změna znamenala pro celé Česko?</h3>
+            <p class="level-d">Pro podrobné zkoumání: kolik by odvod vybral, kdo by ho nesl, jak se modely vyvíjejí v čase a jak chrání nezávislost.</p>
+            <nav class="level-nav" aria-label="Části úrovně 2">
+              <a href="#simulator">Simulátor výnosu</a><a href="#zCeho">Z čeho se platí ČT a ČRo</a><a href="#deset">Deset let dopředu</a><a href="#nezavislost">Pojistky nezávislosti</a><a href="#inspirace">Evropské inspirace</a><a href="#metodika">Metodika a zdroje</a>
+            </nav>
+          </div>
+
           <!-- ============ 3. FISKÁLNÍ SIMULÁTOR ============ -->
           <div class="lab-block" id="simulator">
             <div class="lab-h"><span class="lab-n">3</span><h3>Vybere odvod dost peněz?</h3><span class="tag model">Modelový výpočet</span></div>
-            <p class="lab-sub">Celostátní simulace pro rok 2026 nad rozdělením mezd (ISPV 2025, přepočteno růstem mezd 2026) a důchodů (ČSSZ). Výsledek je vždy interval tří scénářů, ne jedno číslo. Parametry sdílí s kalkulačkou výše.</p>
+            <p class="lab-sub">Celostátní simulace pro rok 2026 nad rozdělením mezd (ISPV 2025, přepočteno růstem mezd 2026) a důchodů (ČSSZ). Výsledek je vždy rozpětí tří scénářů, ne jedno číslo; nejde o statistický interval spolehlivosti. Parametry sdílí s kalkulačkou výše.</p>
             <div class="sim-grid">
               <div class="sim-in" id="simIn">
                 <div class="ctrl"><label for="pRate">Sazba odvodu <b id="pRateV"></b></label><input type="range" id="pRate" min="0" max="0.03" step="0.0005" /></div>
@@ -824,6 +844,8 @@
               </div>
               <div class="sim-out" id="simOut" aria-live="polite"></div>
             </div>
+            <details class="more deep">
+              <summary>Kdo by odvod nesl a jak citlivý je výsledek</summary>
             <div class="charts2">
               <figure class="fig">
                 <figcaption><b>Zatížení podle příjmových decilů</b> <span class="tag model">Modelový výpočet</span><br /><span class="small">Osoby v okruhu odvodu seřazené podle ročního hrubého příjmu. Sloupec = průměrný odvod, číslo = podíl na příjmu.</span></figcaption>
@@ -834,6 +856,7 @@
                 <div class="chart" id="chartSens"></div>
               </figure>
             </div>
+            </details>
           </div>
 
           <!-- ============ 4. GRAF C ============ -->
@@ -890,6 +913,7 @@
         </div>
       </section>
 
+      <!-- ================= KAPITOLA 05 · ČASOVÁ OSA ================= -->
       <section class="ch" id="osa">
         <div class="wrap">
           <div class="ch-head reveal">
@@ -1667,7 +1691,7 @@
       r.addEventListener("keydown", function(e){ if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openDialog(c.iso); } });
       barRows[c.iso] = r; barBox.appendChild(r);
     });
-    var zeroBox = document.createElement("div"); zeroBox.className = "zero-box";
+    var zeroBox = document.createElement("div"); zeroBox.className = "zero-box"; zeroBox.setAttribute("role", "listitem");
     barBox.appendChild(zeroBox);
     barBox.appendChild(avgLine);
     var barsDrawn = false;

@@ -1,6 +1,6 @@
 # Jak by mohlo Česko platit: metodika
 
-Verze parametrů `2026-10-26.1`, právní stav k 26. 10. 2026. Kapitola 04 webu.
+Verze parametrů `2026-10-26.2`, právní stav k 26. 10. 2026. Kapitola 04 webu.
 
 ## Architektura
 
@@ -25,8 +25,9 @@ Výpočty probíhají jen v prohlížeči. Příjmy se nikam neodesílají a neu
 
 - 150 Kč TV + 55 Kč rozhlas měsíčně, jednou za domácnost (zák. č. 348/2005 Sb. ve znění zák. č. 119/2025 Sb.).
 - Osvobození, když je průměrný měsíční čistý příjem domácnosti pod 2,15násobkem životního minima. Životní minimum se mění 1. 10. 2026: jednotlivec 5 500 Kč, první dospělý 5 000 Kč, další dospělý 3 750 Kč, děti 2 480 / 3 050 / 3 490 Kč. Kalkulačka umí oba právní stavy.
-- Další osvobození: ZTP/P s těžkým zrakovým nebo sluchovým postižením; domácnost bez zařízení schopného příjmu.
-- Čistý příjem je orientační: pojistné 11,6 %, daň 15 % (23 % nad 146 901 Kč měsíčně), sleva na poplatníka 2 570 Kč. Bez slev na děti. Lze zadat ručně.
+- Zdravotní osvobození (§ 4 odst. 1): úplná nebo praktická slepota obou očí, nebo oboustranná úplná či praktická hluchota, pokud dotyčný žije sám nebo jen s osobami se stejným důvodem (nezaopatřené děti se nepočítají). Průkaz ZTP/P je doklad, ne podmínka.
+- Příjmové osvobození (§ 4 odst. 2): čistý příjem za uplynulé kalendářní čtvrtletí, příjmy podle zák. č. 110/2006 Sb., na žádost, nejdéle 6 měsíců.
+- Čistý příjem je orientační: pojistné 11,6 %, daň 15 % (23 % nad 146 901 Kč měsíčně), sleva na poplatníka 2 570 Kč, bez slev na děti. Proto kalkulačka v pásmu ±15 % kolem limitu nárok nerozhoduje a pod ním ukáže jen „pravděpodobně“. S ručně zadaným čistým příjmem je výsledek přesný, ale stále na žádost.
 
 ## B. Rozpočtový model (tisk 231)
 
@@ -56,7 +57,7 @@ Výchozí parametry: sazba 1,1 %, hranice 300 000 Kč ročně, strop 3 000 Kč, 
 3. Kvantilová funkce: log-lineární interpolace mezi kvantily, lineární dolní chvost k `lowTail × P10`, nad P90 Paretův chvost s exponentem dopočteným tak, aby průměr rozdělení odpovídal zveřejněnému průměru. Přepočet na rok 2026 růstem průměrné mzdy +6,4 % (ČSÚ, 2. čtvrtletí 2026).
 4. **Důchodci** (ČSSZ 6/2026): 2 333 762 starobních s průměrem 21 803 Kč, 420 880 invalidních s průměrem 14 500 Kč (vážený odhad). Rozdělení lognormální s variačním koeficientem 0,2 a 0,25 (předpoklad).
 5. **OSVČ** (739 472 povinných platit zálohy): rozdělení zisků podle výše není veřejné. Lognormální s mediánem 300 000 Kč a σ = 0,9 je **neověřený předpoklad**; ve výchozím stavu vypnuto.
-6. Interval tří scénářů:
+6. Rozpětí tří scénářů (není to statistický interval spolehlivosti; tvar rozdělení sám přidává asi −6 až +4 %, viz FISCAL-MODEL-AUDIT.md):
 
 | Scénář | počet osob | růst mezd | dolní chvost | úspěšnost výběru |
 |---|---|---|---|---|
@@ -86,6 +87,8 @@ Projekce, ne prognóza. Poplatek +6 % od 1. 7. roku následujícího po překro�
 ```
 npm install      # jen typescript a @types/node pro typovou kontrolu
 npm run check    # tsc --checkJs + node --test
+npm run audit    # nezávislý přepočet v Pythonu
+npm run e2e      # regresní testy stránky (Playwright + Chromium)
 ```
 
 Testy pokrývají nulový příjem, hranici, překročení stropu, zákonná osvobození (příjmový limit před a po 1. 10. 2026, děti, ZTP/P, bez zařízení, ruční čistý příjem), individuální výpočet místo příjmu domácnosti, nulové náklady rozpočtového modelu, shodu rozdělení se zveřejněnými kvantily a průměrem, bilanci simulátoru, kalibraci a valorizaci v projekci.

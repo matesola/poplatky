@@ -1,0 +1,146 @@
+{
+ "date": "2026-10-26T10:43:56.713Z",
+ "browser": "Chromium (Playwright 1.63.0)",
+ "results": [
+  {
+   "name": "[desktop] úvodní statistiky mají skutečná čísla",
+   "ok": true
+  },
+  {
+   "name": "[desktop] evropský přehled: mapa, žebříček, karty zemí",
+   "ok": true
+  },
+  {
+   "name": "[desktop] detail země a přímý odkaz #zeme-CZ",
+   "ok": true
+  },
+  {
+   "name": "[desktop] přímý odkaz #kalkulacka po načtení míří na kalkulačku",
+   "ok": true
+  },
+  {
+   "name": "[desktop] vstup z úvodu vede do kalkulačky",
+   "ok": true
+  },
+  {
+   "name": "[desktop] determinismus: dvě načtení dávají shodné výsledky",
+   "ok": true
+  },
+  {
+   "name": "[desktop] výstupy odpovídají jádru (A, C, graf A)",
+   "ok": true
+  },
+  {
+   "name": "[desktop] změna příjmu aktualizuje výsledek C",
+   "ok": true
+  },
+  {
+   "name": "[desktop] výjimky: slepota u všech dospělých vs. smíšená domácnost",
+   "ok": true
+  },
+  {
+   "name": "[desktop] výjimky: příjmový test je podmíněný (pravděpodobně / hranice)",
+   "ok": true
+  },
+  {
+   "name": "[desktop] neplatný vstup příjmu nezpůsobí pád ani NaN",
+   "ok": true
+  },
+  {
+   "name": "[desktop] hraniční sazba a strop: nula dává nulový výnos",
+   "ok": true
+  },
+  {
+   "name": "[desktop] simulace nezobrazí neplatný výsledek potichu",
+   "ok": true
+  },
+  {
+   "name": "[desktop] kalibrace sazby dá hodnotu a nastaví posuvník",
+   "ok": true
+  },
+  {
+   "name": "[desktop] graf C a D jsou vykreslené s daty",
+   "ok": true
+  },
+  {
+   "name": "[desktop] důležité odkazy jsou platné absolutní https adresy",
+   "ok": true
+  },
+  {
+   "name": "[desktop] žádné chyby v konzoli",
+   "ok": true
+  },
+  {
+   "name": "[mobil] úvodní statistiky mají skutečná čísla",
+   "ok": true
+  },
+  {
+   "name": "[mobil] evropský přehled: mapa, žebříček, karty zemí",
+   "ok": true
+  },
+  {
+   "name": "[mobil] detail země a přímý odkaz #zeme-CZ",
+   "ok": true
+  },
+  {
+   "name": "[mobil] přímý odkaz #kalkulacka po načtení míří na kalkulačku",
+   "ok": true
+  },
+  {
+   "name": "[mobil] vstup z úvodu vede do kalkulačky",
+   "ok": true
+  },
+  {
+   "name": "[mobil] determinismus: dvě načtení dávají shodné výsledky",
+   "ok": true
+  },
+  {
+   "name": "[mobil] výstupy odpovídají jádru (A, C, graf A)",
+   "ok": true
+  },
+  {
+   "name": "[mobil] změna příjmu aktualizuje výsledek C",
+   "ok": true
+  },
+  {
+   "name": "[mobil] výjimky: slepota u všech dospělých vs. smíšená domácnost",
+   "ok": true
+  },
+  {
+   "name": "[mobil] výjimky: příjmový test je podmíněný (pravděpodobně / hranice)",
+   "ok": true
+  },
+  {
+   "name": "[mobil] neplatný vstup příjmu nezpůsobí pád ani NaN",
+   "ok": true
+  },
+  {
+   "name": "[mobil] hraniční sazba a strop: nula dává nulový výnos",
+   "ok": true
+  },
+  {
+   "name": "[mobil] simulace nezobrazí neplatný výsledek potichu",
+   "ok": true
+  },
+  {
+   "name": "[mobil] kalibrace sazby dá hodnotu a nastaví posuvník",
+   "ok": true
+  },
+  {
+   "name": "[mobil] graf C a D jsou vykreslené s daty",
+   "ok": true
+  },
+  {
+   "name": "[mobil] důležité odkazy jsou platné absolutní https adresy",
+   "ok": true
+  },
+  {
+   "name": "[mobil] žádné chyby v konzoli",
+   "ok": true
+  },
+  {
+   "name": "bez JavaScriptu zůstávají úvodní čísla a texty čitelné",
+   "ok": true
+  }
+ ]
+}

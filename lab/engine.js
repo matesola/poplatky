@@ -7,20 +7,26 @@
   "use strict";
 
   /**
-   * @typedef {"emp"|"self"|"pens"|"none"} IncomeType
-   * @typedef {{type: IncomeType, grossMonthly: number}} Adult
+   * @typedef {"emp"|"self"|"pens"|"emppens"|"none"} IncomeType
+   *   emp = zaměstnanec, self = OSVČ, pens = důchodce, emppens = pracující důchodce (souběh mzdy a důchodu), none = bez příjmu z práce
+   * @typedef {{type: IncomeType, grossMonthly: number, pensionMonthly?: number, sensory?: boolean}} Adult
+   *   grossMonthly = hrubá mzda / zisk OSVČ / důchod (u typu pens); pensionMonthly = důchod u souběhu;
+   *   sensory = úplná nebo praktická slepota obou očí nebo oboustranná úplná či praktická hluchota (§ 4 odst. 1 zák. 348/2005 Sb.)
    * @typedef {{adults: Adult[], kids0_6?: number, kids6_15?: number, kids15_26?: number,
-   *            disabilityExempt?: boolean, noDevice?: boolean, netOverride?: number|null, date?: string}} Household
+   *            noDevice?: boolean, netOverride?: number|null, date?: string}} Household
    * @typedef {{rate:number, threshold:number, cap:number, marginal:boolean, includePensions:boolean, includeSelf?:boolean}} LevyParams
-   * @typedef {{monthly:number, annual:number, exempt:boolean, reason:string, limit:number, netMonthly:number, legalDate:string}} CurrentResult
+   * @typedef {"plati"|"osvobozen"|"pravdepodobne"|"hranice"|"neplati"} FeeStatus
+   * @typedef {{monthly:number, annual:number, status:FeeStatus, certain:boolean, exempt:boolean, reason:string, limit:number, netMonthly:number, netRatio:number, legalDate:string}} CurrentResult
    * @typedef {{perAdult:number[], total:number, diffVsCurrent:number, effShare:number, grossAnnual:number}} LevyResult
-   * @typedef {{countF:number, growthAdj:number, lowTail:number, compliance:number}} Scenario
+   * @typedef {{countF:number, growthAdj:number, lowTail:number, compliance:number, pensScale?:number}} Scenario
    */
 
   /** Zaokrouhlení na celé Kč (pro zobrazení i testy). @param {number} x */
   function kc(x) { return Math.round(x); }
   /** @param {number} x @param {number} a @param {number} b */
   function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }
+  /** Bezpečné nezáporné číslo; neplatný vstup = 0. @param {any} x */
+  function nn(x) { var v = +x; return isFinite(v) && v > 0 ? v : 0; }
 
   /* ================= SOUČASNÝ SYSTÉM ================= */
 
@@ -35,66 +41,95 @@
   function zmHousehold(P, h) {
     var r = zmRow(P, h.date || P.meta.legalDate);
     var nAd = h.adults.length;
-    var kids = (h.kids0_6 || 0) + (h.kids6_15 || 0) + (h.kids15_26 || 0);
+    var k0 = nn(h.kids0_6), k1 = nn(h.kids6_15), k2 = nn(h.kids15_26);
     var base;
-    if (nAd === 1 && kids === 0) base = r.single;
+    if (nAd === 1 && k0 + k1 + k2 === 0) base = r.single;
     else if (nAd === 0) base = 0;
     else base = r.firstAdult + (nAd - 1) * r.nextAdult;
-    return base + (h.kids0_6 || 0) * r.child0_6 + (h.kids6_15 || 0) * r.child6_15 + (h.kids15_26 || 0) * r.child15_26;
+    return base + k0 * r.child0_6 + k1 * r.child6_15 + k2 * r.child15_26;
   }
 
   /** Orientační čistý měsíční příjem jedné osoby. @param {any} P @param {Adult} a */
   function netMonthly(P, a) {
-    var g = Math.max(0, a.grossMonthly || 0), n = P.netCalc;
-    if (a.type === "pens") return g;            // důchod do limitu nezdaněn
-    if (a.type === "none") return g;            // např. dávka, zadáno přímo
+    var g = nn(a.grossMonthly), n = P.netCalc;
+    if (a.type === "pens" || a.type === "none") return g;            // důchod do limitu nezdaněn
     if (a.type === "self") return g * n.selfNetRatio;
     var ins = g * (n.empSocial + n.empHealth);
     var tax = Math.min(g, n.taxHighThresholdMonthly) * n.taxRate + Math.max(0, g - n.taxHighThresholdMonthly) * n.taxRateHigh;
     tax = Math.max(0, tax - n.taxCreditMonthly);
-    return g - ins - tax;
+    return g - ins - tax + (a.type === "emppens" ? nn(a.pensionMonthly) : 0);
   }
 
-  /** Kolik domácnost platí dnes (zák. č. 348/2005 Sb.). @param {any} P @param {Household} h @returns {CurrentResult} */
+  /** Kolik domácnost platí dnes (zák. č. 348/2005 Sb., § 4). Vrací podmíněný výsledek tam,
+   * kde nárok nelze z dostupných vstupů určit jednoznačně. @param {any} P @param {Household} h @returns {CurrentResult} */
   function currentFee(P, h) {
     var full = P.fee.tvMonthly.value + P.fee.radioMonthly.value;
     var limit = P.fee.exemptMultiple.value * zmHousehold(P, h);
-    var net = (h.netOverride != null && isFinite(h.netOverride)) ? Math.max(0, h.netOverride)
-      : h.adults.reduce(function (s, a) { return s + netMonthly(P, a); }, 0);
+    var manual = h.netOverride != null && isFinite(+h.netOverride);
+    var net = manual ? nn(h.netOverride) : h.adults.reduce(function (s, a) { return s + netMonthly(P, a); }, 0);
+    var ratio = limit > 0 ? net / limit : Infinity;
+    var band = P.fee.uncertaintyBand.value;
     var legalDate = h.date || P.meta.legalDate;
-    /** @param {string} reason */
-    function zero(reason) { return { monthly: 0, annual: 0, exempt: true, reason: reason, limit: limit, netMonthly: net, legalDate: legalDate }; }
-    if (h.noDevice) return zero("Domácnost nemá žádné zařízení schopné příjmu.");
-    if (h.disabilityExempt) return zero("Osvobození: člen domácnosti s těžkým zrakovým nebo sluchovým postižením.");
-    if (h.adults.length && net < limit) return zero("Osvobození: čistý příjem domácnosti je pod 2,15násobkem životního minima. O osvobození je nutné požádat.");
-    return { monthly: full, annual: full * 12, exempt: false, reason: "Platí se jednou za domácnost, oba poplatky.", limit: limit, netMonthly: net, legalDate: legalDate };
+    /** @param {FeeStatus} status @param {number} m @param {boolean} certain @param {string} reason */
+    function res(status, m, certain, reason) {
+      return { monthly: m, annual: m * 12, status: status, certain: certain, exempt: m === 0, reason: reason, limit: limit, netMonthly: net, netRatio: ratio, legalDate: legalDate };
+    }
+    if (h.noDevice) return res("neplati", 0, false, "Poplatníkem je jen ten, kdo vlastní nebo užívá přijímač; od května 2025 se za něj považuje i počítač, tablet či mobil schopný příjmu. Bez jakéhokoli takového zařízení se neplatí.");
+    var adults = h.adults;
+    if (adults.length && adults.every(function (a) { return !!a.sensory; }))
+      return res("osvobozen", 0, false, "Zákonný důvod osvobození: všichni dospělí v domácnosti mají úplnou nebo praktickou slepotu obou očí nebo oboustrannou úplnou či praktickou hluchotu (nezaopatřené děti se nepočítají). Osvobození platí od měsíce po podání žádosti s doklady.");
+    var sensorySome = adults.some(function (a) { return !!a.sensory; });
+    var sensNote = sensorySome ? " Zdravotní osvobození se neuplatní, protože v domácnosti žije i dospělý bez tohoto postižení." : "";
+    if (!adults.length) return res("plati", full, false, "Zadejte aspoň jednoho dospělého.");
+    if (manual) {
+      if (net < limit) return res("osvobozen", 0, false, "Podle zadaného čistého příjmu splňujete příjmovou podmínku (pod 2,15násobkem životního minima). Rozhodný je čistý příjem za uplynulé kalendářní čtvrtletí; osvobození platí nejdéle 6 měsíců a je nutné o něj požádat." + sensNote);
+      return res("plati", full, true, "Podle zadaného čistého příjmu příjmovou podmínku nesplňujete. Platí se jednou za domácnost, oba poplatky." + sensNote);
+    }
+    if (ratio < 1 - band) return res("pravdepodobne", 0, false, "Podle orientačního odhadu čistého příjmu domácnost pravděpodobně splňuje příjmovou podmínku. Rozhoduje skutečný čistý příjem za uplynulé čtvrtletí podle zák. č. 110/2006 Sb.; osvobození je nutné žádat a obnovovat po 6 měsících." + sensNote);
+    if (ratio <= 1 + band) return res("hranice", full, false, "Odhad čistého příjmu je blízko limitu osvobození. Kalkulačka nárok neumí rozhodnout: zadejte přesný čistý příjem za uplynulé čtvrtletí." + sensNote);
+    return res("plati", full, true, "Platí se jednou za domácnost, oba poplatky." + sensNote);
   }
 
   /* ================= ÚČELOVÝ ODVOD ================= */
+
+  /** Kontrola parametrů odvodu. Neplatné parametry se nikdy tiše nepoužijí.
+   * @param {any} lp @returns {{ok:boolean, errors:string[]}} */
+  function validateLevy(lp) {
+    var e = [];
+    /** @param {string} k @param {number} lo @param {number} hi @param {string} lbl */
+    function chk(k, lo, hi, lbl) { var v = lp ? lp[k] : undefined; if (typeof v !== "number" || !isFinite(v)) e.push(lbl + " chybí nebo není číslo."); else if (v < lo || v > hi) e.push(lbl + " mimo rozsah " + lo + " až " + hi + "."); }
+    chk("rate", 0, 0.2, "Sazba"); chk("threshold", 0, 1e8, "Hranice"); chk("cap", 0, 1e7, "Strop");
+    if (lp && lp.adminCostRate !== undefined) chk("adminCostRate", 0, 0.5, "Správní náklady");
+    if (lp && lp.reserveRate !== undefined) chk("reserveRate", 0, 0.5, "Rezerva");
+    if (lp && (lp.adminCostRate || 0) + (lp.reserveRate || 0) >= 1) e.push("Správní náklady a rezerva dohromady musí být pod 100 %.");
+    return { ok: e.length === 0, errors: e };
+  }
 
   /** Roční odvod jedné osoby z ročního hrubého příjmu.
    * marginal=true: sazba z části příjmu nad hranicí (finský typ), jinak z celého příjmu nad hranicí.
    * @param {number} annual @param {LevyParams} p */
   function levyPerson(annual, p) {
-    var y = Math.max(0, annual || 0);
-    if (y <= p.threshold) return 0;
-    var base = p.marginal ? (y - p.threshold) : y;
-    return Math.min(p.cap, base * p.rate);
+    var y = nn(annual), rate = nn(p.rate), cap = nn(p.cap), thr = nn(p.threshold);
+    if (y <= thr) return 0;
+    var base = p.marginal ? (y - thr) : y;
+    return Math.min(cap, base * rate);
   }
 
-  /** Je osoba v okruhu odvodu? @param {IncomeType} type @param {LevyParams} p */
-  function inScope(type, p) {
-    if (type === "pens") return !!p.includePensions;
-    if (type === "self") return p.includeSelf !== false;
-    if (type === "none") return false;
-    return true;
+  /** Roční základ odvodu osoby podle okruhu. OSVČ jsou v okruhu vždy (volba includeSelf se týká jen
+   * celostátního odhadu, kde chybí data); důchody podle includePensions. @param {Adult} a @param {LevyParams} p */
+  function levyBase(a, p) {
+    var g = nn(a.grossMonthly) * 12;
+    if (a.type === "none") return 0;
+    if (a.type === "pens") return p.includePensions ? g : 0;
+    if (a.type === "emppens") return g + (p.includePensions ? nn(a.pensionMonthly) * 12 : 0);
+    return g;
   }
 
   /** @param {Household} h @param {LevyParams} p @param {number} currentAnnual @returns {LevyResult} */
   function householdLevy(h, p, currentAnnual) {
-    var per = h.adults.map(function (a) { return inScope(a.type, p) ? levyPerson(a.grossMonthly * 12, p) : 0; });
+    var per = h.adults.map(function (a) { return levyPerson(levyBase(a, p), p); });
     var total = per.reduce(function (s, x) { return s + x; }, 0);
-    var gross = h.adults.reduce(function (s, a) { return s + Math.max(0, a.grossMonthly) * 12; }, 0);
+    var gross = h.adults.reduce(function (s, a) { return s + (a.type === "none" ? 0 : nn(a.grossMonthly) * 12 + (a.type === "emppens" ? nn(a.pensionMonthly) * 12 : 0)); }, 0);
     return { perAdult: per, total: total, diffVsCurrent: total - currentAnnual, effShare: gross > 0 ? total / gross : 0, grossAnnual: gross };
   }
 
@@ -164,7 +199,20 @@
   /** @typedef {{group:string, type:IncomeType, annual:number, w:number}} Person */
 
   /** Syntetická populace (ročních hrubých příjmů) pro scénář. @param {any} P @param {LevyParams} lp @param {Scenario} sc @returns {Person[]} */
+  /* Populace nezávisí na sazbě, hranici ani stropu, jen na okruhu a scénáři: lze ji bezpečně uložit do cache. */
+  var POP_CACHE = typeof WeakMap !== "undefined" ? new WeakMap() : null;
+  /** Syntetická populace s cache. @param {any} P @param {LevyParams} lp @param {Scenario} sc @returns {Person[]} */
   function population(P, lp, sc) {
+    var key = [!!lp.includePensions, !!lp.includeSelf, sc.countF, sc.growthAdj, sc.lowTail, sc.pensScale || 1].join("|");
+    var store = POP_CACHE ? POP_CACHE.get(P) : null;
+    if (POP_CACHE && !store) { store = {}; POP_CACHE.set(P, store); }
+    if (store && store[key]) return store[key];
+    var built = buildPopulation(P, lp, sc);
+    if (store) { var keys = Object.keys(store); if (keys.length > 40) delete store[keys[0]]; store[key] = built; }
+    return built;
+  }
+  /** @param {any} P @param {LevyParams} lp @param {Scenario} sc @returns {Person[]} */
+  function buildPopulation(P, lp, sc) {
     var G = P.groups, n = P.sim.points, out = /** @type {Person[]} */ ([]);
     var growth = 1 + P.sim.wageGrowth2026.value + sc.growthAdj;
     [["emp", G.emp], ["pub", G.pub]].forEach(function (pair) {
@@ -174,7 +222,8 @@
     if (lp.includePensions) {
       [["pens", G.pens], ["inv", G.inv]].forEach(function (pair) {
         var g = pair[1], s2 = Math.log(1 + g.cv * g.cv), mu = Math.log(g.mean) - s2 / 2, s = Math.sqrt(s2), w = g.count / n;
-        for (var i = 0; i < n; i++) out.push({ group: String(pair[0]), type: "pens", annual: 12 * Math.exp(mu + s * invNorm((i + 0.5) / n)), w: w });
+        var ps = sc.pensScale || 1;
+        for (var i = 0; i < n; i++) out.push({ group: String(pair[0]), type: "pens", annual: 12 * ps * Math.exp(mu + s * invNorm((i + 0.5) / n)), w: w });
       });
     }
     if (lp.includeSelf) {
@@ -186,25 +235,28 @@
 
   /** Výnos jednoho scénáře. @param {any} P @param {LevyParams} lp @param {Scenario} sc */
   function revenue(P, lp, sc) {
-    var pop = population(P, lp, sc), gross = 0, people = 0, exempt = 0, capped = 0;
-    pop.forEach(function (x) {
+    var pop = population(P, lp, sc), gross = 0, people = 0, exempt = 0, capped = 0, groups = /** @type {Object<string,number>} */ ({});
+    pop.forEach(function (/** @type {Person} */ x) {
       var l = levyPerson(x.annual, lp);
       gross += l * x.w; people += x.w;
+      groups[x.group] = (groups[x.group] || 0) + l * x.w * sc.compliance;
       if (l === 0) exempt += x.w;
-      if (l >= lp.cap - 1e-9 && lp.cap > 0) capped += x.w;
+      if (lp.cap > 0 && l >= lp.cap - 1e-9) capped += x.w;
     });
     gross *= sc.compliance;
-    return { gross: gross, people: people, exemptShare: people ? exempt / people : 0, cappedShare: people ? capped / people : 0, pop: pop };
+    return { gross: gross, people: people, exemptShare: people ? exempt / people : 0, cappedShare: people ? capped / people : 0, groups: groups, pop: pop };
   }
 
   /** Celostátní simulace s intervalem a bilancí.
    * @param {any} P @param {LevyParams & {adminCostRate:number, reserveRate:number}} lp @param {number} target cílový čistý výnos (Kč) */
   function simulate(P, lp, target) {
-    var S = P.sim.scenarios, res = /** @type {any} */ ({});
+    var v = validateLevy(lp);
+    if (!v.ok || !isFinite(target) || target < 0) return { valid: false, errors: v.errors.concat(isFinite(target) && target >= 0 ? [] : ["Cílový výnos není platné nezáporné číslo."]) };
+    var S = P.sim.scenarios, res = /** @type {any} */ ({ valid: true, errors: [] });
     ["low", "mid", "high"].forEach(function (k) {
       var r = revenue(P, lp, S[k]);
       var admin = r.gross * lp.adminCostRate, reserve = r.gross * lp.reserveRate, net = r.gross - admin - reserve;
-      res[k] = { gross: r.gross, admin: admin, reserve: reserve, net: net, gap: net - target, exemptShare: r.exemptShare, cappedShare: r.cappedShare, people: r.people };
+      res[k] = { gross: r.gross, admin: admin, reserve: reserve, net: net, gap: net - target, exemptShare: r.exemptShare, cappedShare: r.cappedShare, people: r.people, groups: r.groups };
       if (k === "mid") res.deciles = deciles(r.pop, lp);
     });
     res.balanced = ["low", "mid", "high"].every(function (k) { var x = res[k]; return Math.abs(x.gross - x.admin - x.reserve - x.net) < 1; });
@@ -236,6 +288,8 @@
    * @param {{rateMax?:number, capMax?:number}} [limits] */
   function calibrate(P, lp, target, solveFor, scenario, limits) {
     var L = limits || {}, sc = P.sim.scenarios[scenario];
+    var vv = validateLevy(lp);
+    if (!vv.ok) return { ok: false, value: NaN, achieved: NaN, reason: vv.errors.join(" ") };
     var keep = 1 - lp.adminCostRate - lp.reserveRate;
     /** @param {number} x */
     function netFor(x) {
@@ -244,7 +298,7 @@
     }
     var lo = 0, hi = solveFor === "rate" ? (L.rateMax || 0.05) : (L.capMax || 20000);
     if (netFor(hi) < target) return { ok: false, value: hi, achieved: netFor(hi), reason: "Cíl nelze dosáhnout ani na horní mezi " + (solveFor === "rate" ? "sazby" : "stropu") + "." };
-    for (var it = 0; it < 60; it++) { var mid = (lo + hi) / 2; if (netFor(mid) >= target) hi = mid; else lo = mid; }
+    for (var it = 0; it < 32; it++) { var mid = (lo + hi) / 2; if (netFor(mid) >= target) hi = mid; else lo = mid; }
     return { ok: true, value: hi, achieved: netFor(hi), reason: "" };
   }
 
@@ -301,7 +355,7 @@
     // rozpočtový model: kumulace „od roku 2026“
     var bud = P.budget.ct.value + P.budget.cro.value, budCum = (1 + cnb[2026]);
     var keep = 1 - lp.adminCostRate - lp.reserveRate, sc = P.sim.scenarios.mid;
-    var wage = 1, levyIdxBase = 0;
+    var wage = 1, pens = 1, levyIdxBase = 0;
     for (var y = 2027; y < 2027 + P.projection.years; y++) {
       cpi *= (1 + o.inflation); wage *= (1 + o.inflation + o.realWageGrowth);
       // poplatek: zvýšení o 6 % účinné od 1. 7. roku následujícího po roce, kdy kumulace přesáhla 6 %
@@ -315,7 +369,8 @@
       budCum *= (1 + o.inflation);
       // odvod: příjmy rostou s nominálními mzdami; hranice a strop buď indexované, nebo pevné
       var levyRev;
-      var sc2 = Object.assign({}, sc, { growthAdj: (1 + P.sim.wageGrowth2026.value) * wage - 1 - P.sim.wageGrowth2026.value });
+      pens *= (1 + o.inflation + o.realWageGrowth / 2);   // valorizace důchodů: inflace + polovina reálného růstu mezd
+      var sc2 = Object.assign({}, sc, { growthAdj: (1 + P.sim.wageGrowth2026.value) * wage - 1 - P.sim.wageGrowth2026.value, pensScale: pens });
       if (o.levyIndexed) {
         if (!levyIdxBase) levyIdxBase = revenue(P, lp, sc2).gross * keep / wage;
         levyRev = levyIdxBase * wage;
@@ -327,7 +382,7 @@
     return years;
   }
 
-  var E = { kc: kc, zmHousehold: zmHousehold, netMonthly: netMonthly, currentFee: currentFee, levyPerson: levyPerson,
+  var E = { kc: kc, validateLevy: validateLevy, levyBase: levyBase, zmHousehold: zmHousehold, netMonthly: netMonthly, currentFee: currentFee, levyPerson: levyPerson,
     householdLevy: householdLevy, budgetOrientation: budgetOrientation, compareHousehold: compareHousehold,
     quantileFn: quantileFn, invNorm: invNorm, population: population, revenue: revenue, simulate: simulate,
     deciles: deciles, calibrate: calibrate, sensitivity: sensitivity, payCurve: payCurve, diffCurves: diffCurves, project: project };

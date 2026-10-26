@@ -1,5 +1,9 @@
 tests/
 node_modules/
+audit/
 METODIKA.md
+AUDIT-REPORT.md
+FISCAL-MODEL-AUDIT.md
+QA-RESULTS.md
 tsconfig.json
 package-lock.json

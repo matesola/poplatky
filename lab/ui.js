@@ -25,10 +25,11 @@
   document.querySelectorAll("[data-legal-date]").forEach(function (el) { el.textContent = P.meta.legalDateLabel; });
 
   /* ---------- stav ---------- */
-  var TYPES = [["emp", "Zaměstnanec"], ["self", "OSVČ"], ["pens", "Důchodce"], ["none", "Bez příjmu z práce"]];
+  var TYPES = [["emp", "Zaměstnanec"], ["self", "OSVČ"], ["pens", "Důchodce"], ["emppens", "Pracující důchodce"], ["none", "Bez příjmu z práce"]];
+  function typeLabel(t) { return TYPES.filter(function (x) { return x[0] === t; })[0][1]; }
   var st = {
     adults: [{ type: "emp", gross: 45000 }, { type: "emp", gross: 36000 }],
-    kids0_6: 0, kids6_15: 0, kids15_26: 0, ztp: false, noDev: false, netOn: false, net: 0,
+    kids0_6: 0, kids6_15: 0, kids15_26: 0, noDev: false, netOn: false, net: 0,
     date: P.meta.legalDate,
     lp: Object.assign({}, P.levyDefault),
     target: "budget", targetCustom: 8e9,
@@ -40,9 +41,9 @@
   function target() { return st.target === "budget" ? BUDGET : st.target === "plan2026" ? PLAN2026 : st.targetCustom; }
   function household() {
     return {
-      adults: st.adults.map(function (a) { return { type: a.type, grossMonthly: a.type === "none" ? 0 : Math.max(0, +a.gross || 0) }; }),
+      adults: st.adults.map(function (a) { return { type: a.type, grossMonthly: a.type === "none" ? 0 : Math.max(0, +a.gross || 0), pensionMonthly: Math.max(0, +a.pension || 0), sensory: !!a.sensory }; }),
       kids0_6: st.kids0_6, kids6_15: st.kids6_15, kids15_26: st.kids15_26,
-      disabilityExempt: st.ztp, noDevice: st.noDev, netOverride: st.netOn ? Math.max(0, +st.net || 0) : null, date: st.date
+      noDevice: st.noDev, netOverride: st.netOn ? Math.max(0, +st.net || 0) : null, date: st.date
     };
   }
 
@@ -54,9 +55,11 @@
         + '<span class="an" aria-hidden="true">' + (i + 1) + "</span>"
         + '<select aria-label="Typ příjmu, dospělý ' + (i + 1) + '" data-f="type">' + TYPES.map(function (t) { return '<option value="' + t[0] + '"' + (t[0] === a.type ? " selected" : "") + ">" + t[1] + "</option>"; }).join("") + "</select>"
         + (st.adults.length > 1 ? '<button type="button" class="rm" data-f="rm" aria-label="Odebrat dospělého ' + (i + 1) + '">✕</button>' : "<span></span>")
-        + '<div class="inc"><label for="inc' + i + '">' + (a.type === "pens" ? "Měsíční důchod" : a.type === "self" ? "Měsíční zisk (příjmy minus výdaje)" : "Hrubý měsíční příjem") + "</label>"
+        + '<div class="inc"><label for="inc' + i + '">' + (a.type === "pens" ? "Měsíční důchod" : a.type === "self" ? "Měsíční zisk (příjmy minus výdaje), Kč" : a.type === "emppens" ? "Hrubá měsíční mzda, Kč" : "Hrubý měsíční příjem, Kč") + "</label>"
         + '<input type="range" min="0" max="150000" step="500" value="' + Math.min(150000, a.gross) + '" data-f="range" aria-label="Příjem posuvníkem, dospělý ' + (i + 1) + '"' + (a.type === "none" ? " disabled" : "") + " />"
-        + '<input type="number" id="inc' + i + '" min="0" step="500" inputmode="numeric" value="' + a.gross + '" data-f="gross"' + (a.type === "none" ? " disabled" : "") + " /></div>"
+        + '<input type="number" id="inc' + i + '" min="0" max="10000000" step="500" inputmode="numeric" value="' + a.gross + '" data-f="gross"' + (a.type === "none" ? " disabled" : "") + " /></div>"
+        + (a.type === "emppens" ? '<div class="inc"><label for="pen' + i + '">Měsíční důchod, Kč</label><span></span><input type="number" id="pen' + i + '" min="0" max="1000000" step="100" inputmode="numeric" value="' + (a.pension || 0) + '" data-f="pension" /></div>' : "")
+        + '<label class="chk sens"><input type="checkbox" data-f="sensory"' + (a.sensory ? " checked" : "") + ' /> Úplná nebo praktická slepota obou očí, nebo oboustranná úplná či praktická hluchota</label>'
         + "</div>";
     });
     box.innerHTML = html;
@@ -65,6 +68,7 @@
   $("adultRows").addEventListener("input", function (e) {
     var t = e.target, row = t.closest(".adult"); if (!row) return;
     var i = +row.dataset.i, f = t.dataset.f, a = st.adults[i];
+    if (f === "pension") { a.pension = Math.max(0, Math.min(1000000, +t.value || 0)); updateHH(); return; }
     if (f === "gross" || f === "range") {
       a.gross = Math.max(0, Math.min(10000000, +t.value || 0));
       var other = row.querySelector(f === "gross" ? '[data-f="range"]' : '[data-f="gross"]');
@@ -75,9 +79,11 @@
   });
   $("adultRows").addEventListener("change", function (e) {
     var t = e.target, row = t.closest(".adult"); if (!row) return;
+    if (t.dataset.f === "sensory") { st.adults[+row.dataset.i].sensory = t.checked; updateHH(); return; }
     if (t.dataset.f === "type") {
       var a = st.adults[+row.dataset.i]; a.type = t.value;
       if (a.type === "pens" && a.gross > 60000) a.gross = 21800;
+      if (a.type === "emppens" && !a.pension) a.pension = 21800;
       renderAdults(); updateHH();
       var sel = $("adultRows").querySelector('.adult[data-i="' + row.dataset.i + '"] select'); if (sel) sel.focus();
     }
@@ -97,7 +103,6 @@
       var k = b.dataset.k; st[k] = Math.max(0, Math.min(8, st[k] + (+b.dataset.d))); $(k).textContent = st[k]; updateHH();
     });
   });
-  $("hhZtp").addEventListener("change", function () { st.ztp = this.checked; updateHH(); });
   $("hhNoDev").addEventListener("change", function () { st.noDev = this.checked; updateHH(); });
   $("hhNetOn").addEventListener("change", function () { st.netOn = this.checked; $("netOvrBox").hidden = !this.checked; if (this.checked) { if (!st.net) { st.net = Math.round(E.currentFee(P, household()).netMonthly); } $("hhNet").value = st.net; $("hhNet").focus(); } updateHH(); });
   $("hhNet").addEventListener("input", function () { st.net = +this.value || 0; updateHH(); });
@@ -109,36 +114,44 @@
     });
   });
 
+  var STATUS = {
+    plati: ["Platíte", "fakt"], osvobozen: ["Nárok na osvobození, na žádost", "fakt"], pravdepodobne: ["Pravděpodobně osvobozeni, ověřte", "model"],
+    hranice: ["Na hranici, nelze určit", "model"], neplati: ["Bez přijímače se neplatí", "fakt"]
+  };
   function updateHH() {
     var h = household(), c = E.compareHousehold(P, h, st.lp), cur = c.current, lv = c.levy, bo = c.budget.orientation;
     var dateLbl = st.date < "2026-10-01" ? "30. 9. 2026" : P.meta.legalDateLabel;
-    var limitTxt = "Limit osvobození: " + kc(cur.limit) + " čistého měsíčně, odhad čistého příjmu domácnosti: " + kc(cur.netMonthly) + (st.netOn ? " (zadáno ručně)" : " (orientační výpočet)") + ".";
+    var limitTxt = "Limit osvobození " + kc(cur.limit) + " čistého měsíčně; " + (st.netOn ? "zadaný" : "orientačně odhadnutý") + " čistý příjem domácnosti " + kc(cur.netMonthly) + ".";
     var dCls = lv.diffVsCurrent > 0.5 ? "up" : lv.diffVsCurrent < -0.5 ? "down" : "eq";
-    var dTxt = lv.diffVsCurrent > 0.5 ? "připlatíte" : lv.diffVsCurrent < -0.5 ? "ušetříte" : "stejně";
+    var dTxt = lv.diffVsCurrent > 0.5 ? "více" : lv.diffVsCurrent < -0.5 ? "méně" : "stejně";
+    var stt = STATUS[cur.status];
+    var bigA = cur.status === "hranice" ? kc(cur.monthly) + '<small>nebo 0 Kč měsíčně</small>' : kc(cur.monthly) + "<small>měsíčně</small>";
     var per = st.adults.map(function (a, i) {
-      var inS = a.type === "pens" ? st.lp.includePensions : a.type === "self" ? st.lp.includeSelf !== false : a.type !== "none";
-      return "<div><span>Dospělý " + (i + 1) + " · " + TYPES.filter(function (t) { return t[0] === a.type; })[0][1].toLowerCase() + "</span><span>" + (inS ? kc(lv.perAdult[i]) : "mimo okruh") + "</span></div>";
+      var note = a.type === "none" ? "bez příjmu z práce" : (a.type === "pens" && !st.lp.includePensions) ? "důchod mimo okruh" : "";
+      return "<div><span>Dospělý " + (i + 1) + " · " + typeLabel(a.type).toLowerCase() + "</span><span>" + (note || kc(lv.perAdult[i])) + "</span></div>";
     }).join("");
     $("hhOut").innerHTML =
-      '<div class="res a"><div class="res-h"><b>A · Dnes platíte</b>' + tag("fakt") + "</div>"
-      + '<div class="res-nums"><span class="res-big">' + kc(cur.monthly) + "<small>měsíčně</small></span>"
-      + '<span class="res-mid">' + kc(cur.annual) + " <small>ročně</small></span></div>"
-      + "<p>" + esc(cur.reason) + " " + (cur.exempt ? "" : esc(limitTxt)) + "</p>"
-      + '<p class="src">Právní stav k ' + dateLbl + ", zák. č. 348/2005 Sb.</p></div>"
+      '<div class="res a"><div class="res-h"><b>A · Dnešní poplatek</b>' + tag("fakt") + "</div>"
+      + '<div class="status s-' + cur.status + '">' + esc(stt[0]) + "</div>"
+      + '<div class="res-nums"><span class="res-big">' + bigA + "</span>"
+      + '<span class="res-mid">' + (cur.status === "hranice" ? "2 460 Kč nebo 0 Kč" : kc(cur.annual)) + " <small>ročně, přímá platba</small></span></div>"
+      + "<p>" + esc(cur.reason) + (cur.status === "neplati" || (cur.status === "osvobozen" && !st.netOn) ? "" : " " + esc(limitTxt)) + "</p>"
+      + '<p class="src">Právní stav k ' + dateLbl + ", § 4 zák. č. 348/2005 Sb. Kalkulačka nárok nepřiznává, jen ukazuje podmínky.</p></div>"
 
       + '<div class="res b"><div class="res-h"><b>B · Ze státního rozpočtu</b>' + tag("navrh") + "</div>"
-      + '<div class="res-nums"><span class="res-big">0 Kč<small>přímá platba</small></span></div>'
-      + "<p>Služba ale zdarma není: ČT a ČRo by dostaly " + mld(BUDGET, 2) + " ročně ze státního rozpočtu, tedy z daní a dluhu, které nesou všichni. Kolik z toho připadá na vás, závisí na celé vaší daňové zátěži a nedá se poctivě spočítat.</p>"
-      + '<div class="orient"><span class="k">Orientační přepočet, ne vaše platba ' + tag("model") + "</span>"
+      + '<div class="res-nums"><span class="res-mid">Přímá platba 0 Kč</span><span class="res-mid">Nepřímo: nelze určit</span></div>'
+      + "<p>Samostatná platba zmizí, náklady ne. ČT a ČRo by dostaly " + mld(BUDGET, 2) + " ročně ze státního rozpočtu, tedy z daní a dluhu. Kolik z toho nese vaše domácnost, závisí na celé daňové a rozpočtové konstrukci a spolehlivě to spočítat nejde. Proto tento model nepředstavuje „nejlevnější“ variantu.</p>"
+      + '<div class="orient"><span class="k">Jen pro představu o velikosti částky, ne vaše platba ' + tag("model") + "</span>"
       + '<div class="per"><div><span>na obyvatele (' + num(P.population.value / 1e6, 2) + " mil.)</span><span>" + kc(bo.perCapita) + " ročně</span></div>"
       + "<div><span>na hospodařící domácnost (SLDB 2021)</span><span>" + kc(bo.perHousehold) + " ročně</span></div></div></div></div>"
 
       + '<div class="res c"><div class="res-h"><b>C · Účelový odvod</b>' + tag("autor") + "</div>"
       + '<div class="res-nums"><span class="res-big">' + kc(lv.total) + "<small>ročně za domácnost</small></span>"
-      + '<span class="delta ' + dCls + '">' + signKc(lv.diffVsCurrent) + " " + dTxt + "</span></div>"
+      + '<span class="delta ' + dCls + '" title="Rozdíl přímých plateb C minus A">' + signKc(lv.diffVsCurrent) + " " + dTxt + " než A</span></div>"
+      + '<p class="small" style="margin-top:4px">Rozdíl přímých plateb domácnosti proti dnešnímu poplatku' + (cur.certain ? "" : " (dnešní částka je podmíněná, viz A)") + ".</p>"
       + '<div class="per">' + per
       + "<div><span>Efektivní podíl na hrubém příjmu domácnosti</span><span>" + (lv.grossAnnual ? pct(lv.effShare, 2) : "-") + "</span></div></div>"
-      + "<p>Parametry: " + pct(st.lp.rate, 2) + (st.lp.marginal ? " z příjmu nad " : " z celého příjmu nad ") + kc(st.lp.threshold) + " ročně, strop " + kc(st.lp.cap) + " na osobu" + (st.lp.includePensions ? ", včetně důchodů" : ", bez důchodů") + '. <a href="#simulator">Změnit v simulátoru</a></p></div>';
+      + "<p>Hypotetický odvod podle parametrů modelu: " + pct(st.lp.rate, 2) + (st.lp.marginal ? " z příjmu nad " : " z celého příjmu nad ") + kc(st.lp.threshold) + " ročně, strop " + kc(st.lp.cap) + " na osobu" + (st.lp.includePensions ? ", včetně důchodů" : ", bez důchodů") + '. <a href="#simulator">Změnit v simulátoru</a></p></div>';
   }
 
   /* ================= SVG pomocníci ================= */
@@ -148,7 +161,7 @@
   /** Čárový graf. o: {series:[{name,color,dash,points:[[x,y]]}], x:[min,max], y:[min,max], xf, yf, marker, h, zero} */
   function lineChart(el, o) {
     var W = Math.max(280, el.clientWidth), mob = W < 480, H = o.h || (mob ? 240 : 300);
-    var L = mob ? 50 : 62, R = mob ? 10 : 16, T = 14, B = 34;
+    var L = mob ? 50 : 62, R = mob ? 10 : 16, T = o.yTitle ? 26 : 14, B = o.xTitle ? 48 : 34;
     var X = scale(o.x[0], o.x[1], L, W - R), Y = scale(o.y[0], o.y[1], H - B, T);
     var s = '<svg viewBox="0 0 ' + W + " " + H + '" width="' + W + '" height="' + H + '" role="img" aria-label="' + esc(o.aria || "") + '">';
     ticks(o.y[0], o.y[1], mob ? 4 : 5).forEach(function (v) {
@@ -158,6 +171,8 @@
     ticks(o.x[0], o.x[1], mob ? 4 : 6).forEach(function (v) {
       s += '<text x="' + X(v) + '" y="' + (H - B + 18) + '" text-anchor="middle" font-size="' + (mob ? 10 : 11) + '">' + o.xf(v) + "</text>";
     });
+    if (o.yTitle) s += '<text class="ax-title" x="' + (L - 6) + '" y="12" text-anchor="start">' + esc(o.yTitle) + "</text>";
+    if (o.xTitle) s += '<text class="ax-title" x="' + (W - R) + '" y="' + (H - 6) + '" text-anchor="end">' + esc(o.xTitle) + "</text>";
     if (o.zero) s += '<line class="axis" x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(0) + '" y2="' + Y(0) + '"/>';
     s += '<line class="axis" x1="' + L + '" x2="' + L + '" y1="' + T + '" y2="' + (H - B) + '"/><line class="axis" x1="' + L + '" x2="' + (W - R) + '" y1="' + (H - B) + '" y2="' + (H - B) + '"/>';
     (o.bands || []).forEach(function (b) {
@@ -198,15 +213,14 @@
       x: [0, 150000], y: [0, yMax], xf: kshort, yf: function (v) { return num(v); }, marker: st.scrub,
       series: [
         { name: "Dnes", color: COL.cur, points: pc.map(function (p) { return [p.monthly, p.current]; }), },
-        { name: "Rozpočet", color: COL.budget, dash: "2 5", w: 3, points: [[0, 0], [150000, 0]], label: "B · přímá platba 0 Kč", labelDy: -8 },
         { name: "Odvod", color: COL.levy, points: pc.map(function (p) { return [p.monthly, p.levy]; }), }
       ],
-      markerDots: [{ y: at.current, color: COL.cur }, { y: at.levy, color: COL.levy }],
+      markerDots: [{ y: at.current, color: COL.cur }, { y: at.levy, color: COL.levy }], yTitle: "Kč ročně", xTitle: "hrubý měsíční příjem",
       aria: "Graf A: roční platba jednočlenné domácnosti podle hrubého měsíčního příjmu. Dnešní poplatek je 2 460 Kč nad hranicí osvobození, odvod roste od hranice " + kc(st.lp.threshold) + " ročně až ke stropu " + kc(st.lp.cap) + ".",
       table: dataTable(["Hrubý měsíčně", "Dnes ročně", "Odvod ročně"], [10000, 20000, 25000, 30000, 40000, 50000, 75000, 100000, 150000].map(function (v) { var p = E.payCurve(P, st.lp, [v])[0]; return [kc(v), kc(p.current), kc(p.levy)]; }))
     });
     $("readA").innerHTML = '<div><span><i style="background:' + COL.cur + '"></i>A · dnes</span><b>' + kc(at.current) + " ročně</b></div>"
-      + '<div><span><i style="background:' + COL.budget + '"></i>B · přímá platba</span><b>0 Kč</b></div>'
+      + '<div><span>B · rozpočet</span><b>přímo 0 Kč, nepřímo nelze určit</b></div>'
       + '<div><span><i style="background:' + COL.levy + '"></i>C · odvod</span><b>' + kc(at.levy) + " ročně</b></div>";
 
     var dc = E.diffCurves(P, st.lp, INC), lo = 0, hi = 0;
@@ -216,7 +230,7 @@
     lineChart($("chartB"), {
       x: [0, 150000], y: [Math.min(-yr * 0.5, lo * 1.15), Math.max(hi * 1.15, 500)], xf: kshort, yf: function (v) { return (v > 0 ? "+" : "") + num(v); }, zero: true, marker: st.scrub,
       series: dc.map(function (s) { return { name: s.label, color: COL[s.id], points: s.points.map(function (p) { return [p.monthly, p.diff]; }), w: 3 }; }),
-      markerDots: dAt.map(function (s) { return { y: s.points[0].diff, color: COL[s.id] }; }),
+      markerDots: dAt.map(function (s) { return { y: s.points[0].diff, color: COL[s.id] }; }), yTitle: "Kč ročně, C minus A", xTitle: "hrubý měsíční příjem výdělečného dospělého",
       aria: "Graf B: rozdíl ročního odvodu proti dnešnímu poplatku podle příjmu pro čtyři typy domácností.",
       table: dataTable(["Hrubý měsíčně"].concat(dc.map(function (s) { return s.label; })), [15000, 25000, 35000, 45000, 60000, 80000, 120000].map(function (v) { var r = E.diffCurves(P, st.lp, [v]); return [kc(v)].concat(r.map(function (s) { return signKc(s.points[0].diff); })); }))
     });
@@ -242,18 +256,23 @@
 
   var lastSim = null;
   function updateSim() {
-    var T = target(), s = E.simulate(P, st.lp, T); lastSim = s;
+    var T = target(), s = E.simulate(P, st.lp, T);
+    if (!s.valid) {
+      $("simOut").innerHTML = '<div class="verdict ne"><div class="vk">Výpočet neproběhl</div><div class="vt">Neplatné parametry</div><p>' + esc(s.errors.join(" ")) + "</p></div>";
+      $("chartDec").innerHTML = ""; $("chartSens").innerHTML = ""; return;
+    }
+    lastSim = s;
     var vt = { ano: "Pokryje cíl ve všech třech scénářích", "nejisté": "Nejisté: cíl pokryje jen část scénářů", ne: "Nepokryje cíl ani v optimistickém scénáři" }[s.sufficient];
     var cls = s.sufficient === "nejisté" ? "nejiste" : s.sufficient;
     function rng(k) { return mldN(s.low[k]) + " až " + mldN(s.high[k]) + " mld."; }
     $("simOut").innerHTML =
       '<div class="verdict ' + cls + '"><div class="vk">Výsledek výpočtu, cíl ' + mld(T, 2) + " čistého</div>"
       + '<div class="vt">' + vt + "</div>"
-      + "<p>Čistý výnos " + rng("net") + " (střed " + mld(s.mid.net) + "). Rozdíl proti cíli " + (s.mid.gap >= 0 ? "+" : "−") + mldN(Math.abs(s.mid.gap), 2) + " mld. ve středu, " + (s.low.gap >= 0 ? "+" : "−") + mldN(Math.abs(s.low.gap), 2) + " mld. v pesimistickém a " + (s.high.gap >= 0 ? "+" : "−") + mldN(Math.abs(s.high.gap), 2) + " mld. v optimistickém scénáři.</p></div>"
+      + "<p>Čistý výnos " + rng("net") + " (střed " + mld(s.mid.net) + "). Rozdíl proti cíli " + (s.mid.gap >= 0 ? "+" : "−") + mldN(Math.abs(s.mid.gap), 2) + " mld. ve středu, " + (s.low.gap >= 0 ? "+" : "−") + mldN(Math.abs(s.low.gap), 2) + " mld. v pesimistickém a " + (s.high.gap >= 0 ? "+" : "−") + mldN(Math.abs(s.high.gap), 2) + ' mld. v optimistickém scénáři.</p><p class="note">Rozpětí scénářů není statistický interval spolehlivosti. Jiný rozumný tvar rozdělení mezd posouvá výsledek o dalších zhruba −6 až +4 %.</p></div>'
       + '<div class="kpis">'
-      + '<div class="kpi"><div class="k">Hrubý výnos</div><div class="v">' + mld(s.mid.gross) + '</div><div class="r">interval ' + rng("gross") + "</div></div>"
+      + '<div class="kpi"><div class="k">Hrubý výnos</div><div class="v">' + mld(s.mid.gross) + '</div><div class="r">rozpětí scénářů ' + rng("gross") + "</div></div>"
       + '<div class="kpi"><div class="k">Čistý výnos</div><div class="v">' + mld(s.mid.net) + '</div><div class="r">po správě a rezervě</div></div>'
-      + '<div class="kpi"><div class="k">Osvobozeno</div><div class="v">' + pct(s.mid.exemptShare, 0) + '</div><div class="r">osob v okruhu (' + num(s.mid.people / 1e6, 2) + " mil.)</div></div>"
+      + '<div class="kpi"><div class="k">Osvobozeno</div><div class="v">' + pct(s.mid.exemptShare, 0) + '</div><div class="r">příjemců v okruhu (' + num(s.mid.people / 1e6, 2) + " mil.; souběh mzdy a důchodu se počítá dvakrát)</div></div>"
       + '<div class="kpi"><div class="k">Na stropu</div><div class="v">' + pct(s.mid.cappedShare, 0) + '</div><div class="r">osob platí plný strop</div></div>'
       + "</div>"
       + '<div class="bal" aria-label="Kontrola bilance"><div><span>Hrubý výnos (střed)</span><span>' + mld(s.mid.gross, 2) + "</span></div>"
@@ -325,7 +344,7 @@
       { lbl: "Účelový odvod · čistý výnos", cat: "model", ct: s.mid.net * share, cro: s.mid.net * (1 - share), lo: s.low.net, hi: s.high.net, note: "Simulace výše, příjmy 2026, dělení v poměru tisku 231" }
     ];
     var mx = niceMax(Math.max.apply(null, rows.map(function (r) { return Math.max(r.ct + r.cro, r.hi || 0); })) * 1.05);
-    var html = '<div class="cbar-legend"><span><i style="background:var(--tax)"></i>ČT</span><span><i style="background:var(--dev)"></i>ČRo</span><span><i class="wh"></i>interval modelu</span></div>';
+    var html = '<div class="cbar-legend"><span><i style="background:var(--tax)"></i>ČT</span><span><i style="background:var(--dev)"></i>ČRo</span><span><i class="wh"></i>rozpětí scénářů modelu</span></div>';
     rows.forEach(function (r) {
       var tot = r.ct + r.cro;
       html += '<div class="cbar"><div class="cbar-l"><b>' + esc(r.lbl) + "</b> " + tag(r.cat) + '<span class="small">' + esc(r.note) + "</span></div>"
@@ -356,7 +375,7 @@
     var y0 = Math.max(0, Math.floor(lo / 1e9) - 1) * 1e9, y1 = niceMax(hi * 1.08);
     if (y1 - hi > hi * 0.4) y1 = Math.ceil(hi * 1.08 / 5e8) * 5e8;
     lineChart($("chartD"), {
-      x: [2027, 2036], y: [y0, y1], xf: function (v) { return String(v); }, yf: function (v) { return num(v / 1e9, 1); }, h: 300,
+      x: [2027, 2036], y: [y0, y1], xf: function (v) { return String(v); }, yf: function (v) { return num(v / 1e9, 1); }, h: 300, yTitle: k === "real" ? "mld. Kč, ceny 2026" : "mld. Kč, nominálně", xTitle: "rok",
       series: [
         { color: "var(--ink)", points: pr.map(function (y) { return [y.year, y.fee[k]]; }) },
         { color: "var(--tax)", points: pr.map(function (y) { return [y.year, y.budget[k]]; }) },
@@ -416,17 +435,20 @@
       + Object.keys(G).map(function (k) { var g = G[k]; return "<tr><td>" + esc(g.label) + '<br /><span class="small">' + g.year + '</span></td><td class="v">' + num(g.count) + " osob" + (g.mean ? "<br />průměr " + kc(g.mean) : "") + (g.medianAnnual ? "<br />medián " + kc(g.medianAnnual) + "/rok" : "") + "</td><td>" + tag(g.cat) + '</td><td class="hide-m">' + srcLink(g.src) + (g.note ? '<br /><span class="small">' + esc(g.note) + "</span>" : "") + "</td></tr>"; }).join("")
       + "</tbody></table>"
       + "<h4>Jak se počítá</h4><ul>"
+      + "<li><b>Osvobození (§ 4 zák. č. 348/2005 Sb.):</b> zdravotní důvod jen při úplné nebo praktické slepotě obou očí nebo oboustranné úplné či praktické hluchotě, a to pokud dotyčný žije sám nebo jen s osobami se stejným důvodem (nezaopatřené děti se nepočítají); průkaz ZTP/P je doklad, ne podmínka. Příjmový důvod: čistý příjem domácnosti za uplynulé kalendářní čtvrtletí pod 2,15násobkem životního minima, příjmy podle zák. č. 110/2006 Sb.; na žádost, nejdéle 6 měsíců. Z hrubého příjmu kalkulačka nárok nerozhoduje: pod 85 % limitu ukáže „pravděpodobně“, mezi 85 a 115 % „nelze určit“.</li>"
       + "<li><b>Dnešní poplatek:</b> 150 + 55 Kč měsíčně jednou za domácnost. Osvobození, pokud je čistý měsíční příjem domácnosti pod 2,15násobkem životního minima (podle složení domácnosti a data právního stavu), při ZTP/P se zrakovým nebo sluchovým postižením a bez zařízení schopného příjmu. Čistý příjem je orientační (pojistné 11,6 %, daň 15 % minus sleva 2 570 Kč, bez slev na děti); lze zadat přesně.</li>"
-      + "<li><b>Rozpočtový model:</b> přímá platba 0 Kč. Přepočet na obyvatele a domácnost je jen ilustrace velikosti částky, ne platba jednotlivce.</li>"
+      + "<li><b>Rozpočtový model:</b> přímá platba 0 Kč. Přepočet na obyvatele a domácnost je jen ilustrace velikosti částky, ne platba jednotlivce. Osobní dopad financování z obecných daní nelze spolehlivě určit bez znalosti konkrétní rozpočtové a daňové konstrukce (které daně, dluh nebo úspory by výdaj kryly).</li>"
       + "<li><b>Odvod:</b> pro každou osobu zvlášť min(strop, sazba × (roční hrubý příjem − hranice)), u varianty „z celého příjmu“ sazba × příjem nad hranicí. Domácnost = součet osob v okruhu.</li>"
-      + "<li><b>Celostátní simulace:</b> syntetická populace ze zveřejněných kvantilů ISPV 2025 (log-lineární interpolace, lineární dolní chvost, Paretův horní chvost kalibrovaný na zveřejněný průměr), přepočteno růstem mezd 2026. Důchody lognormálně kolem průměru ČSSZ. Interval: " + esc(P.sim.scenarioNote) + "</li>"
+      + "<li><b>Celostátní simulace:</b> syntetická populace ze zveřejněných kvantilů ISPV 2025 (log-lineární interpolace, lineární dolní chvost, Paretův horní chvost kalibrovaný na zveřejněný průměr), přepočteno růstem mezd 2026. Důchody lognormálně kolem průměru ČSSZ. Rozpětí scénářů (ne interval spolehlivosti): " + esc(P.sim.scenarioNote) + "</li>"
       + "<li><b>Bilance:</b> hrubý výnos = čistý výnos + správní náklady + rezerva; kontroluje se při každém výpočtu.</li>"
       + "<li><b>Kalibrace:</b> bisekce sazby nebo stropu na požadovaný čistý výnos, nejvýše 3 % sazby a 15 000 Kč stropu.</li>"
       + "<li><b>Projekce:</b> " + esc(P.projection.note) + " Poplatek +6 % po překročení kumulované inflace 6 % (účinnost od 1. 7. následujícího roku), rozpočtový model +10 % po překročení 10 p. b.</li></ul>"
       + "<h4>Omezení a co je nutné ověřit</h4><ul>"
       + "<li>ISPV měří zaměstnance přepočtené na placené měsíce; skutečný roční příjem osob se zkráceným úvazkem nebo neúplným rokem je nižší. Proto interval počtu a dolního chvostu.</li>"
       + "<li>Rozdělení zisků OSVČ podle výše není veřejně k dispozici; OSVČ jsou ve výchozím stavu mimo výpočet.</li>"
-      + "<li>Souběh příjmů (pracující důchodci, zaměstnanci s živností) se nesčítá; každá skupina má vlastní hranici.</li>"
+      + "<li>Souběh příjmů (pracující důchodci, zaměstnanci s živností) celostátní simulace nesčítá; každá skupina má vlastní hranici a osoba se souběhem se počítá dvakrát. Výnos je proto spíš podhodnocený a podíl osvobozených nadhodnocený. Kalkulačka domácnosti souběh sčítá správně.</li>"
+      + "<li>Tvar rozdělení mezd mezi zveřejněnými kvantily je modelový. Nezávislý přepočet s jinými tvary (lognormála z mediánu a průměru, z 10. a 90. percentilu) dává o zhruba 6 % méně až 4 % více (audit/recompute.py).</li>"
+      + "<li>Mimo model zůstávají příjmy z pronájmu a kapitálu a neaktivní osoby s jinými zdanitelnými příjmy.</li>"
       + "<li>Výběr poplatků ČRo za rok 2025 není ve zdrojích; použit plán 2026.</li>"
       + "<li>Detaily valorizace v tisku 231 (index, výchozí měsíc) a případné změny po 1. čtení je nutné ověřit v textu tisku.</li>"
       + "<li>Stav ústavní novely o NKÚ (tisk 47) je ověřen podle zpráv do června 2026.</li></ul>"
@@ -442,5 +464,19 @@
     updateAB(); if (lastSim) { drawDeciles(lastSim.deciles); drawSens(); } updateD();
   }, 150);
   if (window.ResizeObserver) new ResizeObserver(redraw).observe($("simulace")); else addEventListener("resize", redraw);
+  document.querySelectorAll("#simulator details").forEach(function (d) { d.addEventListener("toggle", function () { if (d.open && lastSim) { drawDeciles(lastSim.deciles); drawSens(); } }); });
+  // přímý odkaz do kapitoly: po vykreslení obsahu dorovnat pozici (obsah vzniká až skriptem)
+  if (/^#(simulace|kalkulacka|kdoKolik|simulator|zCeho|deset|nezavislost|inspirace|metodika|pro-me|cele-cesko)$/.test(location.hash)) {
+    var tgt = document.querySelector(location.hash);
+    if (tgt) {
+      if (tgt.tagName === "DETAILS") tgt.open = true;
+      var moved = false;
+      ["wheel", "touchstart", "keydown"].forEach(function (ev) { addEventListener(ev, function () { moved = true; }, { once: true, passive: true }); });
+      var jump = function () { if (!moved) tgt.scrollIntoView({ behavior: "instant", block: "start" }); };
+      requestAnimationFrame(jump);
+      if (document.readyState === "complete") setTimeout(jump, 0); else addEventListener("load", function () { setTimeout(jump, 0); });
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { setTimeout(jump, 0); });
+    }
+  }
   lastW = $("chartA").clientWidth;
 })();
