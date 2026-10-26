@@ -1,4 +1,4 @@
-# Jak by mohlo Česko platit: metodika
+# Kdo platí? Jak by mohlo Česko platit: metodika
 
 Verze parametrů `2026-10-26.3`. Legislativa ověřena k 26. 10. 2026 proti úplnému znění MK (změny do č. 152/2025 Sb.); relevantní znění § 4 a § 6 účinné od 1. 5. 2025; částky životního minima od 1. 10. 2026; data zkontrolována 26. 10. 2026. Všechna tři data jsou v `lab/params.js` (`meta`) a do HTML se propisují staticky (`npm run sync`, hlídá test). Kapitola 04 webu.
 

@@ -26,14 +26,21 @@ function diff(a, b, p, acc) {
   } else acc.push(p + ": " + JSON.stringify(a).slice(0, 80) + " → " + JSON.stringify(b).slice(0, 80));
   return acc;
 }
+// Vědomé, zdrojově doložené změny (cokoli jiného je regrese):
+const ALLOWED = {
+  "COUNTRIES.SI.note": "Slovinské referendum: rozdíl 2 633 hlasů po započtení zahraničí (RTV SLO, 19. 10. 2026), dříve průběžných 546",
+  "COUNTRIES.SI.facts.3": "tamtéž",
+};
 const cur = extract(fs.readFileSync(path.join(ROOT, "index.html"), "utf8"));
 const refs = process.argv.slice(2).length ? process.argv.slice(2) : ["4718d17", "main"];
 let bad = 0;
 const report = { current: { countries: cur.COUNTRIES.length, timeline: cur.TIMELINE.length }, refs: {} };
 for (const ref of refs) {
   const old = extract(execSync("git show " + ref + ":index.html", { cwd: ROOT, encoding: "utf8", maxBuffer: 64e6 }));
-  const d = { COUNTRIES: diff(old.COUNTRIES, cur.COUNTRIES, "COUNTRIES", []), TIMELINE: diff(old.TIMELINE, cur.TIMELINE, "TIMELINE", []), MAP: diff(old.MAP, cur.MAP, "MAP", []) };
+  const keyed = (arr) => Object.fromEntries(arr.map((c) => [c.iso, c]));
+  const d = { COUNTRIES: diff(keyed(old.COUNTRIES), keyed(cur.COUNTRIES), "COUNTRIES", []).filter((x) => !ALLOWED[x.split(":")[0]]), TIMELINE: diff(old.TIMELINE, cur.TIMELINE, "TIMELINE", []), MAP: diff(old.MAP, cur.MAP, "MAP", []) };
   report.refs[ref] = d;
+  if (old.COUNTRIES.map((c) => c.iso).join() !== cur.COUNTRIES.map((c) => c.iso).join()) d.COUNTRIES.push("COUNTRIES: změněné pořadí zemí");
   const n = d.COUNTRIES.length + d.TIMELINE.length + d.MAP.length;
   bad += n;
   console.log(`${ref}: COUNTRIES ${old.COUNTRIES.length}→${cur.COUNTRIES.length}, TIMELINE ${old.TIMELINE.length}→${cur.TIMELINE.length}, rozdílů ${n}`);

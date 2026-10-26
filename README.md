@@ -1,4 +1,4 @@
-# Poplatky za vysílání v Evropě
+# Kdo platí? Jak financujeme média veřejné služby
 
 Statický web bez buildu: financování veřejnoprávních médií ve 45 evropských zemích a interaktivní kapitola „Co kdybychom platili jinak?“ (kalkulačka domácnosti, celostátní fiskální simulátor, projekce, nezávislost). Stav k 26. 10. 2026.
 

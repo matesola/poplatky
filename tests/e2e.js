@@ -47,8 +47,8 @@ const kc = (s) => Number(String(s).replace(/[^\d-]/g, ""));
     await p.goto(base, { waitUntil: "load" });
 
     await t(`[${label}] úvodní statistiky mají skutečná čísla`, async () => {
-      const nums = await p.$$eval(".stat .num", (els) => els.map((e) => e.textContent.replace(/\s+/g, "")));
-      assert(nums.join("|") === "103let|€363|17|546", nums.join("|"));
+      const nums = await p.$$eval(".stat .num", (els) => els.map((e) => e.textContent.replace(/[\s\u00a0]+/g, "")));
+      assert(nums.join("|") === "103let|€363|17|2633", nums.join("|"));
     });
     await t(`[${label}] evropský přehled: mapa, žebříček, karty zemí`, async () => {
       assert((await p.$$("#mapSvg path.c")).length >= 40, "mapa");
@@ -161,8 +161,8 @@ const kc = (s) => Number(String(s).replace(/[^\d-]/g, ""));
   await t("bez JavaScriptu zůstávají úvodní čísla a texty čitelné", async () => {
     const ctx = await browser.newContext({ javaScriptEnabled: false });
     const p = await ctx.newPage(); await p.goto(base);
-    const nums = await p.$$eval(".stat .num", (els) => els.map((e) => e.textContent.replace(/\s+/g, "")));
-    assert(nums.join("|") === "103let|€363|17|546", nums.join("|"));
+    const nums = await p.$$eval(".stat .num", (els) => els.map((e) => e.textContent.replace(/[\s\u00a0]+/g, "")));
+    assert(nums.join("|") === "103let|€363|17|2633", nums.join("|"));
     assert((await p.textContent("#simulace")).includes("Co kdybychom platili jinak?"));
     await ctx.close();
   });
@@ -284,21 +284,21 @@ const kc = (s) => Number(String(s).replace(/[^\d-]/g, ""));
   }
 
   /* ================= Úvodní statistiky ve 4 variantách + nedokončené popisky ================= */
-  const STATS = "103let|€363|17|546";
+  const STATS = "103let|€363|17|2633";
   await t("statistiky: s JavaScriptem", async () => {
     const ctx = await browser.newContext(); const p = await ctx.newPage(); await p.goto(base);
-    assert((await p.$$eval(".stat .num", (els) => els.map((e) => e.textContent.replace(/\s+/g, "")))).join("|") === STATS); await ctx.close();
+    assert((await p.$$eval(".stat .num", (els) => els.map((e) => e.textContent.replace(/[\s\u00a0]+/g, "")))).join("|") === STATS); await ctx.close();
   });
   await t("statistiky: omezené animace (prefers-reduced-motion)", async () => {
     const ctx = await browser.newContext({ reducedMotion: "reduce" }); const p = await ctx.newPage(); await p.goto(base);
-    assert((await p.$$eval(".stat .num", (els) => els.map((e) => e.textContent.replace(/\s+/g, "")))).join("|") === STATS);
+    assert((await p.$$eval(".stat .num", (els) => els.map((e) => e.textContent.replace(/[\s\u00a0]+/g, "")))).join("|") === STATS);
     await p.waitForTimeout(1500);
-    assert((await p.$$eval(".stat .num", (els) => els.map((e) => e.textContent.replace(/\s+/g, "")))).join("|") === STATS, "po 1,5 s"); await ctx.close();
+    assert((await p.$$eval(".stat .num", (els) => els.map((e) => e.textContent.replace(/[\s\u00a0]+/g, "")))).join("|") === STATS, "po 1,5 s"); await ctx.close();
   });
   await t("statistiky a datum: textový extraktor surového HTML (jako crawler, bez DOM)", async () => {
     const raw = await (await fetch(base)).text();
-    const text = raw.replace(/<script[\s\S]*?<\/script>/g, " ").replace(/<style[\s\S]*?<\/style>/g, " ").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").replace(/ ([.;,)])/g, "$1");
-    for (const s of ["103 let", "€ 363", "546 hlasů", "znění účinné od 1. 5. 2025; legislativa ověřena k 26. 10. 2026"]) assert(text.includes(s) || text.replace(/€ /g, "€").includes(s.replace("€ ", "€")), "chybí: " + s);
+    const text = raw.replace(/<script[\s\S]*?<\/script>/g, " ").replace(/<style[\s\S]*?<\/style>/g, " ").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\u00a0/g, " ").replace(/\s+/g, " ").replace(/ ([.;,)])/g, "$1");
+    for (const s of ["103 let", "€ 363", "2 633 hlasů", "znění účinné od 1. 5. 2025; legislativa ověřena k 26. 10. 2026"]) assert(text.includes(s) || text.replace(/€ /g, "€").includes(s.replace("€ ", "€")), "chybí: " + s);
     assert(!/(stav k|účinné od|ověřena k|zkontrolována)\s*[.;,)]/.test(text), "nedokončený popisek s datem");
     assert(!/\b0 let\b|€ ?0\b/.test(text), "nuly");
   });
@@ -310,6 +310,70 @@ const kc = (s) => Number(String(s).replace(/[^\d-]/g, ""));
     assert(body.includes("legislativa ověřena k 26. 10. 2026"), "datum v kartě A");
     await ctx.close();
   });
+
+  await t("čísla v HTML bez JS = čísla po spuštění JS (žádné výchozí hodnoty vydávané za data)", async () => {
+    const grab = async (js) => { const c = await browser.newContext({ javaScriptEnabled: js, viewport: { width: 1366, height: 900 } }); const p = await c.newPage(); await p.goto(base); await p.waitForTimeout(js ? 1500 : 200);
+      const r = await p.evaluate(() => { const o = {}; document.querySelectorAll("[id]").forEach((e) => { if (e.children.length > 3) return; const t = e.textContent.replace(/\s+/g, " ").trim(); if (t && /\d/.test(t) && t.length < 200) o[e.id] = t; }); return o; }); await c.close(); return r; };
+    const a = await grab(false), j = await grab(true);
+    const bad = Object.keys(a).filter((k) => j[k] !== undefined && j[k] !== a[k]).map((k) => k + ": " + a[k] + " ≠ " + j[k]);
+    assert(bad.length === 0, bad.join("; "));
+  });
+
+  /* ================= Identita „Kdo platí?“, metadata, SEO soubory ================= */
+  await t("identita: H1, podtitulek a perex v přesném znění, bez JS i s JS", async () => {
+    for (const js of [false, true]) {
+      const c = await browser.newContext({ javaScriptEnabled: js }); const p = await c.newPage(); await p.goto(base);
+      const h1 = (await p.textContent("h1")).replace(/\s+/g, " ").trim();
+      const sub = (await p.textContent(".hero-sub")).trim(), lede = (await p.textContent(".hero .lede")).replace(/\s+/g, " ").trim();
+      assert(h1 === "Kdo platí?", "H1: " + h1);
+      assert(sub === "Jak financujeme média veřejné služby.", "podtitulek: " + sub);
+      assert(lede === "Od televizních poplatků po státní rozpočet. Prozkoumejte 45 evropských zemí, spočítejte si české alternativy a zjistěte, co jednotlivé modely znamenají pro nezávislost médií.", "perex: " + lede);
+      assert((await p.$$("h1")).length === 1, "jediné H1");
+      const go = await p.$$eval(".hero-go a", (as) => as.map((a) => a.textContent.trim() + ">" + a.getAttribute("href")));
+      assert(go.join("|") === "Evropské srovnání>#mapa|Český kontext>#cesko|Kalkulačka>#kalkulacka|Metodika a zdroje>#zdroje", go.join("|"));
+      for (const g of go) assert(await p.$(g.split(">")[1]), "cíl " + g);
+      await c.close();
+    }
+  });
+  await t("metadata: title, description, canonical, OG, Twitter, JSON-LD, manifest", async () => {
+    const c = await browser.newContext({ javaScriptEnabled: false }); const p = await c.newPage(); await p.goto(base);
+    const m = await p.evaluate(() => { const g = (s) => { const e = document.querySelector(s); return e && (e.content || e.href || e.textContent); }; return {
+      title: document.title, desc: g('meta[name="description"]'), canon: g('link[rel="canonical"]'), ogt: g('meta[property="og:title"]'), ogd: g('meta[property="og:description"]'), ogu: g('meta[property="og:url"]'),
+      ogi: g('meta[property="og:image"]'), site: g('meta[property="og:site_name"]'), tw: g('meta[name="twitter:card"]'), twt: g('meta[name="twitter:title"]'), ld: g('script[type="application/ld+json"]'), man: document.querySelector('link[rel="manifest"]').getAttribute("href") }; });
+    assert(m.title === "Kdo platí? Jak financujeme média veřejné služby", m.title);
+    assert(m.canon === "https://poplatky.app/" && m.ogu === "https://poplatky.app/", "canonical " + m.canon);
+    assert(m.site === "Kdo platí?" && m.ogt === m.title && m.twt === m.title && m.tw === "summary_large_image", "OG/Twitter");
+    assert(m.desc.startsWith("Od televizních poplatků") && m.ogd === m.desc, "description");
+    assert(m.ogi === "https://poplatky.app/og.png", "og:image");
+    const ld = JSON.parse(m.ld); assert(ld.name === "Kdo platí?" && ld.url === "https://poplatky.app/" && ld["@type"] === "WebSite", "JSON-LD");
+    const head = (await (await fetch(base)).text()).slice(0, 6000); assert(!/Poplatky za vysílání v Evropě/.test(head), "starý název v hlavičce");
+    const man = await (await fetch(base + m.man)).json(); assert(man.short_name === "Kdo platí?", "manifest");
+    await c.close();
+  });
+  await t("SEO soubory: robots.txt, sitemap.xml, og.png 1200×630 se nasazují", async () => {
+    const r = await fetch(base + "robots.txt"); assert(r.ok && /Sitemap: https:\/\/poplatky\.app\/sitemap\.xml/.test(await r.text()), "robots");
+    const sm = await fetch(base + "sitemap.xml"); assert(sm.ok && /<loc>https:\/\/poplatky\.app\/<\/loc>/.test(await sm.text()), "sitemap");
+    const og = Buffer.from(await (await fetch(base + "og.png")).arrayBuffer());
+    assert(og.readUInt32BE(16) === 1200 && og.readUInt32BE(20) === 630, "rozměr og.png");
+  });
+  for (const [vp, label] of [[{ width: 1366, height: 900 }, "desktop"], [{ width: 390, height: 844 }, "mobil"]]) {
+    await t(`[flow ${label}] přechod do evropského srovnání a sdílení konkrétní sekce`, async () => {
+      const c = await browser.newContext({ viewport: vp, isMobile: label === "mobil", hasTouch: label === "mobil" }); const p = await c.newPage(); await p.goto(base);
+      await p.click('.hero-go a[href="#mapa"]');
+      let top = 1e9; for (let i = 0, prev = -1; i < 40; i++) { await p.waitForTimeout(150); top = await p.$eval("#mapa", (e) => e.getBoundingClientRect().top); if (Math.abs(top - prev) < 1) break; prev = top; }
+      assert(top > -5 && top < 200, "mapa " + top);
+      assert((await p.$$("#mapSvg path.c")).length >= 40, "mapa vykreslena");
+      const navHashes = await p.$$eval("nav.toc .links a", (as) => as.map((a) => a.getAttribute("href")));
+      assert(navHashes.length === 9, "navigace " + navHashes.length);
+      for (const [h, sel] of [["#zeme-CZ", "#dlgName"], ["#kalkulacka", "#kalkulacka"], ["#metodika", "#metodika"]].concat(navHashes.map((x) => [x, x]))) {
+        const q = await c.newPage(); await q.goto(base + h); await q.waitForTimeout(1100);
+        if (h === "#zeme-CZ") assert((await q.textContent(sel)).trim() === "Česko", "dialog CZ");
+        else { const tp = await q.$eval(sel, (e) => e.getBoundingClientRect().top); assert(tp > -5 && tp < 200, h + " " + tp); }
+        await q.close();
+      }
+      await c.close();
+    });
+  }
 
   /* ================= Mobil: šířky 320 až 430 (Chromium, emulace) ================= */
   for (const w of [320, 360, 375, 390, 414, 430]) {

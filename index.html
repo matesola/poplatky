@@ -5,8 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" href="data:," />
-    <title>Poplatky za vysílání v Evropě</title>
-    <meta name="description" content="Televizní a rozhlasové poplatky ve 45 evropských zemích: částky, modely financování, česká novela 2025, sněmovní tisk 231, referenda a soudní rozhodnutí. Stav k 24. 10. 2026." />
+    <title>Kdo platí? Jak financujeme média veřejné služby</title>
+    <meta name="description" content="Od televizních poplatků po státní rozpočet. Prozkoumejte 45 evropských zemí, spočítejte si české alternativy a zjistěte, co jednotlivé modely znamenají pro nezávislost médií." />
+    <link rel="canonical" href="https://poplatky.app/" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Matesola" />
+    <meta name="theme-color" content="#f2efe6" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#101010" media="(prefers-color-scheme: dark)" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="cs_CZ" />
+    <meta property="og:site_name" content="Kdo platí?" />
+    <meta property="og:title" content="Kdo platí? Jak financujeme média veřejné služby" />
+    <meta property="og:description" content="Od televizních poplatků po státní rozpočet. Prozkoumejte 45 evropských zemí, spočítejte si české alternativy a zjistěte, co jednotlivé modely znamenají pro nezávislost médií." />
+    <meta property="og:url" content="https://poplatky.app/" />
+    <meta property="og:image" content="https://poplatky.app/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Kdo platí? Jak financujeme média veřejné služby. 45 evropských zemí a česká kalkulačka." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Kdo platí? Jak financujeme média veřejné služby" />
+    <meta name="twitter:description" content="Od televizních poplatků po státní rozpočet. Prozkoumejte 45 evropských zemí, spočítejte si české alternativy a zjistěte, co jednotlivé modely znamenají pro nezávislost médií." />
+    <meta name="twitter:image" content="https://poplatky.app/og.png" />
+    <link rel="manifest" href="site.webmanifest" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Kdo platí?","alternateName":"Kdo platí? Jak financujeme média veřejné služby","url":"https://poplatky.app/","inLanguage":"cs","description":"Od televizních poplatků po státní rozpočet. Prozkoumejte 45 evropských zemí, spočítejte si české alternativy a zjistěte, co jednotlivé modely znamenají pro nezávislost médií.","author":{"@type":"Person","name":"Matesola"},"dateModified":"2026-10-26"}</script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -459,6 +480,12 @@
         .big-fee .total .amt { font-size: 34px; }
         .avg-line span { top: auto; bottom: 100%; white-space: normal; width: max-content; max-width: 44vw; font-size: 10px; }
       }
+      .hero .hero-sub { font-weight: 800; font-stretch: 110%; font-size: clamp(22px, 3.2vw, 36px); line-height: 1.15; margin: 18px 0 0; letter-spacing: -.01em; }
+      .hero-go { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0 0; }
+      .hero-go a { font: 700 13px "IBM Plex Mono", monospace; text-transform: uppercase; color: var(--ink); text-decoration: none; border: var(--bw) solid var(--line); background: var(--card); padding: 10px 14px; min-height: 44px; display: inline-flex; align-items: center; box-shadow: var(--sh-s); }
+      .hero-go a:hover, .hero-go a:focus-visible { background: var(--hi); color: var(--on-hi); }
+      .hero-go a.go-calc { background: var(--accent); color: #0b0b0b; }
+      @media (max-width: 480px) { .hero-go { display: grid; grid-template-columns: 1fr 1fr; } .hero-go a { justify-content: center; text-align: center; } }
     </style>
   </head>
   <body>
@@ -470,14 +497,21 @@
           <span>Stav k <b>24. 10. 2026</b></span>
           <span>Zdroj u každého údaje</span>
         </div>
-        <h1>Poplatky<br />za vysílání<br /><span class="hl">v Evropě</span></h1>
-        <p class="lede">Evropské domácnosti platí za veřejnoprávní média šesti různými způsoby. Sedmnáct ze 45 zemí v přehledu od roku 1999 poplatek zrušilo nebo převedlo na daň, dalších jedenáct samostatný poplatek nemělo vůbec. Česká Sněmovna o zrušení poplatků jedná od října 2026. Níže jsou částky, modely, novely, referenda, soudní rozhodnutí a seznam údajů, které se nepodařilo ověřit.</p>
+        <h1>Kdo <span class="hl">platí?</span></h1>
+        <p class="hero-sub">Jak financujeme média veřejné služby.</p>
+        <p class="lede">Od televizních poplatků po státní rozpočet. Prozkoumejte 45 evropských zemí, spočítejte si české alternativy a zjistěte, co jednotlivé modely znamenají pro nezávislost médií.</p>
+        <nav class="hero-go" aria-label="Kam dál">
+          <a href="#mapa">Evropské srovnání</a>
+          <a href="#cesko">Český kontext</a>
+          <a href="#kalkulacka" class="go-calc">Kalkulačka</a>
+          <a href="#zdroje">Metodika a zdroje</a>
+        </nav>
 
         <div class="stat-strip">
-          <div class="stat"><div class="num"><span data-count="103">103</span> <em>let</em></div><div class="lbl">od zahájení pravidelného rozhlasového vysílání v Československu (Radiojournal, 18. 5. 1923)</div></div>
-          <div class="stat"><div class="num">€<span data-count="363">363</span></div><div class="lbl">nejvyšší poplatek v Evropě: Švýcarsko, 335 CHF ročně za domácnost</div></div>
-          <div class="stat"><div class="num"><span data-count="17">17</span></div><div class="lbl">zemí z přehledu od roku 1999 zrušilo poplatek nebo jej převedlo na daň či rozpočet; žádná nezavedla nový přístrojový</div></div>
-          <div class="stat"><div class="num"><span data-count="546">546</span></div><div class="lbl">hlasů dělilo zachování a zrušení poplatku ve slovinském referendu 11. 10. 2026 (předběžně, konečný výsledek do 30. 10.)</div></div>
+          <div class="stat"><div class="num"><span>103</span> <em>let</em></div><div class="lbl">od zahájení pravidelného rozhlasového vysílání v Československu (Radiojournal, 18. 5. 1923)</div></div>
+          <div class="stat"><div class="num">€<span>363</span></div><div class="lbl">nejvyšší poplatek v Evropě: Švýcarsko, 335 CHF ročně za domácnost</div></div>
+          <div class="stat"><div class="num"><span>17</span></div><div class="lbl">zemí z přehledu od roku 1999 zrušilo poplatek nebo jej převedlo na daň či rozpočet; žádná nezavedla nový přístrojový</div></div>
+          <div class="stat"><div class="num"><span>2&nbsp;633</span></div><div class="lbl">hlasů dělilo zachování a zrušení poplatku ve slovinském referendu 11. 10. 2026 (neoficiálně, včetně hlasů ze zahraničí; úřední potvrzení do 30. 10.)</div></div>
         </div>
 
         <div class="live-banner">
@@ -948,7 +982,7 @@
               <div>
                 <div class="tl-counter">
                   <div class="c"><div class="n" id="tlYear">2026</div><div class="l">zobrazený rok</div></div>
-                  <div class="c"><div class="n" id="tlGone">10</div><div class="l">zemí bez samostatné platby<br />(rozpočet, obecná daň)</div></div>
+                  <div class="c"><div class="n" id="tlGone">26</div><div class="l">zemí bez samostatné platby<br />(rozpočet, obecná daň)</div></div>
                   <div class="c"><div class="n" id="tlTax">3</div><div class="l">zemí s účelovou<br />daní na osobu</div></div>
                   <div class="c"><div class="n" id="tlFee">16</div><div class="l">zemí s poplatkem<br />nebo daní při nákupu</div></div>
                 </div>
@@ -1023,9 +1057,9 @@
             <div class="card vote reveal">
               <div class="when">Slovinsko · 11. 10. 2026 · poradní referendum</div>
               <h3>Zrušit povinnou platbu příspěvku RTV?</h3>
-              <div class="vbar"><div class="a" style="width:50.03%"></div><div class="b" style="width:49.97%"></div></div>
-              <div class="vbar-lbl"><span>50,03 % zachovat</span><span>49,97 % zrušit</span></div>
-              <p>Nejtěsnější výsledek v historii evropských poplatků. Neoficiální průběžné výsledky Státní volební komise (DVK) po započtení domácích poštovních hlasů: <b>462 299 hlasů proti zrušení, 461 753 pro, rozdíl 546 hlasů</b>, účast 54,62 %. Po započtení hlasů ze zahraničí uvádí Public Media Alliance 50,14 % pro zachování. Čísla se mezi aktualizacemi DVK mírně posouvala, konečný výsledek má komise potvrdit do 30. 10. 2026. Referendum je nezávazné; vláda Janeze Janši přesto chce povinnou platbu ukončit.<span class="flag">předběžné výsledky</span></p>
+              <div class="vbar"><div class="a" style="width:50.14%"></div><div class="b" style="width:49.86%"></div></div>
+              <div class="vbar-lbl"><span>50,14 % zachovat</span><span>49,86 % zrušit</span></div>
+              <p>Nejtěsnější výsledek v historii evropských poplatků. Neoficiální výsledky Státní volební komise (DVK) po započtení všech hlasů včetně zahraničí (RTV SLO, 19. 10. 2026): <b>464 680 hlasů proti zrušení, 462 047 pro, rozdíl 2 633 hlasů</b>, účast 54,78 %. V noci po hlasování činil rozdíl jen 546 hlasů, s poštovními a zahraničními hlasy se zvětšil. Úřední potvrzení má komise vydat do 30. 10. 2026. Referendum je nezávazné; vláda Janeze Janši přesto chce povinnou platbu ukončit.<span class="flag">předběžné výsledky</span></p>
             </div>
             <div class="card vote reveal">
               <div class="when">Švýcarsko · 14. 6. 2015 · referendum</div>
@@ -1158,7 +1192,7 @@
               <ul>
                 <li><b>Česko:</b> přesný výběr rozhlasového poplatku ČRo za rok 2026 není veřejně ověřen; známý je jen očekávaný výběr ČT (6,7 mld. Kč dle ČTK). České číslo „na obyvatele“ proto neuvádíme.</li>
                 <li><b>Česko, tisk 231:</b> stav je doložen více zprávami ze dne prvního čtení (24. 10. 2026), ne přímým čtením sněmovního rejstříku; stejně tak je potřeba před dalším šířením ověřit program výboru na 29. 10. a zda text stále uvádí účinnost 1. 1. 2027.</li>
-                <li><b>Slovinsko:</b> DVK k 24. 10. 2026 konečný výsledek referenda z 11. října formálně nepotvrdila, má tak učinit do 30. října. Uvedených 50,03 % (resp. 50,14 % po zahraničních hlasech) pochází z neoficiálních průběžných aktualizací DVK, které se mírně lišily.</li>
+                <li><b>Slovinsko:</b> DVK k 26. 10. 2026 konečný výsledek referenda z 11. října formálně nepotvrdila, má tak učinit do 30. října. Uvedených 50,14 % a rozdíl 2 633 hlasů jsou neoficiální výsledky po započtení hlasů ze zahraničí (RTV SLO, 19. 10. 2026); průběžné aktualizace se mírně lišily (546 hlasů v noci po hlasování, 1 354 k 16. 10.).</li>
                 <li><b>Doplněné země:</b> u Moldavska není státní alokace TRM na rok 2026 (221 mil. MDL) potvrzená z rozpočtového zákona, u Běloruska se rozpočtová položka BTRC na rok 2026 dohledat nepodařila, u San Marina není ověřená aktuální výše veřejného financování RTV a u Lucemburska částka pro Média 100,7 pochází ze sekundárního přehledu State Media Monitor. Přesné datum konce kyperského odvodu přes elektřinu (1. 7. 2000) stojí na jediném zdroji, samotné zrušení je potvrzené.</li>
                 <li><b>Německo:</b> rozsudek Spolkového ústavního soudu ke stížnostem na nepřijetí 18,94 € k 24. 10. 2026 nepadl.</li>
                 <li><b>Polsko:</b> stav návrhu „opłaty audiowizualnej“ (asi 10 PLN měsíčně s daní z příjmu) se v rejstříku Sejmu ověřit nepodařilo; uvádíme jej jen jako opakovaně oznamovaný záměr ministerstva.</li>
@@ -1193,6 +1227,7 @@
             <li><a href="https://www.ebu.ch/news/2026/06/concerns-over-czech-government-plan-to-abolish-the-licence-fee" target="_blank" rel="noopener">EBU: obavy z českého plánu zrušit poplatek (22. 6. 2026)</a></li>
             <li><a href="https://www.ebu.ch/news/2026/10/ebu-welcomes-early-results-in-slovenia-s-licence-fee-vote" target="_blank" rel="noopener">EBU: slovinské referendum (říjen 2026)</a></li>
             <li><a href="https://www.ebu.ch/news/2026/10/ebu-strongly-criticizes-proposed-cuts-to-vrt-funding" target="_blank" rel="noopener">EBU: škrty VRT a financování na obyvatele (říjen 2026)</a></li>
+            <li><a href="https://www.rtvslo.si/slovenija/referendumi-2026/po-prestetih-glasovnicah-iz-tujine-se-izidi-referendumov-niso-spremenili/797428" target="_blank" rel="noopener">RTV SLO, 19. 10. 2026: výsledky referenda po započtení hlasů ze zahraničí</a></li>
             <li><a href="https://www.publicmediaalliance.org/referendums-audits-boards-the-pma-briefing/" target="_blank" rel="noopener">Public Media Alliance: briefing o referendech (20. 10. 2026)</a></li>
             <li><a href="https://www.broadbandtvnews.com/2026/03/09/swiss-voters-reject-proposal-to-halve-public-licence-fee/" target="_blank" rel="noopener">Broadband TV News: švýcarské hlasování 8. 3. 2026</a></li>
             <li><a href="https://merlin.obs.coe.int/article/10340" target="_blank" rel="noopener">Rada Evropy, IRIS: rakouský ORF-Beitrag</a></li>
@@ -1218,7 +1253,8 @@
     <footer>
       <div class="wrap" style="display:flex;flex-wrap:wrap;gap:14px 40px;justify-content:space-between;align-items:baseline">
         <div>
-          <div style="font-weight:900;font-size:20px">Poplatky za vysílání v Evropě</div>
+          <div style="font-weight:900;font-size:20px">Kdo platí?</div>
+          <div class="small">Jak financujeme média veřejné služby. Evropská část navazuje na původní přehled „Poplatky za vysílání v Evropě“.</div>
           <div class="small">Financování veřejnoprávních médií ve 45 evropských zemích. Stav k 24. 10. 2026.</div>
         </div>
         <div class="small" style="max-width:460px">Částky v korunách, librách, francích, zlotých a skandinávských korunách jsou přepočteny referenčními kurzy ECB k 23. 10. 2026. Legislativní procesy běží dál: český tisk 231, slovinské referendum i německé řízení před ústavním soudem se po uzávěrce mohou posunout.</div>
@@ -1258,8 +1294,8 @@
         facts:["ORF-Beitragsgesetz platí od 1. 1. 2024: platí každé hlavní bydliště, vedlejší bydlení jsou osvobozena.","Sazba 15,30 € je zákonem zmrazena do konce 2029; průměrný roční výnos má strop 710 mil. €.","Firmy platí 1 až 100 příspěvků podle mzdových nákladů, strop 1 530 € měsíčně na provozovnu.","Proti novému poplatku přišlo asi 7 600 stížností; správní soud jej 9. 10. 2026 potvrdil.","FPÖ (nejsilnější strana po volbách 2024) slibuje úplné zrušení „Zwangsgebühr“, vládní strany model drží."],
         src:{t:"ORF-Beitrags Service (OBS)", u:"https://www.obs.at/english"} },
       { iso:"SI", name:"Slovinsko", model:"dom", local:"168,24 € / rok (14,02 € měsíčně)", eur:168, basis:"Domácnost s přípojkou elektřiny", collector:"RTV Slovenija", bc:"RTV Slovenija",
-        note:"Země nejtěsnějšího referenda v Evropě: v říjnu 2026 dělilo zachování a zrušení poplatku 546 hlasů. Vláda chce povinnou platbu přesto ukončit.",
-        facts:["Poplatek byl 12,75 € od roku 2012; vláda jej od 1. 1. 2025 zákonně zvýšila o 10 %.","Výběr 109,59 mil. € v roce 2025 = 69,3 % příjmů RTV Slovenija.","Referendum 2022: oficiálně 62,83 % pro zákon o odpolitizování řízení RTV (443 971 hlasů), 37,17 % proti (262 648).","Poradní referendum 11. 10. 2026: podle neoficiálních průběžných výsledků DVK zrušení odmítnuto 50,03 % (rozdíl 546 hlasů), po zahraničních hlasech 50,14 % pro zachování; konečný výsledek má DVK formálně potvrdit do 30. 10. 2026.","Vládní návrh ze srpna 2026: rozpočtové financování a nová 7členná dozorčí rada, 6 členů jmenuje vláda. MFRR a EFJ varují před porušením EMFA."],
+        note:"Země nejtěsnějšího referenda v Evropě: v říjnu 2026 dělilo zachování a zrušení poplatku 2 633 hlasů (neoficiálně, včetně zahraničí). Vláda chce povinnou platbu přesto ukončit.",
+        facts:["Poplatek byl 12,75 € od roku 2012; vláda jej od 1. 1. 2025 zákonně zvýšila o 10 %.","Výběr 109,59 mil. € v roce 2025 = 69,3 % příjmů RTV Slovenija.","Referendum 2022: oficiálně 62,83 % pro zákon o odpolitizování řízení RTV (443 971 hlasů), 37,17 % proti (262 648).","Poradní referendum 11. 10. 2026: podle neoficiálních výsledků DVK po započtení hlasů ze zahraničí zrušení odmítnuto 50,14 % (464 680 proti, 462 047 pro, rozdíl 2 633 hlasů); konečný výsledek má DVK formálně potvrdit do 30. 10. 2026.","Vládní návrh ze srpna 2026: rozpočtové financování a nová 7členná dozorčí rada, 6 členů jmenuje vláda. MFRR a EFJ varují před porušením EMFA."],
         src:{t:"Public Media Alliance: slovinské referendum", u:"https://www.publicmediaalliance.org/referendums-audits-boards-the-pma-briefing/"} },
       { iso:"IE", name:"Irsko", model:"dev", local:"160 € / rok", eur:160, basis:"Prostory s televizním přijímačem", collector:"An Post (pošta)", bc:"RTÉ (asi 85 %), vysílací fond",
         note:"Licence vázaná na televizor, ne na sledování: kdo sleduje jen přes internet, neplatí nic. Po skandálu v RTÉ stát výpadek dorovnává z rozpočtu.",
@@ -1493,25 +1529,6 @@
     }
     addEventListener("scroll", function(){ if (!progQueued) { progQueued = true; requestAnimationFrame(paintProgress); } }, { passive: true });
     paintProgress();
-
-    /* ---------- počítadla v hero ---------- */
-    var counted = false;
-    function runCounters(){
-      if (counted) return; counted = true;
-      document.querySelectorAll("[data-count]").forEach(function(el){
-        var target = +el.getAttribute("data-count");
-        el.textContent = target.toLocaleString("cs-CZ"); return;
-        var t0 = null;
-        function tick(ts){
-          if (!t0) t0 = ts;
-          var p = Math.min(1, (ts - t0) / 1400);
-          el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))).toLocaleString("cs-CZ");
-          if (p < 1) requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
-      });
-    }
-    new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) runCounters(); }); }, {threshold:.3}).observe(document.querySelector(".stat-strip"));
 
     /* ---------- reveal ---------- */
     var revealIO = new IntersectionObserver(function(es){

@@ -1,5 +1,5 @@
 {
- "date": "2026-10-26T11:36:55.664Z",
+ "date": "2026-10-26T12:01:12.469Z",
  "browser": "Chromium (Playwright 1.63.0)",
  "results": [
   {
@@ -244,6 +244,30 @@
   },
   {
    "name": "bez JavaScriptu: žádné nedokončené popisky s datem ani NaN",
+   "ok": true
+  },
+  {
+   "name": "čísla v HTML bez JS = čísla po spuštění JS (žádné výchozí hodnoty vydávané za data)",
+   "ok": true
+  },
+  {
+   "name": "identita: H1, podtitulek a perex v přesném znění, bez JS i s JS",
+   "ok": true
+  },
+  {
+   "name": "metadata: title, description, canonical, OG, Twitter, JSON-LD, manifest",
+   "ok": true
+  },
+  {
+   "name": "SEO soubory: robots.txt, sitemap.xml, og.png 1200×630 se nasazují",
+   "ok": true
+  },
+  {
+   "name": "[flow desktop] přechod do evropského srovnání a sdílení konkrétní sekce",
+   "ok": true
+  },
+  {
+   "name": "[flow mobil] přechod do evropského srovnání a sdílení konkrétní sekce",
    "ok": true
   },
   {

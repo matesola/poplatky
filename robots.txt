@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://poplatky.app/sitemap.xml

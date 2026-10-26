@@ -1,6 +1,6 @@
 # Audit fiskálního modelu účelového odvodu
 
-Stav: 26. 10. 2026, verze parametrů `2026-10-26.3` (finální opravné kolo, větev `final`). Týká se kapitoly 04, části „Vybere odvod dost peněz?“.
+Stav: 26. 10. 2026, verze parametrů `2026-10-26.3`, release candidate „Kdo platí?“ (větev `release`). Celostátní výsledky jsou orientační (viz § 7 a § 8). Týká se kapitoly 04, části „Vybere odvod dost peněz?“.
 
 **Shrnutí.** Model je deterministická aproximace postavená na zveřejněných kvantilech mezd. Nezávislý přepočet v Pythonu se s aplikací shoduje na 0,00 %, takže aritmetika je správná. Hlavní nejistota je metodická: tvar rozdělení mezi zveřejněnými kvantily, souběhy příjmů a chybějící data o OSVČ. Strukturní nejistota jen z tvaru rozdělení mezd je zhruba −6 až +4 %. Výsledky proto nejsou přesný fiskální výpočet a aplikace je tak ani neprezentuje.
 

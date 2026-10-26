@@ -465,9 +465,10 @@
   }, 150);
   if (window.ResizeObserver) new ResizeObserver(redraw).observe($("simulace")); else addEventListener("resize", redraw);
   document.querySelectorAll("#simulator details").forEach(function (d) { d.addEventListener("toggle", function () { if (d.open && lastSim) { drawDeciles(lastSim.deciles); drawSens(); } }); });
-  // přímý odkaz do kapitoly: po vykreslení obsahu dorovnat pozici (obsah vzniká až skriptem)
-  if (/^#(simulace|kalkulacka|kdoKolik|simulator|zCeho|deset|nezavislost|inspirace|metodika|pro-me|cele-cesko)$/.test(location.hash)) {
-    var tgt = document.querySelector(location.hash);
+  // přímý (sdílený) odkaz na kteroukoli kapitolu či blok: po vykreslení obsahu dorovnat pozici,
+  // protože mapa, grafy a kalkulačka vznikají až skriptem a posouvají rozložení. Odkazy #zeme-XX řeší dialog.
+  if (/^#[A-Za-z][\w-]*$/.test(location.hash) && !/^#zeme-/.test(location.hash) && document.getElementById(location.hash.slice(1))) {
+    var tgt = document.getElementById(location.hash.slice(1));
     if (tgt) {
       if (tgt.tagName === "DETAILS") tgt.open = true;
       var moved = false;
