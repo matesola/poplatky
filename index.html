@@ -6,7 +6,7 @@
     <meta name="color-scheme" content="light" />
     <link rel="icon" href="data:," />
     <title>Kdo platí? Jak financujeme média veřejné služby</title>
-    <meta name="description" content="Od televizních poplatků po státní rozpočet. Prozkoumejte 45 evropských zemí, spočítejte si české alternativy a zjistěte, co jednotlivé modely znamenají pro nezávislost médií." />
+    <meta name="description" content="Co by se stalo, kdyby Česko zrušilo televizní a rozhlasové poplatky? Porovnejte alternativy, spočítejte dopad na vlastní domácnost, veřejné finance a nezávislost médií." />
     <link rel="canonical" href="https://poplatky.app/" />
     <meta name="robots" content="index, follow" />
     <meta name="author" content="Matesola" />
@@ -15,7 +15,7 @@
     <meta property="og:locale" content="cs_CZ" />
     <meta property="og:site_name" content="Kdo platí?" />
     <meta property="og:title" content="Kdo platí? Jak financujeme média veřejné služby" />
-    <meta property="og:description" content="Od televizních poplatků po státní rozpočet. Prozkoumejte 45 evropských zemí, spočítejte si české alternativy a zjistěte, co jednotlivé modely znamenají pro nezávislost médií." />
+    <meta property="og:description" content="Co by se stalo, kdyby Česko zrušilo televizní a rozhlasové poplatky? Porovnejte alternativy, spočítejte jejich dopad na vlastní domácnost a prozkoumejte, co znamenají pro veřejné finance a nezávislost médií. Podívejte se také, jak podobné otázky řeší Evropa." />
     <meta property="og:url" content="https://poplatky.app/" />
     <meta property="og:image" content="https://poplatky.app/og.png" />
     <meta property="og:image:width" content="1200" />
@@ -23,11 +23,11 @@
     <meta property="og:image:alt" content="Kdo platí? Jak financujeme média veřejné služby. 45 evropských zemí a česká kalkulačka." />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Kdo platí? Jak financujeme média veřejné služby" />
-    <meta name="twitter:description" content="Od televizních poplatků po státní rozpočet. Prozkoumejte 45 evropských zemí, spočítejte si české alternativy a zjistěte, co jednotlivé modely znamenají pro nezávislost médií." />
+    <meta name="twitter:description" content="Co by se stalo, kdyby Česko zrušilo televizní a rozhlasové poplatky? Porovnejte alternativy, spočítejte jejich dopad na vlastní domácnost a prozkoumejte, co znamenají pro veřejné finance a nezávislost médií. Podívejte se také, jak podobné otázky řeší Evropa." />
     <meta name="twitter:image" content="https://poplatky.app/og.png" />
     <link rel="manifest" href="site.webmanifest" />
     <script>/* Výchozí je světlý režim; tmavý jen po výslovné volbě uživatele. */ try { if (localStorage.getItem("pzv-theme") === "dark") document.documentElement.setAttribute("data-theme", "dark"); } catch (e) {}</script>
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Kdo platí?","alternateName":"Kdo platí? Jak financujeme média veřejné služby","url":"https://poplatky.app/","inLanguage":"cs","description":"Od televizních poplatků po státní rozpočet. Prozkoumejte 45 evropských zemí, spočítejte si české alternativy a zjistěte, co jednotlivé modely znamenají pro nezávislost médií.","author":{"@type":"Person","name":"Matesola"},"dateModified":"2026-10-26"}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Kdo platí?","alternateName":"Kdo platí? Jak financujeme média veřejné služby","url":"https://poplatky.app/","inLanguage":"cs","description":"Co by se stalo, kdyby Česko zrušilo televizní a rozhlasové poplatky? Porovnejte alternativy, spočítejte jejich dopad na vlastní domácnost a prozkoumejte, co znamenají pro veřejné finance a nezávislost médií. Podívejte se také, jak podobné otázky řeší Evropa.","author":{"@type":"Person","name":"Matesola"},"dateModified":"2026-10-26"}</script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -535,20 +535,33 @@
       @media (max-width: 520px) { .trust dl { grid-template-columns: 1fr; gap: 2px; } .trust dd { margin-bottom: 6px; } }
       .map-note { margin: 10px 0 0; max-width: 900px; }
       .stat-src { font: 600 11px "IBM Plex Mono", monospace; text-transform: uppercase; color: var(--ink); white-space: nowrap; display: inline-block; padding: 2px 0; }
+      /* Premisa: třetí vstup, evropský úvod, souvislosti, O projektu */
+      .path-cz { grid-column: 1 / -1; box-shadow: var(--sh-s); padding: 12px 18px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; }
+      .path-cz .path-t { font-size: clamp(18px, 2vw, 22px); }
+      .path-cz .path-d { font-size: 14.5px; }
+      .eu-intro { border-left: 6px solid var(--line); padding: 4px 0 4px 16px; margin: 0 0 22px; max-width: 860px; }
+      .eu-intro p { margin: 0; font-size: 18px; line-height: 1.5; }
+      .eu-stats { margin: 0 0 28px; }
+      .ctx-link { font-size: 15px; line-height: 1.5; border: 2px dashed var(--line-soft); padding: 10px 14px; margin: 0 0 22px; max-width: 900px; }
+      .prose .ctx-link { margin-top: 6px; }
+      .about { border: var(--bw) solid var(--line); background: var(--card); padding: 16px 18px; margin: 0 0 22px; max-width: 900px; }
+      .about h3 { margin: 0 0 8px; font-weight: 900; font-stretch: 112%; font-size: 20px; text-transform: uppercase; }
+      .about p { margin: 0 0 10px; font-size: 15.5px; line-height: 1.55; }
+      @media (max-width: 700px) { .path-cz { display: grid; } }
     </style>
   </head>
   <body>
     <header class="hero">
       <div class="wrap">
         <div class="hero-meta">
-          <span>Přehled</span>
-          <span><span data-n-countries>45</span> zemí Evropy</span>
-          <span>Evropská data k <b>24. 10. 2026</b></span>
+          <span>Česko</span>
+          <span>Stav legislativy k <b><time datetime="2026-10-26" data-cfg="legalDateLabel">26. 10. 2026</time></b></span>
+          <span>Evropa jako kontext</span>
           <span>Zdroj u každého údaje</span>
         </div>
         <h1>Kdo <span class="hl">platí?</span></h1>
         <p class="hero-sub">Jak financujeme média veřejné služby.</p>
-        <p class="lede">Od televizních poplatků po státní rozpočet. Prozkoumejte <span data-n-countries>45</span> evropských zemí, spočítejte si české alternativy a zjistěte, co jednotlivé modely znamenají pro nezávislost médií.</p>
+        <p class="lede">Co by se stalo, kdyby Česko zrušilo televizní a rozhlasové poplatky? Porovnejte alternativy, spočítejte jejich dopad na vlastní domácnost a prozkoumejte, co znamenají pro veřejné finance a nezávislost médií. Podívejte se také, jak podobné otázky řeší Evropa.</p>
         <section class="now-cz" aria-labelledby="nowTitle">
           <div class="now-h"><h2 id="nowTitle">Aktuální Česko</h2><span class="now-date">ověřeno k <time datetime="2026-10-26" data-cfg="legalDateLabel">26. 10. 2026</time></span></div>
           <div class="now-grid">
@@ -565,17 +578,12 @@
         </section>
 
         <nav class="paths" aria-label="Hlavní cesty">
-          <a class="path path-me" href="#kalkulacka"><span class="path-k">Pro vaši domácnost</span><span class="path-t">Kolik bych platil já?</span><span class="path-d">Dnešní poplatek, financování z rozpočtu a odvod z příjmu. Stačí zadat příjmy.</span></a>
-          <a class="path path-eu" href="#mapa"><span class="path-k"><span data-n-countries>45</span> zemí</span><span class="path-t">Jak platí Evropa?</span><span class="path-d">Mapa modelů financování, částky a porovnání zemí.</span></a>
+          <a class="path path-me" href="#kalkulacka"><span class="path-k">Pro vaši domácnost</span><span class="path-t">Kolik bych platil já?</span><span class="path-d">Porovnejte současné poplatky s financováním ze státního rozpočtu a účelovým odvodem z příjmu.</span></a>
+          <a class="path path-eu" href="#mapa"><span class="path-k"><span data-n-countries>45</span> zemí</span><span class="path-t">Jak platí Evropa?</span><span class="path-d">Jaké modely používají jiné země a co se z jejich zkušeností můžeme naučit?</span></a>
+          <a class="path path-cz" href="#cele-cesko"><span class="path-t">Co by změna znamenala pro Česko?</span><span class="path-d">Kolik by odvod vybral, kdo by ho nesl, jak se modely vyvíjejí v čase a jaké pojistky nezávislosti mají.</span></a>
         </nav>
         <p class="paths-more"><a href="#cesko">Česko podrobně</a><a href="#pojistky">Nezávislost médií</a><a href="#zdroje">Metodika a zdroje</a></p>
 
-        <div class="stat-strip">
-          <div class="stat"><div class="num"><span>103</span> <em>let</em></div><div class="lbl">od zahájení pravidelného rozhlasového vysílání v Československu (Radiojournal, 18. 5. 1923) <a class="stat-src" href="#cesko">historie poplatku</a></div></div>
-          <div class="stat"><div class="num">€<span>363</span></div><div class="lbl">nejvyšší poplatek v Evropě: Švýcarsko, 335 CHF ročně za domácnost <a class="stat-src" href="https://merlin.obs.coe.int/article/10525" target="_blank" rel="noopener">zdroj</a></div></div>
-          <div class="stat"><div class="num"><span>17</span></div><div class="lbl">zemí z přehledu od roku 1999 zrušilo poplatek nebo jej převedlo na daň či rozpočet; žádná nezavedla nový přístrojový <a class="stat-src" href="#osa">časová osa</a></div></div>
-          <div class="stat"><div class="num"><span>2&nbsp;633</span></div><div class="lbl">hlasů dělilo zachování a zrušení poplatku ve slovinském referendu 11. 10. 2026 (neoficiálně, včetně hlasů ze zahraničí; úřední potvrzení do 30. 10.) <a class="stat-src" href="https://www.rtvslo.si/slovenija/referendumi-2026/po-prestetih-glasovnicah-iz-tujine-se-izidi-referendumov-niso-spremenili/797428" target="_blank" rel="noopener">RTV SLO</a></div></div>
-        </div>
 
       </div>
     </header>
@@ -865,6 +873,15 @@
               <p class="sub">Platba je navázaná na domácnost, na přístroj, na účet za elektřinu, na daň z příjmu nebo na nákup přijímače. Ve 26 zemích ze 45 samostatná platba není a vysílání financuje rozpočet. Najeďte nebo ťukněte na zemi pro detail.</p>
             </div>
           </div>
+          <div class="eu-intro">
+            <p>Evropa nemá jeden správný model financování médií veřejné služby. Jednotlivé země používají poplatky, daně, státní rozpočty i kombinovaná řešení. Tento přehled slouží jako kontext pro českou debatu, nikoli jako žebříček nejlepších systémů.</p>
+          </div>
+          <div class="stat-strip eu-stats">
+            <div class="stat"><div class="num"><span>103</span> <em>let</em></div><div class="lbl">od zahájení pravidelného rozhlasového vysílání v Československu (Radiojournal, 18. 5. 1923) <a class="stat-src" href="#cesko">historie poplatku</a></div></div>
+            <div class="stat"><div class="num">€<span>363</span></div><div class="lbl">nejvyšší poplatek v Evropě: Švýcarsko, 335 CHF ročně za domácnost <a class="stat-src" href="https://merlin.obs.coe.int/article/10525" target="_blank" rel="noopener">zdroj</a></div></div>
+            <div class="stat"><div class="num"><span>17</span></div><div class="lbl">zemí z přehledu od roku 1999 zrušilo poplatek nebo jej převedlo na daň či rozpočet; žádná nezavedla nový přístrojový <a class="stat-src" href="#osa">časová osa</a></div></div>
+            <div class="stat"><div class="num"><span>2&nbsp;633</span></div><div class="lbl">hlasů dělilo zachování a zrušení poplatku ve slovinském referendu 11. 10. 2026 (neoficiálně, včetně hlasů ze zahraničí; úřední potvrzení do 30. 10.) <a class="stat-src" href="https://www.rtvslo.si/slovenija/referendumi-2026/po-prestetih-glasovnicah-iz-tujine-se-izidi-referendumov-niso-spremenili/797428" target="_blank" rel="noopener">RTV SLO</a></div></div>
+          </div>
 
           <div class="map-tools">
             <div class="seg" role="group" aria-label="Režim mapy">
@@ -888,6 +905,7 @@
           <div class="prose reveal" style="margin-top:34px">
             <p><b>Elektřina.</b> Poplatek na účtu za elektřinu je běžný v jižní Evropě a na Balkáně (Itálie, Řecko, Portugalsko, Srbsko, Bosna, Albánie). Zaváděl se tam, kde se klasická licence ve velkém neplatila. Itálie po přesunu v roce 2016 snížila úniky z odhadovaných 30 % na jednotky procent.</p>
             <p><b>Daň.</b> Finsko (2013), Švédsko (2019) a Island (2009) poplatek nahradily účelovou daní z příjmu, která se vybírá odděleně a jde jen vysílateli. Dánsko a Norsko poplatek zrušily a financují vysílání z obecných daní bez samostatné položky.</p>
+            <p class="ctx-link"><b>Souvislost s Českem:</b> účelový odvod z příjmu podle finského a švédského vzoru je model C v <a href="#kalkulacka">kalkulačce</a>; kolik by vybral a kdo by ho nesl, ukazuje <a href="#cele-cesko">celostátní model</a>. Financování z rozpočtu jako v Dánsku či Norsku navrhuje tisk 231; jaké pojistky nezávislosti takový model má a jaké ne, srovnává kapitola <a href="#pojistky">Nezávislost a pojistky</a>.</p>
             <p><b>Přístroj.</b> Od roku 1999 žádná země v přehledu nezavedla nový poplatek za přístroj. Turecko vybírá <i>bandrol</i>: daň 16 % z ceny televize nebo rádia, placenou jednou při nákupu.</p>
           </div>
         </div>
@@ -902,6 +920,7 @@
               <p class="sub">Roční platba přepočtená na eura referenčními kurzy ECB k 23. 10. 2026. Ve Švédsku, Finsku a na Islandu se platí za osobu, dvoučlenná domácnost tedy platí až dvojnásobek stropu. Česko s 2 460 Kč (asi 101 €) je pod průměrem zbývajících poplatků, který EBU uvádí kolem 116 € ročně.</p>
             </div>
           </div>
+          <p class="ctx-link reveal"><b>Souvislost s Českem:</b> paušální poplatek je pro všechny domácnosti stejný, takže jeho podíl na příjmu je u nižších příjmů vyšší. Jak by se zatížení českých domácností podle příjmu změnilo u rozpočtového modelu a účelového odvodu, ukazují <a href="#kdoKolik">grafy A a B</a> a <a href="#simulator">rozdělení podle decilů</a>. Podíl poplatku na mediánovém příjmu v Evropě ukazuje <a href="#mapa">mapa v pohledu Zátěž</a>.</p>
           <div class="chart-tools reveal">
             <div class="seg" role="group" aria-label="Řazení žebříčku">
               <button id="sortDesc" aria-pressed="true">Od nejdražšího</button>
@@ -1053,6 +1072,7 @@
               <p class="sub">Každý bod je rok, ve kterém aspoň jedna země poplatek zrušila, převedla na daň, nebo zásadně přestavěla; větší bod znamená víc změn v jednom roce. Klikněte na rok, posuňte posuvník nebo osu přehrajte. Česko 2025 je jediný červený bod: poplatek se tam nezrušil, ale zvýšil.</p>
             </div>
           </div>
+          <p class="ctx-link reveal"><b>Souvislost s Českem:</b> které prvky zahraničních přechodů na jiný model by se daly použít v Česku, rozebírá blok <a href="#inspirace">Co si vzít z Evropy</a>; kde je český návrh dnes, ukazuje <a href="#legislativa">stav legislativy</a>.</p>
           <div class="card tl-wrap reveal">
             <div class="tl-grid">
               <div>
@@ -1272,6 +1292,11 @@
               <h2>Zdroje, metoda, neověřené údaje</h2>
               <p class="sub">Každá částka má zdroj, přednostně primární: zákon, oficiální stránku vysílatele, regulátora nebo výběrčího. Kde jde o sekundární zpravodajství, je to u země uvedeno. Níže je seznam údajů, které se k 24. 10. 2026 nepodařilo ověřit.</p>
             </div>
+          </div>
+          <div class="about" id="o-projektu">
+            <h3>O projektu</h3>
+            <p>Kdo platí? zkoumá různé způsoby financování českých médií veřejné služby: jejich dopady na domácnosti a stát, rozložení zátěže, dlouhodobou udržitelnost a institucionální nezávislost. Evropská data slouží jako kontext a zdroj zkušeností pro českou debatu.</p>
+            <p>Impulsem ke vzniku projektu byl mimo jiné web <a href="https://poplatkyvevrope.cz/" target="_blank" rel="noopener">poplatkyvevrope.cz</a>, který přehledně mapuje způsoby financování médií veřejné služby v evropských zemích. Kdo platí? na toto téma navazuje vlastní analýzou českých alternativ, výpočty dopadů na domácnosti, modelováním veřejných příjmů a zkoumáním pojistek nezávislosti médií.</p>
           </div>
           <details class="lab-block method method-z" id="metodika">
             <summary><span class="lab-n">§</span> Metodika, předpoklady a zdroje výpočtů</summary>
@@ -2315,7 +2340,7 @@
         + '<div class="fact"><div class="k">Kdo dostává</div><div class="v">' + esc(c.bc) + '</div></div>'
         + '</div>'
         + (c.model === "bud" ? '<p class="small" style="margin:-6px 0 14px">Bez samostatné platby neznamená bez nákladů: vysílání platí státní rozpočet z daní. Veřejné výdaje na obyvatele srovnává kapitola 06.</p>' : '')
-        + compareCZ(c)
+        + compareCZ(c) + ctxDialog(c)
         + '<p style="font-size:15.5px;margin:0">' + esc(c.note) + '</p>'
         + '<ul>' + facts + '</ul>'
         + trustBlock(c);
@@ -2329,7 +2354,20 @@
         document.body.classList.add("lock");
       }
       $("dlgClose").addEventListener("click", function(){ dlg.close(); });
+      $("dlgIn").querySelectorAll("[data-go]").forEach(function(a){ a.addEventListener("click", function(){ dlg.close(); }); });
       try { history.replaceState(null, "", "#zeme-" + iso); } catch (e) {}
+    }
+    /* Souvislost s českou debatou podle modelu; odkazy jen na existující obsah, bez tvrzení o příčinách. */
+    function ctxDialog(c){
+      if (c.iso === "CZ") return "";
+      var L = {
+        tax: 'Účelový odvod z příjmu je v české kalkulačce model C: <a href="#kalkulacka" data-go>kolik by platila vaše domácnost</a> a <a href="#cele-cesko" data-go>kolik by vybral celostátně</a>.',
+        bud: 'Financování z rozpočtu navrhuje i český tisk 231. <a href="#pojistky" data-go>Jaké pojistky nezávislosti má a jaké chybí</a>, srovnává kapitola 07.',
+        dom: 'Paušální poplatek za domácnost platí i Česko. <a href="#kdoKolik" data-go>Jak se zatížení českých domácností liší podle příjmu</a> v jednotlivých modelech.',
+        dev: 'I český poplatek je podle zákona vázaný na zařízení schopné příjmu, platí se ale jednou za domácnost. <a href="#kdoKolik" data-go>Jak se zatížení domácností liší podle příjmu</a> v českých modelech.',
+        ele: 'Česká kalkulačka srovnává paušální poplatek s dalšími modely: <a href="#kdoKolik" data-go>zatížení domácností podle příjmu</a>.'
+      }[c.model];
+      return L ? '<p class="ctx-link" style="margin:14px 0 0"><b>Souvislost s Českem:</b> ' + L + '</p>' : "";
     }
     function compareCZ(c){
       if (c.iso === "CZ" || c.eur === null) return "";

@@ -327,10 +327,11 @@ const kc = (s) => Number(String(s).replace(/[^\d-]/g, ""));
       const sub = (await p.textContent(".hero-sub")).trim(), lede = (await p.textContent(".hero .lede")).replace(/\s+/g, " ").trim();
       assert(h1 === "Kdo platí?", "H1: " + h1);
       assert(sub === "Jak financujeme média veřejné služby.", "podtitulek: " + sub);
-      assert(lede === "Od televizních poplatků po státní rozpočet. Prozkoumejte 45 evropských zemí, spočítejte si české alternativy a zjistěte, co jednotlivé modely znamenají pro nezávislost médií.", "perex: " + lede);
+      assert(lede === "Co by se stalo, kdyby Česko zrušilo televizní a rozhlasové poplatky? Porovnejte alternativy, spočítejte jejich dopad na vlastní domácnost a prozkoumejte, co znamenají pro veřejné finance a nezávislost médií. Podívejte se také, jak podobné otázky řeší Evropa.", "perex: " + lede);
+      assert(!/\d/.test(lede), "perex bez počtu zemí");
       assert((await p.$$("h1")).length === 1, "jediné H1");
       const go = await p.$$eval(".paths .path-t, .paths-more a", (as) => as.map((a) => a.textContent.trim() + ">" + (a.closest("a") || a).getAttribute("href")));
-      assert(go.join("|") === "Kolik bych platil já?>#kalkulacka|Jak platí Evropa?>#mapa|Česko podrobně>#cesko|Nezávislost médií>#pojistky|Metodika a zdroje>#zdroje", go.join("|"));
+      assert(go.join("|") === "Kolik bych platil já?>#kalkulacka|Jak platí Evropa?>#mapa|Co by změna znamenala pro Česko?>#cele-cesko|Česko podrobně>#cesko|Nezávislost médií>#pojistky|Metodika a zdroje>#zdroje", go.join("|"));
       for (const g of go) assert(await p.$(g.split(">")[1]), "cíl " + g);
       await c.close();
     }
@@ -343,7 +344,7 @@ const kc = (s) => Number(String(s).replace(/[^\d-]/g, ""));
     assert(m.title === "Kdo platí? Jak financujeme média veřejné služby", m.title);
     assert(m.canon === "https://poplatky.app/" && m.ogu === "https://poplatky.app/", "canonical " + m.canon);
     assert(m.site === "Kdo platí?" && m.ogt === m.title && m.twt === m.title && m.tw === "summary_large_image", "OG/Twitter");
-    assert(m.desc.startsWith("Od televizních poplatků") && m.ogd === m.desc, "description");
+    assert(m.desc.startsWith("Co by se stalo, kdyby Česko zrušilo") && m.ogd.startsWith(m.desc.slice(0, 60)), "description");
     assert(m.ogi === "https://poplatky.app/og.png", "og:image");
     const ld = JSON.parse(m.ld); assert(ld.name === "Kdo platí?" && ld.url === "https://poplatky.app/" && ld["@type"] === "WebSite", "JSON-LD");
     const head = (await (await fetch(base)).text()).slice(0, 6000); assert(!/Poplatky za vysílání v Evropě/.test(head), "starý název v hlavičce");
@@ -520,6 +521,40 @@ const kc = (s) => Number(String(s).replace(/[^\d-]/g, ""));
     await p.focus(".path-me"); await p.keyboard.press("Tab"); await p.keyboard.press("Shift+Tab");
     const o = await p.$eval(".path-me", (e) => getComputedStyle(e).outlineStyle + " " + getComputedStyle(e).outlineWidth);
     assert(/solid 3px/.test(o), o);
+    await c.close();
+  });
+
+  /* ================= Premisa (větev premisa) ================= */
+  await t("premisa: hero bez evropských čísel, statistiky až v evropské kapitole", async () => {
+    const c = await browser.newContext(); const p = await c.newPage(); await p.goto(base);
+    assert(!(await p.$("header.hero .stat-strip")), "statistiky v úvodu");
+    assert(await p.$("#mapa .eu-stats"), "statistiky v kapitole Mapa");
+    const intro = (await p.innerText("#mapa .eu-intro")).replace(/\s+/g, " ").trim();
+    assert(intro === "Evropa nemá jeden správný model financování médií veřejné služby. Jednotlivé země používají poplatky, daně, státní rozpočty i kombinovaná řešení. Tento přehled slouží jako kontext pro českou debatu, nikoli jako žebříček nejlepších systémů.", intro);
+    const order = await p.evaluate(() => { const a = document.querySelector("#mapa .eu-intro"), b = document.querySelector("#mapSvg"); return !!(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING); });
+    assert(order, "úvod před mapou");
+    await c.close();
+  });
+  await t("premisa: přiznání inspirace s funkčním odkazem, bez tvrzení o partnerství", async () => {
+    const c = await browser.newContext({ javaScriptEnabled: false }); const p = await c.newPage(); await p.goto(base);
+    const a = await p.$('#o-projektu a[href="https://poplatkyvevrope.cz/"]'); assert(a, "odkaz");
+    const tx = (await p.innerText("#o-projektu")).replace(/\s+/g, " ");
+    assert(/Impulsem ke vzniku projektu byl mimo jiné web poplatkyvevrope\.cz/.test(tx), "znění");
+    assert(!/partner|spolupr|ve spolupráci|oficiál/i.test(tx), "nesmí sugerovat partnerství");
+    await c.close();
+  });
+  await t("premisa: všechny odkazy Souvislost s Českem míří na existující obsah", async () => {
+    const c = await browser.newContext(); const p = await c.newPage(); await p.goto(base);
+    const hrefs = await p.$$eval(".ctx-link a", (as) => as.map((a) => a.getAttribute("href")));
+    assert(hrefs.length >= 8, "odkazů " + hrefs.length);
+    for (const h of hrefs) assert(await p.$(h), "chybí cíl " + h);
+    for (const iso of ["FI", "SK", "DE", "GB", "IT"]) {
+      await p.evaluate((i) => window.openCountry(i), iso); await p.waitForTimeout(80);
+      const l = await p.$$eval("#dlgIn .ctx-link a", (as) => as.map((a) => a.getAttribute("href")));
+      assert(l.length >= 1, iso + " bez souvislosti"); for (const h of l) assert(await p.$(h), iso + " cíl " + h);
+    }
+    await p.click('#dlgIn .ctx-link a'); await p.waitForTimeout(300);
+    assert(!(await p.$eval("#detail", (d) => d.open)), "dialog se po kliknutí zavře");
     await c.close();
   });
 

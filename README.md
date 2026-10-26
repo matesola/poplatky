@@ -1,6 +1,6 @@
 # Kdo platí? Jak financujeme média veřejné služby
 
-Statický web bez buildu: jak se v Evropě financují média veřejné služby (45 zemí) a co by jednotlivé modely znamenaly pro českou domácnost. Stav legislativy ověřen k 26. 10. 2026.
+Statický web bez buildu: jak by se mohla financovat česká média veřejné služby, co by alternativy k poplatkům znamenaly pro domácnosti, veřejné finance a nezávislost médií, a jak podobné otázky řeší 45 evropských zemí. Impulsem ke vzniku byl mimo jiné web poplatkyvevrope.cz. Stav legislativy ověřen k 26. 10. 2026.
 
 Pořadí kapitol: úvod s blokem „Aktuální Česko“ a dvěma hlavními cestami, 01 kalkulačka, 02 Česko (stav legislativy a chronologie), 03 mapa a modely, 04 částky, 05 země a porovnání, 06 na obyvatele, 07 nezávislost a pojistky, 08 časová osa, 09 referenda a soudy, 10 pokročilé modelování, zdroje a metodika. Všechny dřívější kotvy (`#kalkulacka`, `#simulator`, `#metodika`, `#zeme-CZ` …) zůstaly.
 

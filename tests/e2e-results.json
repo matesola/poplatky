@@ -1,5 +1,5 @@
 {
- "date": "2026-10-26T16:58:54.970Z",
+ "date": "2026-10-26T17:20:28.816Z",
  "browser": "Chromium (Playwright 1.63.0)",
  "results": [
   {
@@ -336,6 +336,18 @@
   },
   {
    "name": "ux2: klávesnice: hlavní cesty mají viditelný fokus",
+   "ok": true
+  },
+  {
+   "name": "premisa: hero bez evropských čísel, statistiky až v evropské kapitole",
+   "ok": true
+  },
+  {
+   "name": "premisa: přiznání inspirace s funkčním odkazem, bez tvrzení o partnerství",
+   "ok": true
+  },
+  {
+   "name": "premisa: všechny odkazy Souvislost s Českem míří na existující obsah",
    "ok": true
   },
   {

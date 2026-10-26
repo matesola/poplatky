@@ -111,7 +111,7 @@ function countries() {
 test("HTML: počet zemí v textech (data-n-countries) = délka datové sady", () => {
   const n = countries().COUNTRIES.length;
   const vals = [...html.matchAll(/data-n-countries>(\d+)</g)].map((m) => +m[1]);
-  assert.ok(vals.length >= 4); vals.forEach((v) => assert.equal(v, n));
+  assert.ok(vals.length >= 3); vals.forEach((v) => assert.equal(v, n));
   assert.ok(html.includes("Prozkoumejte 45 evropských zemí") ? n === 45 : true, "metadata uvádějí 45");
 });
 test("HTML: roční poplatek v bloku Aktuální Česko = (150 + 55) × 12 z params", () => {
