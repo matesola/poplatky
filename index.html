@@ -3,15 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="color-scheme" content="light dark" />
+    <meta name="color-scheme" content="light" />
     <link rel="icon" href="data:," />
     <title>Kdo platí? Jak financujeme média veřejné služby</title>
     <meta name="description" content="Od televizních poplatků po státní rozpočet. Prozkoumejte 45 evropských zemí, spočítejte si české alternativy a zjistěte, co jednotlivé modely znamenají pro nezávislost médií." />
     <link rel="canonical" href="https://poplatky.app/" />
     <meta name="robots" content="index, follow" />
     <meta name="author" content="Matesola" />
-    <meta name="theme-color" content="#f2efe6" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#101010" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f2efe6" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="cs_CZ" />
     <meta property="og:site_name" content="Kdo platí?" />
@@ -27,6 +26,7 @@
     <meta name="twitter:description" content="Od televizních poplatků po státní rozpočet. Prozkoumejte 45 evropských zemí, spočítejte si české alternativy a zjistěte, co jednotlivé modely znamenají pro nezávislost médií." />
     <meta name="twitter:image" content="https://poplatky.app/og.png" />
     <link rel="manifest" href="site.webmanifest" />
+    <script>/* Výchozí je světlý režim; tmavý jen po výslovné volbě uživatele. */ try { if (localStorage.getItem("pzv-theme") === "dark") document.documentElement.setAttribute("data-theme", "dark"); } catch (e) {}</script>
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Kdo platí?","alternateName":"Kdo platí? Jak financujeme média veřejné služby","url":"https://poplatky.app/","inLanguage":"cs","description":"Od televizních poplatků po státní rozpočet. Prozkoumejte 45 evropských zemí, spočítejte si české alternativy a zjistěte, co jednotlivé modely znamenají pro nezávislost médií.","author":{"@type":"Person","name":"Matesola"},"dateModified":"2026-10-26"}</script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -44,18 +44,6 @@
         --ctx: #e4dfd0; --ctx-line: #0b0b0b; --sea: #f2efe6;
         --bw: 2.5px; --sh: 6px 6px 0 var(--ink); --sh-s: 3px 3px 0 var(--ink);
         --shadow: var(--sh); --radius: 0;
-      }
-      @media (prefers-color-scheme: dark) {
-        :root:not([data-theme="light"]) {
-          color-scheme: dark;
-          --paper: #101010; --paper-2: #232323; --card: #191919;
-          --ink: #f3f0e7; --ink-2: #d4d0c6; --ink-3: #9a968c;
-          --line: #f3f0e7; --line-soft: #343434;
-          --accent: #ff5a24; --accent-ink: #ff7a4d;
-          --dom: #ff5a24; --dev: #ffb81f; --ele: #18c486; --tax: #4f86ff; --bud: #7b776e; --buy: #b088ff; --good: #18c486;
-          --a0: #57534b; --a1: #fff07a; --a2: #ffcc33; --a3: #ff9a1f; --a4: #ff5a24; --a5: #ff2d55;
-          --ctx: #262626; --ctx-line: #101010; --sea: #101010;
-        }
       }
       :root[data-theme="dark"] {
           color-scheme: dark;
@@ -1509,13 +1497,12 @@
     var root = document.documentElement, themeBtn = $("themeBtn");
     var SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>';
     var MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>';
-    function curTheme(){ var t = root.getAttribute("data-theme"); return t || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); }
+    function curTheme(){ return root.getAttribute("data-theme") === "dark" ? "dark" : "light"; }
     function paintThemeBtn(){ themeBtn.innerHTML = curTheme() === "dark" ? SUN : MOON; }
-    try { var savedTheme = localStorage.getItem("pzv-theme"); if (savedTheme === "dark" || savedTheme === "light") root.setAttribute("data-theme", savedTheme); } catch (e) {}
     paintThemeBtn();
     themeBtn.addEventListener("click", function(){
       var next = curTheme() === "dark" ? "light" : "dark";
-      root.setAttribute("data-theme", next);
+      if (next === "dark") root.setAttribute("data-theme", "dark"); else root.removeAttribute("data-theme");
       try { localStorage.setItem("pzv-theme", next); } catch (e) {}
       paintThemeBtn();
     });

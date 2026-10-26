@@ -375,6 +375,19 @@ const kc = (s) => Number(String(s).replace(/[^\d-]/g, ""));
     });
   }
 
+  await t("motiv: výchozí světlý i při tmavém systému; tmavý jen po volbě a pamatuje se", async () => {
+    const c = await browser.newContext({ colorScheme: "dark" }); const p = await c.newPage(); await p.goto(base);
+    const bg = () => p.evaluate(() => getComputedStyle(document.body).backgroundColor);
+    assert(await bg() === "rgb(242, 239, 230)", "výchozí pozadí " + await bg());
+    await p.click("#themeBtn"); await p.waitForTimeout(50);
+    assert(await bg() === "rgb(16, 16, 16)", "po přepnutí " + await bg());
+    await p.reload(); await p.waitForTimeout(100);
+    assert(await bg() === "rgb(16, 16, 16)", "tmavý po obnovení");
+    await p.click("#themeBtn"); await p.reload(); await p.waitForTimeout(100);
+    assert(await bg() === "rgb(242, 239, 230)", "zpět světlý");
+    await c.close();
+  });
+
   /* ================= Mobil: šířky 320 až 430 (Chromium, emulace) ================= */
   for (const w of [320, 360, 375, 390, 414, 430]) {
     await t(`[mobil ${w}px] bez vodorovného přetečení, ovladatelné prvky`, async () => {

@@ -10,6 +10,7 @@ Datum: 26. 10. 2026. Větev `release` (vychází z `final`). Produkce (`main` 05
 | Vstupy z úvodu | Čtyři odkazy pod perexem: Evropské srovnání, Český kontext, Kalkulačka, Metodika a zdroje. Na mobilu mřížka 2×2, dotykové cíle 44 px | Opraveno a ověřeno |
 | `<title>`, description, OG, Twitter, JSON-LD (WebSite), manifest | Nový název, canonical a `og:url` `https://poplatky.app/`, `og:image` 1200×630 ve stávající typografii | Opraveno a ověřeno |
 | Patička, README, METODIKA | Nový název; původní „Poplatky za vysílání v Evropě“ zůstává jen jako historický název evropské části | Opraveno a ověřeno |
+| Výchozí motiv | Světlý vždy, i při tmavém nastavení systému; tmavý jen po přepnutí tlačítkem, volba se pamatuje a načítá už v hlavičce (bez probliknutí) | Opraveno a ověřeno (E2E, axe v obou režimech 0) |
 | Navigace kapitol | Beze změny, všechny kotvy zachovány | Problém se nepotvrdil |
 
 ## Tři chyby
@@ -47,7 +48,7 @@ Nezávislá reference 43 případů a 20 celostátních kontrol, 0 rozdílů. P�
 | `tsc --checkJs` | bez chyb |
 | `npm test` | 55/55 |
 | `npm run audit` | recompute 5/5 (0,00 %), reference 63/63 |
-| `npm run e2e` (Chromium 1.63, desktop 1366, mobil 320 až 430 px s dotykem, bez JS, reduced motion) | 73/73 |
+| `npm run e2e` (Chromium 1.63, desktop 1366, mobil 320 až 430 px s dotykem, bez JS, reduced motion) | 74/74 |
 | `tests/regression-data.js` | 0 neočekávaných rozdílů (2 povolené: Slovinsko) |
 | axe WCAG 2.2 AA | desktop 0 ve světlém i tmavém; mobil 1 typ `target-size` (body roků na časové ose, ekvivalent posuvníkem, výjimka 2.5.8) |
 | Výkon (lab, Chromium) | desktop LCP 184 ms, CLS 0; mobil 4× CPU LCP 516 ms, CLS 0 |
