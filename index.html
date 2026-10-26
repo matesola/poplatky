@@ -1666,6 +1666,27 @@
     /* počet zemí v textech vždy z datové sady */
     document.querySelectorAll("[data-n-countries]").forEach(function(el){ el.textContent = COUNTRIES.length; });
 
+    /* ---------- vnitřní odkazy: dorovnání cíle po doběhnutí posouvání ----------
+       Při průjezdu stránkou se obsah nad cílem může změnit (např. časová osa), plynulé posouvání pak skončí vedle.
+       Jakmile se posouvání zastaví, cíl se zarovná. Zásah uživatele (kolečko, dotyk, klávesa) dorovnání zruší. */
+    document.addEventListener("click", function(e){
+      var a = e.target.closest && e.target.closest('a[href^="#"]'); if (!a) return;
+      var id = a.getAttribute("href").slice(1); if (!id || /^zeme-/.test(id)) return;
+      var t = document.getElementById(id); if (!t) return;
+      var moved = false, stop = function(){ moved = true; };
+      ["wheel", "touchstart", "keydown"].forEach(function(ev){ addEventListener(ev, stop, { once: true, passive: true }); });
+      var last = -1, n = 0;
+      (function check(){
+        if (moved) return;
+        if (Math.abs(scrollY - last) < 1 && n > 2) {
+          var want = parseFloat(getComputedStyle(t).scrollMarginTop) || 0;
+          if (Math.abs(t.getBoundingClientRect().top - want) > 8) t.scrollIntoView({ behavior: "instant", block: "start" });
+          return;
+        }
+        last = scrollY; n++; if (n < 80) setTimeout(check, 100);
+      })();
+    });
+
     /* ---------- navigace ---------- */
     var tocLinks = {}, linksBox = document.querySelector("nav.toc .links");
     document.querySelectorAll("nav.toc a").forEach(function(a){ tocLinks[a.getAttribute("href").slice(1)] = a; });
