@@ -1,6 +1,6 @@
 # Výsledky QA
 
-Datum: 26. 10. 2026. Větev `audit`. Prostředí: cloudový Linux kontejner, Node 22.23.4, Python 3.13.17, TypeScript 5.9.3, Playwright 1.63.0 s Chromiem (headless).
+Datum: 26. 10. 2026. Větev `audit`. **Aktuální stav finálního kola je v [FINAL-QA-REPORT.md](FINAL-QA-REPORT.md)** (55 jednotkových testů, 63 referenčních kontrol, 67 E2E). Prostředí: cloudový Linux kontejner, Node 22.23.4, Python 3.13.17, TypeScript 5.9.3, Playwright 1.63.0 s Chromiem (headless).
 
 U každého testu je uvedeno, co skutečně proběhlo. Kde test neproběhl, je to napsáno výslovně.
 
