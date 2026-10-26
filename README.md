@@ -1,9 +1,11 @@
 # Poplatky za vysílání v Evropě
 
-Jednostránkový statický web: financování veřejnoprávních médií ve 45 evropských zemích, stav k 24. 10. 2026.
+Statický web bez buildu: financování veřejnoprávních médií ve 45 evropských zemích a interaktivní kapitola „Co kdybychom platili jinak?“ (kalkulačka domácnosti, celostátní fiskální simulátor, projekce, nezávislost). Stav k 26. 10. 2026.
 
-- `index.html` obsahuje vše (data, mapu, styly, skripty). Jedinou externí závislostí jsou Google Fonts.
-- Mapa: Natural Earth 1:50m (world-atlas), předpočítané SVG cesty, Krym přiřazen Ukrajině, Kosovo samostatně.
-- Světlý a noční režim, odkaz na konkrétní zemi přes `#zeme-CZ`.
+- `index.html`: stránka, data zemí, mapa, styly.
+- `lab/`: kapitola 04, oddělené výpočetní jádro (`engine.js`), verzované parametry se zdroji (`params.js`), prezentace (`ui.js`, `lab.css`).
+- `tests/`: jednotkové testy jádra.
+- `METODIKA.md`: vzorce, předpoklady, omezení.
 
-Lokálně stačí otevřít `index.html` v prohlížeči. Nasazení: libovolný statický hosting (Vercel, GitHub Pages), bez buildu.
+Lokálně stačí otevřít `index.html` v prohlížeči. Kontrola: `npm install && npm run check`.
+Nasazení: Vercel jako statický web (`vercel.json`), bez build kroku.

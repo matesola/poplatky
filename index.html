@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="lab/lab.css" />
     <style>
       :root {
         color-scheme: light;
@@ -128,7 +129,7 @@
       #tlPlay[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-style: solid; box-shadow: none; }
       #tlPlay { border-style: solid; color: var(--ink); background: var(--hi); color: var(--on-hi); font-family: "IBM Plex Mono", monospace; text-transform: uppercase; }
       .chips { display: flex; flex-wrap: wrap; gap: 10px; }
-      .btn { border: var(--bw) solid var(--line); background: var(--accent); color: #fff; font: 700 13px "IBM Plex Mono", monospace; text-transform: uppercase; padding: 9px 14px; cursor: pointer; box-shadow: var(--sh-s); transition: transform .08s, box-shadow .08s; }
+      .btn { border: var(--bw) solid var(--line); background: var(--accent); color: #0b0b0b; font: 700 13px "IBM Plex Mono", monospace; text-transform: uppercase; padding: 9px 14px; cursor: pointer; box-shadow: var(--sh-s); transition: transform .08s, box-shadow .08s; }
       .btn:hover { background: var(--hi); color: var(--on-hi); }
       .btn.ghost { background: var(--card); color: var(--ink); }
       .btn.ghost:hover { background: var(--hi); color: var(--on-hi); }
@@ -204,7 +205,7 @@
       .bar-val .loc { display: block; font-size: 11px; font-weight: 500; color: var(--ink-3); }
       .bar-row.zero .bar-val { color: var(--ink-3); }
       .avg-line { position: absolute; top: 0; bottom: 0; width: 0; border-left: 2.5px dashed var(--accent); pointer-events: none; z-index: 2; }
-      .avg-line span { position: absolute; top: -24px; left: -2px; font: 700 11px "IBM Plex Mono", monospace; text-transform: uppercase; color: #fff; background: var(--accent); padding: 1px 6px; white-space: nowrap; }
+      .avg-line span { position: absolute; top: -24px; left: -2px; font: 700 11px "IBM Plex Mono", monospace; text-transform: uppercase; color: #0b0b0b; background: var(--accent); padding: 1px 6px; white-space: nowrap; }
       @media (max-width: 640px) { .bar-row { grid-template-columns: 104px 1fr 66px; gap: 8px; } .bar-val .loc { display: none; } .bar-row .nm { font-size: 13px; } .bar-val { font-size: 13px; } }
 
       /* česko */
@@ -224,7 +225,7 @@
       .calc .out .line { display: flex; justify-content: space-between; gap: 10px; font-size: 15px; }
       .calc .out .line b { font: 700 15px "IBM Plex Mono", monospace; }
       .calc .out .grand { border-top: 2px dashed var(--line); padding-top: 10px; margin-top: 4px; font-weight: 700; }
-      .calc .out .grand b { background: var(--accent); color: #fff; padding: 0 6px; font-size: 16px; }
+      .calc .out .grand b { background: var(--accent); color: #0b0b0b; padding: 0 6px; font-size: 16px; }
       .tiers { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; align-items: end; height: 84px; margin: 22px 0 0; border-bottom: var(--bw) solid var(--line); }
       .tiers button { border: 2px solid var(--line); border-bottom: 0; padding: 0; background: var(--paper-2); cursor: pointer; position: relative; min-height: 6px; }
       .tiers button:hover { background: var(--hi); }
@@ -367,7 +368,7 @@
       .ccard .mdl .dot { width: 12px; height: 12px; border: 2px solid var(--line); }
       .ccard .note { font-size: 13.8px; color: var(--ink-2); margin: 10px 0 0; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; position: relative; }
       .ccard .open { font: 700 12px "IBM Plex Mono", monospace; text-transform: uppercase; margin-top: 14px; display: inline-block; align-self: flex-start; border: 2px solid var(--line); padding: 2px 8px; position: relative; }
-      .ccard:hover .open { background: var(--accent); color: #fff; }
+      .ccard:hover .open { background: var(--accent); color: #0b0b0b; }
       .ccard .mini { position: absolute; right: 10px; bottom: 10px; width: 64px; height: 64px; pointer-events: none; }
       .ccard .mini path { fill: var(--paper-2); stroke: var(--line); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
       .ccard mark, .dlg-in mark { background: var(--hi); color: var(--on-hi); padding: 0 1px; }
@@ -475,10 +476,11 @@
         <a href="#mapa">01 Mapa</a>
         <a href="#zebricek">02 Částky</a>
         <a href="#cesko">03 Česko</a>
-        <a href="#osa">04 Časová osa</a>
-        <a href="#hlasy">05 Referenda a soudy</a>
-        <a href="#kontext">06 Na obyvatele</a>
-        <a href="#zeme">07 Země</a>
+        <a href="#simulace">04 Jak platit</a>
+        <a href="#osa">05 Časová osa</a>
+        <a href="#hlasy">06 Referenda a soudy</a>
+        <a href="#kontext">07 Na obyvatele</a>
+        <a href="#zeme">08 Země</a>
         <a href="#zdroje">Zdroje</a>
       </div>
         <button class="theme-btn" id="themeBtn" type="button" aria-label="Přepnout světlý a tmavý režim" title="Světlý / tmavý režim"></button>
@@ -661,7 +663,7 @@
                 <li><b>Úleva 2 460 Kč ročně</b> pro každou domácnost platící oba poplatky.</li>
                 <li>Po novele 2025 platí i lidé, kteří ČT a ČRo nesledují, jen proto, že mají <b>mobil nebo počítač</b>.</li>
                 <li><b>Konec exekucí a inkasního aparátu:</b> koalice slibuje úsporu až 250 mil. Kč ročně na výběru. Předseda SPD Tomio Okamura ve Sněmovně tvrdil, že ČT poslala za tři roky do exekuce přes 41 tisíc osob a firem <span class="flag">tvrzení politika, ne oficiální statistika</span></li>
-                <li>Rozpočtové financování se zákonným vzorcem může být stejně stabilní jako u soudů nebo NKÚ; návrh počítá i s <b>rozšířením kontroly NKÚ</b> na ČT a ČRo.</li>
+                <li>Rozpočtové financování se zákonným vzorcem může být stejně stabilní jako u soudů nebo NKÚ; koalice počítá i s <b>rozšířením kontroly NKÚ</b> na ČT a ČRo, to ale řeší samostatné předlohy (ústavní novela, tisk 47, a tisk 217).</li>
                 <li>„Většina Evropy už to udělala“: v rozpravě padala Francie, Nizozemsko, Dánsko, Norsko i Slovensko.</li>
               </ul>
             </div>
@@ -685,10 +687,213 @@
         </div>
       </section>
       <!-- ================= KAPITOLA 4 · ČASOVÁ OSA ================= -->
+      <!-- ================= KAPITOLA 04 · JAK BY MOHLO ČESKO PLATIT ================= -->
+      <section class="ch lab" id="simulace" aria-labelledby="labTitle">
+        <div class="wrap">
+          <div class="ch-head">
+            <div class="ch-num">04</div>
+            <div>
+              <h2 id="labTitle">Co kdybychom platili jinak?</h2>
+              <p class="sub">Tři způsoby, jak financovat Českou televizi a Český rozhlas: dnešní poplatek, vládní rozpočtový model a analytický návrh účelového odvodu z příjmu. Zadejte svou domácnost, pak se podívejte, kolik by který model vybral a jak chrání nezávislost.</p>
+            </div>
+          </div>
+
+          <div class="tags-legend" aria-label="Typy údajů v této kapitole">
+            <span class="tag fakt">Ověřený fakt</span><span class="tl-txt">zákon, oficiální statistika, dohledatelný zdroj</span>
+            <span class="tag navrh">Legislativní návrh</span><span class="tl-txt">projednávaný text, nemusí projít</span>
+            <span class="tag model">Modelový výpočet</span><span class="tl-txt">výsledek ze zveřejněných předpokladů</span>
+            <span class="tag autor">Autorský návrh</span><span class="tl-txt">možné řešení k diskusi, není zákon ani vládní návrh</span>
+          </div>
+
+          <!-- tři scénáře v kostce -->
+          <div class="scen3" role="list">
+            <article class="scen" role="listitem">
+              <div class="scen-k"><span class="scen-l">A</span><span class="tag fakt">Ověřený fakt</span></div>
+              <h3>Dnešní poplatek</h3>
+              <p class="scen-big">205 Kč <small>měsíčně za domácnost</small></p>
+              <p>Platí se jednou za domácnost bez ohledu na příjem a počet lidí. Peníze jdou přímo ČT a ČRo, mimo státní rozpočet.</p>
+              <p class="src">Zákon č. 348/2005 Sb., stav k <span data-legal-date></span></p>
+            </article>
+            <article class="scen" role="listitem">
+              <div class="scen-k"><span class="scen-l">B</span><span class="tag navrh">Legislativní návrh</span></div>
+              <h3>Ze státního rozpočtu</h3>
+              <p class="scen-big">0 Kč <small>přímo, 7,81 mld. Kč z daní</small></p>
+              <p>Domácnost nic samostatně neplatí. Ministerstvo kultury posílá ČT a ČRo pevnou částku stanovenou zákonem. Náklad nese rozpočet, tedy všichni daňoví poplatníci.</p>
+              <p class="src">Sněmovní tisk 231 po 1. čtení. Není zákonem.</p>
+            </article>
+            <article class="scen" role="listitem">
+              <div class="scen-k"><span class="scen-l">C</span><span class="tag autor">Autorský návrh</span></div>
+              <h3>Účelový odvod z příjmu</h3>
+              <p class="scen-big">% z příjmu <small>se stropem na osobu</small></p>
+              <p>Každý dospělý nad hranicí příjmu odvede malé procento, nejvýš do stropu. Vybírá Finanční správa, výnos jde zákonem jen médiím. Inspirace: Finsko a Švédsko.</p>
+              <p class="src">Analytický návrh tohoto webu. Parametry vyžadují fiskální kalibraci níže.</p>
+            </article>
+          </div>
+
+          <!-- ============ 1. KALKULAČKA DOMÁCNOSTI ============ -->
+          <div class="lab-block" id="kalkulacka">
+            <div class="lab-h"><span class="lab-n">1</span><h3>Kolik platím dnes a kolik bych platil jinak?</h3></div>
+            <div class="hh-grid">
+              <form class="hh-in" id="hhForm" onsubmit="return false" aria-label="Složení a příjmy domácnosti">
+                <fieldset>
+                  <legend>Dospělí v domácnosti</legend>
+                  <div id="adultRows"></div>
+                  <div class="row-btns">
+                    <button type="button" class="btn ghost" id="addAdult">+ Přidat dospělého</button>
+                  </div>
+                </fieldset>
+                <details class="more" id="hhMore">
+                  <summary>Děti, osvobození a upřesnění</summary>
+                  <div class="kids">
+                    <label>Děti do 6 let <span class="stepper"><button type="button" data-k="kids0_6" data-d="-1" aria-label="Méně dětí do 6 let">−</button><span id="kids0_6">0</span><button type="button" data-k="kids0_6" data-d="1" aria-label="Více dětí do 6 let">+</button></span></label>
+                    <label>Děti 6 až 15 let <span class="stepper"><button type="button" data-k="kids6_15" data-d="-1" aria-label="Méně dětí 6 až 15 let">−</button><span id="kids6_15">0</span><button type="button" data-k="kids6_15" data-d="1" aria-label="Více dětí 6 až 15 let">+</button></span></label>
+                    <label>Nezaopatřené děti 15 až 26 let <span class="stepper"><button type="button" data-k="kids15_26" data-d="-1" aria-label="Méně starších dětí">−</button><span id="kids15_26">0</span><button type="button" data-k="kids15_26" data-d="1" aria-label="Více starších dětí">+</button></span></label>
+                  </div>
+                  <label class="chk"><input type="checkbox" id="hhZtp" /> Člen domácnosti má těžké zrakové nebo sluchové postižení (ZTP/P)</label>
+                  <label class="chk"><input type="checkbox" id="hhNoDev" /> Nemáme žádné zařízení schopné příjmu (ani mobil či počítač s internetem)</label>
+                  <label class="chk"><input type="checkbox" id="hhNetOn" /> Znám přesný čistý měsíční příjem domácnosti</label>
+                  <div class="net-ovr" id="netOvrBox" hidden><input type="number" id="hhNet" inputmode="numeric" min="0" step="100" aria-label="Čistý měsíční příjem domácnosti v Kč" /> <span class="small">Kč čistého měsíčně za celou domácnost</span></div>
+                  <div class="legal-date"><span class="small">Právní stav životního minima:</span>
+                    <div class="seg" role="group" aria-label="Datum právního stavu">
+                      <button type="button" data-date="2026-09-30" aria-pressed="false">do 30. 9. 2026</button>
+                      <button type="button" data-date="2026-10-26" aria-pressed="true">od 1. 10. 2026</button>
+                    </div>
+                  </div>
+                </details>
+                <p class="privacy">Výpočet běží jen ve vašem prohlížeči. Příjmy se nikam neodesílají ani neukládají.</p>
+              </form>
+
+              <div class="hh-out" id="hhOut" aria-live="polite"></div>
+            </div>
+          </div>
+
+          <!-- ============ 2. GRAFY A + B ============ -->
+          <div class="lab-block" id="kdoKolik">
+            <div class="lab-h"><span class="lab-n">2</span><h3>Kdo kolik zaplatí a kdo získá</h3></div>
+            <div class="scrub">
+              <label for="scrub">Hrubý měsíční příjem jednoho dospělého <b id="scrubVal"></b></label>
+              <input type="range" id="scrub" min="0" max="150000" step="1000" value="45000" />
+            </div>
+            <div class="charts2">
+              <figure class="fig">
+                <figcaption><b>A · Roční platba podle příjmu</b> <span class="tag model">Modelový výpočet</span><br /><span class="small">Jednočlenná domácnost zaměstnance. Rozpočtový model nemá individuální platbu, proto v grafu není čára.</span></figcaption>
+                <div class="chart" id="chartA"></div>
+                <div class="readout" id="readA" aria-live="polite"></div>
+              </figure>
+              <figure class="fig">
+                <figcaption><b>B · Rozdíl odvodu proti dnešnímu poplatku</b> <span class="tag model">Modelový výpočet</span><br /><span class="small">Nad nulou domácnost připlatí, pod nulou ušetří. Liší se jednotlivec a domácnost.</span></figcaption>
+                <div class="chart" id="chartB"></div>
+                <div class="readout" id="readB" aria-live="polite"></div>
+              </figure>
+            </div>
+          </div>
+
+          <!-- ============ 3. FISKÁLNÍ SIMULÁTOR ============ -->
+          <div class="lab-block" id="simulator">
+            <div class="lab-h"><span class="lab-n">3</span><h3>Vybere odvod dost peněz?</h3><span class="tag model">Modelový výpočet</span></div>
+            <p class="lab-sub">Celostátní simulace pro rok 2026 nad rozdělením mezd (ISPV 2025, přepočteno růstem mezd 2026) a důchodů (ČSSZ). Výsledek je vždy interval tří scénářů, ne jedno číslo. Parametry sdílí s kalkulačkou výše.</p>
+            <div class="sim-grid">
+              <div class="sim-in" id="simIn">
+                <div class="ctrl"><label for="pRate">Sazba odvodu <b id="pRateV"></b></label><input type="range" id="pRate" min="0" max="0.03" step="0.0005" /></div>
+                <div class="ctrl"><label for="pThr">Hranice osvobození <b id="pThrV"></b></label><input type="range" id="pThr" min="0" max="600000" step="10000" /></div>
+                <div class="ctrl"><label for="pCap">Roční strop na osobu <b id="pCapV"></b></label><input type="range" id="pCap" min="0" max="15000" step="100" /></div>
+                <div class="ctrl-row">
+                  <label class="chk"><input type="checkbox" id="pMarg" /> Sazba jen z části nad hranicí (finský typ)</label>
+                  <label class="chk"><input type="checkbox" id="pPens" /> Zahrnout důchody</label>
+                  <label class="chk warn"><input type="checkbox" id="pSelf" /> Zahrnout OSVČ <span class="tag model">neověřený předpoklad</span></label>
+                </div>
+                <details class="more">
+                  <summary>Správní náklady a rezerva</summary>
+                  <div class="ctrl"><label for="pAdm">Správní náklady <b id="pAdmV"></b></label><input type="range" id="pAdm" min="0" max="0.03" step="0.001" /></div>
+                  <div class="ctrl"><label for="pRes">Stabilizační rezerva <b id="pResV"></b></label><input type="range" id="pRes" min="0" max="0.1" step="0.005" /></div>
+                </details>
+                <div class="ctrl"><label for="pTarget">Požadovaný čistý výnos</label>
+                    <select id="pTarget">
+                      <option value="budget">Tisk 231 pro rok 2027: 7,81 mld. Kč</option>
+                      <option value="plan2026">Plán výběru ČT + ČRo 2026: 9,21 mld. Kč</option>
+                      <option value="custom">Vlastní částka</option>
+                    </select>
+                    <input type="number" id="pTargetCustom" min="0" step="0.1" value="8" hidden aria-label="Vlastní cílový výnos v mld. Kč" />
+                  </div>
+                <div class="calib">
+                  <span class="small">Kalibrace na cíl (centrální scénář, s kontrolou v pesimistickém):</span>
+                  <button type="button" class="btn" id="calRate">Najít sazbu při tomto stropu</button>
+                  <button type="button" class="btn ghost" id="calCap">Najít strop při této sazbě</button>
+                  <p class="small" id="calOut" aria-live="polite"></p>
+                </div>
+              </div>
+              <div class="sim-out" id="simOut" aria-live="polite"></div>
+            </div>
+            <div class="charts2">
+              <figure class="fig">
+                <figcaption><b>Zatížení podle příjmových decilů</b> <span class="tag model">Modelový výpočet</span><br /><span class="small">Osoby v okruhu odvodu seřazené podle ročního hrubého příjmu. Sloupec = průměrný odvod, číslo = podíl na příjmu.</span></figcaption>
+                <div class="chart" id="chartDec"></div>
+              </figure>
+              <figure class="fig">
+                <figcaption><b>Citlivost čistého výnosu</b> <span class="tag model">Modelový výpočet</span><br /><span class="small">O kolik se změní centrální odhad při posunu jednoho parametru.</span></figcaption>
+                <div class="chart" id="chartSens"></div>
+              </figure>
+            </div>
+          </div>
+
+          <!-- ============ 4. GRAF C ============ -->
+          <div class="lab-block" id="zCeho">
+            <div class="lab-h"><span class="lab-n">4</span><h3>Z čeho se zaplatí ČT a ČRo</h3></div>
+            <p class="lab-sub">Skutečný výběr, plán, legislativní návrh a modelovaný výnos odvodu vedle sebe. U každé položky je období a typ údaje.</p>
+            <div class="chart" id="chartC" role="group" aria-label="Graf C: zdroje financování ČT a ČRo"></div>
+          </div>
+
+          <!-- ============ 5. GRAF D ============ -->
+          <div class="lab-block" id="deset">
+            <div class="lab-h"><span class="lab-n">5</span><h3>Co se stane za deset let</h3><span class="tag model">Projekce, ne prognóza</span></div>
+            <div class="proj-tools">
+              <div class="seg" role="group" aria-label="Scénář inflace" id="projInf"></div>
+              <div class="seg" role="group" aria-label="Zobrazení" id="projMode">
+                <button type="button" data-m="nominal" aria-pressed="false">Nominálně</button>
+                <button type="button" data-m="real" aria-pressed="true">Reálně (ceny 2026)</button>
+              </div>
+              <label class="chk"><input type="checkbox" id="projIdx" checked /> Hranici a strop odvodu valorizovat růstem mezd</label>
+            </div>
+            <div class="chart" id="chartD"></div>
+            <p class="small" id="projNote"></p>
+          </div>
+
+          <!-- ============ 6. NEZÁVISLOST ============ -->
+          <div class="lab-block" id="nezavislost">
+            <div class="lab-h"><span class="lab-n">6</span><h3>Jak model chrání před politickým tlakem</h3></div>
+            <p class="lab-sub">Žádné skóre. Věcné srovnání konkrétních pojistek, každá buňka nese typ údaje. Rozhodující měřítko dává čl. 5 Evropského aktu o svobodě médií.</p>
+            <div class="indep" id="indep"></div>
+            <aside class="emfa">
+              <div class="emfa-k">EMFA, čl. 5 <span class="tag fakt">Ověřený fakt</span></div>
+              <ol>
+                <li><b>Nezávislost.</b> Členské státy zajistí redakční a funkční nezávislost poskytovatelů médií veřejné služby.</li>
+                <li><b>Vedení a rady.</b> Jmenování vedoucích osob a členů rad má být transparentní, otevřené a nediskriminační; odvolání před koncem mandátu jen výjimečně, řádně odůvodněné a soudně přezkoumatelné.</li>
+                <li><b>Financování.</b> Postupy financování mají stát na transparentních a objektivních kritériích stanovených předem a zaručit přiměřené, udržitelné a předvídatelné prostředky, které odpovídají poslání a chrání redakční nezávislost. Odůvodnění nařízení doporučuje víceleté financování.</li>
+                <li><b>Dohled.</b> Plnění těchto požadavků má sledovat nezávislý orgán nebo mechanismus.</li>
+              </ol>
+              <p class="src">Parafráze, závazné je znění v Úředním věstníku: <a href="https://eur-lex.europa.eu/legal-content/CS/TXT/?uri=CELEX:32024R1083" target="_blank" rel="noopener">nařízení (EU) 2024/1083</a>, použitelné od 8. 8. 2025.</p>
+            </aside>
+          </div>
+
+          <!-- ============ 7. EVROPSKÉ INSPIRACE ============ -->
+          <div class="lab-block" id="inspirace">
+            <div class="lab-h"><span class="lab-n">7</span><h3>Co si vzít z Evropy</h3></div>
+            <p class="lab-sub">Konstrukce, kontrola a co se dělo potom. Vývoj v zemi nepřisuzujeme modelu financování, pokud příčinnou souvislost nelze doložit.</p>
+            <div class="insp" id="insp"></div>
+          </div>
+
+          <!-- ============ 8. METODIKA ============ -->
+          <details class="lab-block method" id="metodika">
+            <summary><span class="lab-n">§</span> Metodika, předpoklady a zdroje výpočtů</summary>
+            <div id="methodBody"></div>
+          </details>
+        </div>
+      </section>
+
       <section class="ch" id="osa">
         <div class="wrap">
           <div class="ch-head reveal">
-            <div class="ch-num">04</div>
+            <div class="ch-num">05</div>
             <div>
               <h2>Rušení poplatků 1999 až 2026</h2>
               <p class="sub">Každý bod je rok, ve kterém aspoň jedna země poplatek zrušila, převedla na daň, nebo zásadně přestavěla; větší bod znamená víc změn v jednom roce. Klikněte na rok, posuňte posuvník nebo osu přehrajte. Česko 2025 je jediný červený bod: poplatek se tam nezrušil, ale zvýšil.</p>
@@ -749,7 +954,7 @@
       <section class="ch" id="hlasy">
         <div class="wrap">
           <div class="ch-head reveal">
-            <div class="ch-num">05</div>
+            <div class="ch-num">06</div>
             <div>
               <h2>Referenda a soudy</h2>
               <p class="sub">Všude, kde se o poplatku hlasovalo v referendu, poplatek přežil: Švýcarsko 2018 i 2026, Slovinsko 2026. A všude, kde se rušil jen parlamentní většinou, to šlo rychle, ale s otazníky nad nezávislostí. Druhý pilíř tvoří ústavní soudy: v Německu a Rakousku poplatek nejen podržely, ale i přestavěly.</p>
@@ -824,7 +1029,7 @@
       <section class="ch" id="kontext">
         <div class="wrap">
           <div class="ch-head reveal">
-            <div class="ch-num">06</div>
+            <div class="ch-num">07</div>
             <div>
               <h2>Kolik stojí veřejnoprávní média na jednoho obyvatele</h2>
               <p class="sub">Poplatek domácnosti je jen část příběhu: vysílatelé mají i reklamu, sponzoring a dotace. EBU ve zprávě <i>Funding of Public Service Media</i> (únor 2026, data za rok 2024) počítá veřejné financování na obyvatele. Celkem jde v prostoru EBU o 41 miliard eur ročně a financování za dekádu reálně kleslo asi o 9 %.</p>
@@ -869,7 +1074,7 @@
       <section class="ch" id="zeme">
         <div class="wrap">
           <div class="ch-head reveal">
-            <div class="ch-num">07</div>
+            <div class="ch-num">08</div>
             <div>
               <h2>45 zemí</h2>
               <p class="sub">Každá karta má model, částku, výběrčího, vysílatele a stručnou historii včetně toho, co se v zemi děje právě v roce 2026. Klikněte pro detail se zdroji.</p>
@@ -1862,6 +2067,7 @@
         + '<div class="cmp-row"><span>Česko</span><div class="cmp-t"><i style="width:' + (cz.eur / mx * 100) + '%;background:var(--dom)"></i></div><b>' + cz.eur + ' €</b></div>'
         + '<div class="small" style="margin-top:6px">' + txt + (c.perPerson ? " Pozor: částka je na osobu." : "") + '</div></div>';
     }
+    window.openCountry = openDialog;
     function stepDlg(d){ var L = dlgList(), i = L.indexOf(dlgIso); if (i < 0) i = 0; openDialog(L[(i + d + L.length) % L.length]); }
     $("dlgPrev").addEventListener("click", function(){ stepDlg(-1); });
     $("dlgNext").addEventListener("click", function(){ stepDlg(1); });
@@ -1885,5 +2091,8 @@
     var hm = /^#zeme-([A-Z]{2})$/.exec(location.hash);
     if (hm && byIso[hm[1]]) setTimeout(function(){ openDialog(hm[1]); }, 300);
     </script>
+    <script src="lab/params.js"></script>
+    <script src="lab/engine.js"></script>
+    <script src="lab/ui.js"></script>
   </body>
 </html>

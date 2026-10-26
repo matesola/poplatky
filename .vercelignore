@@ -1,0 +1,5 @@
+tests/
+node_modules/
+METODIKA.md
+tsconfig.json
+package-lock.json

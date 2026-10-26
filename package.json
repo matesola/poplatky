@@ -1,0 +1,14 @@
+{
+  "name": "poplatky",
+  "private": true,
+  "description": "Poplatky za vysílání v Evropě: statický web bez buildu. Skripty slouží jen k testům a typové kontrole.",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "typecheck": "tsc -p tsconfig.json",
+    "check": "npm run typecheck && npm test"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  }
+}
