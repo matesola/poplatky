@@ -16,7 +16,7 @@
    *            noDevice?: boolean, netOverride?: number|null, date?: string}} Household
    * @typedef {{rate:number, threshold:number, cap:number, marginal:boolean, includePensions:boolean, includeSelf?:boolean}} LevyParams
    * @typedef {"plati"|"osvobozen"|"pravdepodobne"|"hranice"|"neplati"} FeeStatus
-   * @typedef {{monthly:number, annual:number, status:FeeStatus, certain:boolean, exempt:boolean, reason:string, limit:number, netMonthly:number, netRatio:number, legalDate:string}} CurrentResult
+   * @typedef {{monthly:number, annual:number, status:FeeStatus, certain:boolean, exempt:boolean, basis:("smysly"|"prijem"|null), reason:string, limit:number, netMonthly:number, netRatio:number, legalDate:string}} CurrentResult
    * @typedef {{perAdult:number[], total:number, diffVsCurrent:number, effShare:number, grossAnnual:number}} LevyResult
    * @typedef {{countF:number, growthAdj:number, lowTail:number, compliance:number, pensScale?:number}} Scenario
    */
@@ -70,16 +70,21 @@
     var ratio = limit > 0 ? net / limit : Infinity;
     var band = P.fee.uncertaintyBand.value;
     var legalDate = h.date || P.meta.legalDate;
-    /** @param {FeeStatus} status @param {number} m @param {boolean} certain @param {string} reason */
-    function res(status, m, certain, reason) {
-      return { monthly: m, annual: m * 12, status: status, certain: certain, exempt: m === 0, reason: reason, limit: limit, netMonthly: net, netRatio: ratio, legalDate: legalDate };
+    /** @param {FeeStatus} status @param {number} m @param {boolean} certain @param {string} reason @param {"smysly"|"prijem"=} basis */
+    function res(status, m, certain, reason, basis) {
+      return { monthly: m, annual: m * 12, status: status, certain: certain, exempt: m === 0, basis: basis || (m === 0 && status !== "neplati" ? "prijem" : null), reason: reason, limit: limit, netMonthly: net, netRatio: ratio, legalDate: legalDate };
     }
     if (h.noDevice) return res("neplati", 0, false, "Poplatníkem je jen ten, kdo vlastní nebo užívá přijímač; od května 2025 se za něj považuje i počítač, tablet či mobil schopný příjmu. Bez jakéhokoli takového zařízení se neplatí.");
     var adults = h.adults;
-    if (adults.length && adults.every(function (a) { return !!a.sensory; }))
-      return res("osvobozen", 0, false, "Zákonný důvod osvobození: všichni dospělí v domácnosti mají úplnou nebo praktickou slepotu obou očí nebo oboustrannou úplnou či praktickou hluchotu (nezaopatřené děti se nepočítají). Osvobození platí od měsíce po podání žádosti s doklady.");
+    var kids = nn(h.kids0_6) + nn(h.kids6_15) + nn(h.kids15_26);
+    if (adults.length && adults.every(function (a) { return !!a.sensory; })) {
+      var basisTxt = "Zákonný důvod (§ 4 odst. 1 písm. g) zák. č. 348/2005 Sb.): úplná nebo praktická slepota obou očí nebo oboustranná úplná či praktická hluchota u všech dospělých v domácnosti. Nárok vzniká ze zákona od prvního dne měsíce po vzniku důvodu (§ 4 odst. 3), nejde o žádost s lhůtou 6 měsíců. Kdo je v evidenci poplatníků, musí důvod ČT a ČRo doložit; podle ČT kopií průkazu ZTP/P u nevidomých nebo ZTP u neslyšících. Rozhoduje zdravotní stav, ne samotný průkaz.";
+      if (kids > 0)
+        return res("pravdepodobne", 0, false, basisTxt + " Pozor: zákon o dětech v domácnosti výslovně nemluví. Že se nezletilé a nezaopatřené děti nezapočítávají, uvádí výklad ČT; ověřte u ČT nebo ČRo.", "smysly");
+      return res("osvobozen", 0, false, basisTxt, "smysly");
+    }
     var sensorySome = adults.some(function (a) { return !!a.sensory; });
-    var sensNote = sensorySome ? " Zdravotní osvobození se neuplatní, protože v domácnosti žije i dospělý bez tohoto postižení." : "";
+    var sensNote = sensorySome ? " Zdravotní osvobození (§ 4 odst. 1 písm. g) se neuplatní: v domácnosti žije i dospělý bez úplné či praktické slepoty nebo hluchoty. Samotný průkaz ZTP/P nárok nezakládá." : "";
     if (!adults.length) return res("plati", full, false, "Zadejte aspoň jednoho dospělého.");
     if (manual) {
       if (net < limit) return res("osvobozen", 0, false, "Podle zadaného čistého příjmu splňujete příjmovou podmínku (pod 2,15násobkem životního minima). Rozhodný je čistý příjem za uplynulé kalendářní čtvrtletí; osvobození platí nejdéle 6 měsíců a je nutné o něj požádat." + sensNote);

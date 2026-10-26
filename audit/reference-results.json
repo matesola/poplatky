@@ -1,0 +1,451 @@
+{
+ "cases": [
+  {
+   "skupina": "odvod",
+   "pripad": "nulový příjem",
+   "rucne": 0.0,
+   "reference": 0.0,
+   "aplikace": 0.0,
+   "ok": true
+  },
+  {
+   "skupina": "odvod",
+   "pripad": "přesně na hranici 25 000 Kč/měs.",
+   "rucne": 0.0,
+   "reference": 0.0,
+   "aplikace": 0.0,
+   "ok": true
+  },
+  {
+   "skupina": "odvod",
+   "pripad": "těsně pod hranicí 24 999 Kč/měs.",
+   "rucne": 0.0,
+   "reference": 0.0,
+   "aplikace": 0.0,
+   "ok": true
+  },
+  {
+   "skupina": "odvod",
+   "pripad": "těsně nad hranicí 25 001 Kč/měs.",
+   "rucne": 0.132,
+   "reference": 0.132,
+   "aplikace": 0.132,
+   "ok": true
+  },
+  {
+   "skupina": "odvod",
+   "pripad": "pod stropem 40 000 Kč/měs.",
+   "rucne": 1980.0,
+   "reference": 1980.0,
+   "aplikace": 1979.9999999999998,
+   "ok": true
+  },
+  {
+   "skupina": "odvod",
+   "pripad": "přesně na stropu",
+   "rucne": 3000.0,
+   "reference": 3000.0,
+   "aplikace": 3000.0,
+   "ok": true
+  },
+  {
+   "skupina": "odvod",
+   "pripad": "nad stropem 1 000 000 Kč/rok",
+   "rucne": 3000.0,
+   "reference": 3000.0,
+   "aplikace": 3000.0,
+   "ok": true
+  },
+  {
+   "skupina": "odvod",
+   "pripad": "extrémní příjem 1 mld. Kč/měs.",
+   "rucne": 3000.0,
+   "reference": 3000.0,
+   "aplikace": 3000.0,
+   "ok": true
+  },
+  {
+   "skupina": "odvod",
+   "pripad": "záporný vstup = 0",
+   "rucne": 0.0,
+   "reference": 0.0,
+   "aplikace": 0.0,
+   "ok": true
+  },
+  {
+   "skupina": "odvod",
+   "pripad": "tři dospělí 40 000 / 60 000 / bez příjmu",
+   "rucne": 4980.0,
+   "reference": 4980.0,
+   "aplikace": 4980.0,
+   "ok": true
+  },
+  {
+   "skupina": "odvod",
+   "pripad": "nulová sazba",
+   "rucne": 0.0,
+   "reference": 0.0,
+   "aplikace": 0.0,
+   "ok": true
+  },
+  {
+   "skupina": "odvod",
+   "pripad": "nulový strop",
+   "rucne": 0.0,
+   "reference": 0.0,
+   "aplikace": 0.0,
+   "ok": true
+  },
+  {
+   "skupina": "odvod",
+   "pripad": "varianta z celého příjmu, 400 000 Kč/rok",
+   "rucne": 4400.0,
+   "reference": 4400.0,
+   "aplikace": 4400.0,
+   "ok": true
+  },
+  {
+   "skupina": "odvod",
+   "pripad": "výjimka: důchodce mimo okruh",
+   "rucne": 0.0,
+   "reference": 0.0,
+   "aplikace": 0.0,
+   "ok": true
+  },
+  {
+   "skupina": "odvod",
+   "pripad": "důchodce v okruhu 30 000 Kč/měs.",
+   "rucne": 660.0,
+   "reference": 660.0,
+   "aplikace": 660.0,
+   "ok": true
+  },
+  {
+   "skupina": "odvod",
+   "pripad": "souběh mzda 30 000 + důchod 20 000, strop 10 000",
+   "rucne": 3300.0,
+   "reference": 3300.0,
+   "aplikace": 3300.0,
+   "ok": true
+  },
+  {
+   "skupina": "odvod",
+   "pripad": "souběh, důchody mimo okruh",
+   "rucne": 660.0,
+   "reference": 660.0,
+   "aplikace": 660.0,
+   "ok": true
+  },
+  {
+   "skupina": "odvod",
+   "pripad": "OSVČ v kalkulačce vždy v okruhu",
+   "rucne": 3000.0,
+   "reference": 3000.0,
+   "aplikace": 3000.0,
+   "ok": true
+  },
+  {
+   "skupina": "limit osvobození",
+   "pripad": "jednotlivec, limit od 1. 10. 2026",
+   "rucne": 11825.0,
+   "reference": 11825.0,
+   "aplikace": 11825.0,
+   "ok": true
+  },
+  {
+   "skupina": "poplatek Kč/měs.",
+   "pripad": "jednotlivec, limit od 1. 10. 2026",
+   "rucne": 0.0,
+   "reference": 0.0,
+   "aplikace": 0.0,
+   "ok": true
+  },
+  {
+   "skupina": "stav",
+   "pripad": "jednotlivec, limit od 1. 10. 2026",
+   "rucne": "osvobozen",
+   "reference": "osvobozen",
+   "aplikace": "osvobozen",
+   "ok": true
+  },
+  {
+   "skupina": "limit osvobození",
+   "pripad": "jednotlivec přesně na limitu platí (ostrá nerovnost)",
+   "rucne": 11825.0,
+   "reference": 11825.0,
+   "aplikace": 11825.0,
+   "ok": true
+  },
+  {
+   "skupina": "poplatek Kč/měs.",
+   "pripad": "jednotlivec přesně na limitu platí (ostrá nerovnost)",
+   "rucne": 205.0,
+   "reference": 205.0,
+   "aplikace": 205.0,
+   "ok": true
+  },
+  {
+   "skupina": "stav",
+   "pripad": "jednotlivec přesně na limitu platí (ostrá nerovnost)",
+   "rucne": "plati",
+   "reference": "plati",
+   "aplikace": "plati",
+   "ok": true
+  },
+  {
+   "skupina": "limit osvobození",
+   "pripad": "jednotlivec do 30. 9. 2026",
+   "rucne": 10449.0,
+   "reference": 10449.0,
+   "aplikace": 10449.0,
+   "ok": true
+  },
+  {
+   "skupina": "poplatek Kč/měs.",
+   "pripad": "jednotlivec do 30. 9. 2026",
+   "rucne": 0.0,
+   "reference": 0.0,
+   "aplikace": 0.0,
+   "ok": true
+  },
+  {
+   "skupina": "stav",
+   "pripad": "jednotlivec do 30. 9. 2026",
+   "rucne": "osvobozen",
+   "reference": "osvobozen",
+   "aplikace": "osvobozen",
+   "ok": true
+  },
+  {
+   "skupina": "limit osvobození",
+   "pripad": "pár",
+   "rucne": 18812.5,
+   "reference": 18812.5,
+   "aplikace": 18812.5,
+   "ok": true
+  },
+  {
+   "skupina": "poplatek Kč/měs.",
+   "pripad": "pár",
+   "rucne": 0.0,
+   "reference": 0.0,
+   "aplikace": 0.0,
+   "ok": true
+  },
+  {
+   "skupina": "stav",
+   "pripad": "pár",
+   "rucne": "osvobozen",
+   "reference": "osvobozen",
+   "aplikace": "osvobozen",
+   "ok": true
+  },
+  {
+   "skupina": "limit osvobození",
+   "pripad": "pár s dítětem 6 až 15",
+   "rucne": 25370.0,
+   "reference": 25370.0,
+   "aplikace": 25370.0,
+   "ok": true
+  },
+  {
+   "skupina": "poplatek Kč/měs.",
+   "pripad": "pár s dítětem 6 až 15",
+   "rucne": 205.0,
+   "reference": 205.0,
+   "aplikace": 205.0,
+   "ok": true
+  },
+  {
+   "skupina": "stav",
+   "pripad": "pár s dítětem 6 až 15",
+   "rucne": "plati",
+   "reference": "plati",
+   "aplikace": "plati",
+   "ok": true
+  },
+  {
+   "skupina": "poplatek Kč/měs.",
+   "pripad": "bez zařízení",
+   "rucne": 0.0,
+   "reference": 0.0,
+   "aplikace": 0.0,
+   "ok": true
+  },
+  {
+   "skupina": "stav",
+   "pripad": "bez zařízení",
+   "rucne": "neplati",
+   "reference": "neplati",
+   "aplikace": "neplati",
+   "ok": true
+  },
+  {
+   "skupina": "poplatek Kč/měs.",
+   "pripad": "nevidomá žijící sama",
+   "rucne": 0.0,
+   "reference": 0.0,
+   "aplikace": 0.0,
+   "ok": true
+  },
+  {
+   "skupina": "stav",
+   "pripad": "nevidomá žijící sama",
+   "rucne": "osvobozen",
+   "reference": "osvobozen",
+   "aplikace": "osvobozen",
+   "ok": true
+  },
+  {
+   "skupina": "poplatek Kč/měs.",
+   "pripad": "nevidomý s vidící partnerkou",
+   "rucne": 205.0,
+   "reference": 205.0,
+   "aplikace": 205.0,
+   "ok": true
+  },
+  {
+   "skupina": "stav",
+   "pripad": "nevidomý s vidící partnerkou",
+   "rucne": "plati",
+   "reference": "plati",
+   "aplikace": "plati",
+   "ok": true
+  },
+  {
+   "skupina": "poplatek Kč/měs.",
+   "pripad": "nevidomý rodič s dítětem (výklad ČT)",
+   "rucne": 0.0,
+   "reference": 0.0,
+   "aplikace": 0.0,
+   "ok": true
+  },
+  {
+   "skupina": "stav",
+   "pripad": "nevidomý rodič s dítětem (výklad ČT)",
+   "rucne": "pravdepodobne",
+   "reference": "pravdepodobne",
+   "aplikace": "pravdepodobne",
+   "ok": true
+  },
+  {
+   "skupina": "poplatek Kč/měs.",
+   "pripad": "vysoký příjem",
+   "rucne": 205.0,
+   "reference": 205.0,
+   "aplikace": 205.0,
+   "ok": true
+  },
+  {
+   "skupina": "stav",
+   "pripad": "vysoký příjem",
+   "rucne": "plati",
+   "reference": "plati",
+   "aplikace": "plati",
+   "ok": true
+  }
+ ],
+ "national": [
+  {
+   "kontrola": "váhy osob (low)",
+   "ok": true,
+   "detail": "6264007 vs 6264007"
+  },
+  {
+   "kontrola": "součet skupin = celek (low)",
+   "ok": true,
+   "detail": "7477318957 vs 7477318957"
+  },
+  {
+   "kontrola": "bilance hrubý = čistý + správa + rezerva (low)",
+   "ok": true,
+   "detail": "1 % a 2 % z hrubého"
+  },
+  {
+   "kontrola": "horní mez výnosu: strop × osoby (low)",
+   "ok": true,
+   "detail": "7.477 ≤ 18.792 mld."
+  },
+  {
+   "kontrola": "váhy osob (mid)",
+   "ok": true,
+   "detail": "6448710 vs 6448710"
+  },
+  {
+   "kontrola": "součet skupin = celek (mid)",
+   "ok": true,
+   "detail": "8099317921 vs 8099317921"
+  },
+  {
+   "kontrola": "bilance hrubý = čistý + správa + rezerva (mid)",
+   "ok": true,
+   "detail": "1 % a 2 % z hrubého"
+  },
+  {
+   "kontrola": "horní mez výnosu: strop × osoby (mid)",
+   "ok": true,
+   "detail": "8.099 ≤ 19.346 mld."
+  },
+  {
+   "kontrola": "váhy osob (high)",
+   "ok": true,
+   "detail": "6633413 vs 6633413"
+  },
+  {
+   "kontrola": "součet skupin = celek (high)",
+   "ok": true,
+   "detail": "8663934911 vs 8663934911"
+  },
+  {
+   "kontrola": "bilance hrubý = čistý + správa + rezerva (high)",
+   "ok": true,
+   "detail": "1 % a 2 % z hrubého"
+  },
+  {
+   "kontrola": "horní mez výnosu: strop × osoby (high)",
+   "ok": true,
+   "detail": "8.664 ≤ 19.900 mld."
+  },
+  {
+   "kontrola": "pořadí scénářů pesimistický < střední < optimistický",
+   "ok": true,
+   "detail": "7.48 / 8.10 / 8.66"
+  },
+  {
+   "kontrola": "OSVČ ve výchozím stavu nejsou v součtu",
+   "ok": true,
+   "detail": "emp,pub,pens,inv"
+  },
+  {
+   "kontrola": "OSVČ po zapnutí jsou samostatná skupina",
+   "ok": true,
+   "detail": "0.82 mld. (neověřený předpoklad)"
+  },
+  {
+   "kontrola": "bez důchodů zmizí skupiny pens a inv",
+   "ok": true,
+   "detail": "emp,pub"
+  },
+  {
+   "kontrola": "nulové správní náklady: čistý = hrubý",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "kontrola": "správa + rezerva ≥ 100 % je odmítnuto",
+   "ok": true,
+   "detail": "Správní náklady mimo rozsah 0 až 0.5.; Správní náklady a rezerva dohromady musí být pod 100 %."
+  },
+  {
+   "kontrola": "nedosažitelná kalibrace 50 mld. hlásí neúspěch",
+   "ok": true,
+   "detail": "max 9.68 mld. při sazbě 3 %"
+  },
+  {
+   "kontrola": "kalibrace 7,81 mld. dosáhne cíle",
+   "ok": true,
+   "detail": "sazba 1.081 %, čistý 7.8100 mld."
+  }
+ ],
+ "failures": 0
+}

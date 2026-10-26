@@ -1,5 +1,5 @@
 {
- "date": "2026-10-26T10:43:56.713Z",
+ "date": "2026-10-26T11:18:53.781Z",
  "browser": "Chromium (Playwright 1.63.0)",
  "results": [
   {
@@ -140,6 +140,134 @@
   },
   {
    "name": "bez JavaScriptu zůstávají úvodní čísla a texty čitelné",
+   "ok": true
+  },
+  {
+   "name": "[flow desktop] 1 otevření webu",
+   "ok": true
+  },
+  {
+   "name": "[flow desktop] 2 přechod na kalkulačku z úvodu",
+   "ok": true
+  },
+  {
+   "name": "[flow desktop] 3 individuální příjmy: kalkulačka = jádro = graf A",
+   "ok": true
+  },
+  {
+   "name": "[flow desktop] 4 změna počtu osob přepočítá A i C",
+   "ok": true
+  },
+  {
+   "name": "[flow desktop] 5 přepínání scénářů: právní stav ŽM a režim projekce",
+   "ok": true
+  },
+  {
+   "name": "[flow desktop] 6 výpočty osvobození: smysly, smíšená, dítě",
+   "ok": true
+  },
+  {
+   "name": "[flow desktop] 7 parametry odvodu: kalkulačka, graf A i simulátor se shodují s jádrem",
+   "ok": true
+  },
+  {
+   "name": "[flow desktop] 8 grafy A až D a decily jsou vykreslené",
+   "ok": true
+  },
+  {
+   "name": "[flow desktop] 9 metodika: právní pravidla a tři data",
+   "ok": true
+  },
+  {
+   "name": "[flow desktop] 10 obnovení a přímý odkaz na českou sekci",
+   "ok": true
+  },
+  {
+   "name": "[flow desktop] bez chyb v konzoli",
+   "ok": true
+  },
+  {
+   "name": "[flow mobil] 1 otevření webu",
+   "ok": true
+  },
+  {
+   "name": "[flow mobil] 2 přechod na kalkulačku z úvodu",
+   "ok": true
+  },
+  {
+   "name": "[flow mobil] 3 individuální příjmy: kalkulačka = jádro = graf A",
+   "ok": true
+  },
+  {
+   "name": "[flow mobil] 4 změna počtu osob přepočítá A i C",
+   "ok": true
+  },
+  {
+   "name": "[flow mobil] 5 přepínání scénářů: právní stav ŽM a režim projekce",
+   "ok": true
+  },
+  {
+   "name": "[flow mobil] 6 výpočty osvobození: smysly, smíšená, dítě",
+   "ok": true
+  },
+  {
+   "name": "[flow mobil] 7 parametry odvodu: kalkulačka, graf A i simulátor se shodují s jádrem",
+   "ok": true
+  },
+  {
+   "name": "[flow mobil] 8 grafy A až D a decily jsou vykreslené",
+   "ok": true
+  },
+  {
+   "name": "[flow mobil] 9 metodika: právní pravidla a tři data",
+   "ok": true
+  },
+  {
+   "name": "[flow mobil] 10 obnovení a přímý odkaz na českou sekci",
+   "ok": true
+  },
+  {
+   "name": "[flow mobil] bez chyb v konzoli",
+   "ok": true
+  },
+  {
+   "name": "statistiky: s JavaScriptem",
+   "ok": true
+  },
+  {
+   "name": "statistiky: omezené animace (prefers-reduced-motion)",
+   "ok": true
+  },
+  {
+   "name": "statistiky a datum: textový extraktor surového HTML (jako crawler, bez DOM)",
+   "ok": true
+  },
+  {
+   "name": "bez JavaScriptu: žádné nedokončené popisky s datem ani NaN",
+   "ok": true
+  },
+  {
+   "name": "[mobil 320px] bez vodorovného přetečení, ovladatelné prvky",
+   "ok": true
+  },
+  {
+   "name": "[mobil 360px] bez vodorovného přetečení, ovladatelné prvky",
+   "ok": true
+  },
+  {
+   "name": "[mobil 375px] bez vodorovného přetečení, ovladatelné prvky",
+   "ok": true
+  },
+  {
+   "name": "[mobil 390px] bez vodorovného přetečení, ovladatelné prvky",
+   "ok": true
+  },
+  {
+   "name": "[mobil 414px] bez vodorovného přetečení, ovladatelné prvky",
+   "ok": true
+  },
+  {
+   "name": "[mobil 430px] bez vodorovného přetečení, ovladatelné prvky",
    "ok": true
   }
  ]

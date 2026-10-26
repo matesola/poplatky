@@ -4,6 +4,8 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const P = require("../lab/params.js");
 const E = require("../lab/engine.js");
+const fs = require("fs");
+const path = require("path");
 
 const LP = Object.assign({}, P.levyDefault, { rate: 0.01, threshold: 300000, cap: 3000, marginal: true, includePensions: true, includeSelf: false });
 const emp = (m) => ({ type: "emp", grossMonthly: m });
@@ -326,4 +328,52 @@ test("projekce: důchody se valorizují, výnos odvodu bez indexace roste", () =
   const pr = E.project(P, Object.assign({}, LP), { inflation: 0.025, realWageGrowth: 0.015, levyIndexed: false });
   assert.ok(pr[9].levy.nominal > pr[0].levy.nominal);
   pr.forEach((y) => { assert.ok(y.levy.nominal >= 0 && y.fee.nominal > 0 && y.budget.nominal > 0); });
+});
+
+/* ---------- § 4 odst. 1 písm. g) zák. č. 348/2005 Sb.: konkrétní příklady (finální kolo) ----------
+ * Ověřeno proti úplnému znění MK (změny do č. 152/2025 Sb.) a stránce ČT „Osvobození od platby“, 26. 10. 2026. */
+test("§ 4/1 g) OPRÁVNĚNÁ: nevidomá žena žijící sama, plat 60 000 Kč (příjem nehraje roli)", () => {
+  const r = E.currentFee(P, { adults: [{ type: "emp", grossMonthly: 60000, sensory: true }] });
+  assert.equal(r.annual, 0); assert.equal(r.status, "osvobozen"); assert.equal(r.basis, "smysly");
+  assert.match(r.reason, /ze zákona/);
+});
+test("§ 4/1 g) OPRÁVNĚNÍ: dva neslyšící manželé, oba s oboustrannou hluchotou", () => {
+  const d = { type: "pens", grossMonthly: 0, pensionMonthly: 25000, sensory: true };
+  const r = E.currentFee(P, { adults: [d, { ...d }] });
+  assert.equal(r.status, "osvobozen"); assert.equal(r.annual, 0);
+});
+test("§ 4/1 g) NEJISTÉ: nevidomý rodič s nezletilým dítětem; zákon děti neřeší, výjimka je výklad ČT", () => {
+  const r = E.currentFee(P, { adults: [{ type: "emp", grossMonthly: 50000, sensory: true }], kids0_6: 1 });
+  assert.equal(r.status, "pravdepodobne"); assert.equal(r.certain, false); assert.match(r.reason, /výklad ČT/);
+});
+test("§ 4/1 g) NEOPRÁVNĚNÁ: nevidomý žije s vidící partnerkou (vysoký příjem domácnosti)", () => {
+  const r = E.currentFee(P, { adults: [{ type: "emp", grossMonthly: 45000, sensory: true }, emp(45000)] });
+  assert.equal(r.status, "plati"); assert.equal(r.annual, 2460); assert.match(r.reason, /průkaz ZTP\/P nárok nezakládá/);
+});
+test("§ 4/1 g) NEOPRÁVNĚNÝ: držitel ZTP/P kvůli tělesnému postižení; kalkulačka nemá zaškrtávátko ZTP/P, rozhoduje jen slepota či hluchota", () => {
+  // Takový člověk zdravotní podmínku nezaškrtne; posuzuje se jen příjem.
+  const r = E.currentFee(P, { adults: [emp(40000)] });
+  assert.equal(r.status, "plati"); assert.equal(r.basis, null);
+  const ui = fs.readFileSync(path.join(__dirname, "..", "lab", "ui.js"), "utf8");
+  assert.doesNotMatch(ui, /(při|s průkazem|držitel)\s+ZTP\/P\s+(se|jsou|je)\s/i, "ZTP/P nesmí být v textu podmínkou");
+});
+test("§ 4/1 g) smíšená domácnost s nízkým příjmem: zdravotní důvod ne, příjmový může", () => {
+  const r = E.currentFee(P, { adults: [{ type: "none", grossMonthly: 0, sensory: true }, { type: "none", grossMonthly: 0 }] });
+  assert.equal(r.annual, 0); assert.equal(r.basis, "prijem"); assert.notEqual(r.status, "plati");
+});
+
+/* ---------- Datum právního stavu: jediný zdroj, statické HTML ---------- */
+test("HTML: všechny data-cfg texty jsou staticky vyplněné a shodné s params.meta", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
+  const RE = /<(\w+)\b[^>]*\bdata-cfg="(\w+)"[^>]*>([^<]*)<\/\1>/g;
+  let m, n = 0;
+  while ((m = RE.exec(html))) { n++; assert.equal(m[3], P.meta[m[2]], "data-cfg=" + m[2] + " (spusťte npm run sync)"); }
+  assert.ok(n >= 2);
+  assert.match(html, new RegExp('datetime="' + P.meta.legalDate + '"'));
+  assert.doesNotMatch(html, /data-legal-date|stav k\s*<span[^>]*><\/span>/);
+  assert.doesNotMatch(html, /stav k\s*<\/p>/);
+});
+test("params.meta: tři odlišená data jsou vyplněná", () => {
+  for (const k of ["legalDateLabel", "effectiveLabel", "zmEffectiveLabel", "dataCheckedLabel"])
+    assert.match(P.meta[k], /^\d{1,2}\. \d{1,2}\. \d{4}$/, k);
 });

@@ -18,11 +18,12 @@
     zakon348: { t: "Zákon č. 348/2005 Sb., o rozhlasových a televizních poplatcích (ve znění zák. č. 119/2025 Sb.)", u: "https://www.zakonyprolidi.cz/cs/2005-348" },
     novela119: { t: "Zákon č. 119/2025 Sb. (velká mediální novela)", u: "https://data.atlascloud.cz/LCR/Rejstrik/Sb/2025/sb119-2025/119_2025/119_2025.pdf" },
     mk: { t: "Ministerstvo kultury: Rozhlasové a televizní poplatky", u: "https://www.mk.gov.cz/488.html" },
+    zakon348mk: { t: "Ministerstvo kultury: úplné znění zák. č. 348/2005 Sb. (změny do č. 152/2025 Sb.)", u: "https://www.mk.gov.cz/doc/cms_library/zakon-c-348_2005-sb-o-rozhlasovych-a-televiznich-poplatcich-1412.docx" },
     zakon348pdf: { t: "Zákon č. 348/2005 Sb., znění účinné od 1. 5. 2025 (PDF, Česká televize)", u: "https://www.ceskatelevize.cz/vse-o-ct/api/media/documents/Zakon_o_rozhlasovych_a_televiznich_poplatcich.pdf" },
     ctOsvobozeni: { t: "Česká televize: osvobození od platby", u: "https://poplatky.ceskatelevize.cz/osvobozeni-od-platby" },
     croOsvobozeni: { t: "Český rozhlas: osvobození (částky životního minima od 1. 10. 2026)", u: "https://poplatek.rozhlas.cz/osvobozeni-8752432" },
     zm: { t: "Kurzy.cz: životní minimum od 1. 10. 2026 (zák. č. 110/2006 Sb.)", u: "https://zpravy.kurzy.cz/872430-zivotni-minimum-se-od-rijna-2026-zmeni-ovlivni-superdavku-porodne-i-dalsi-davky-o-valorizaci-ale/" },
-    osvobozeni: { t: "aRecenze: osvobození od poplatků 2026 (příjmový limit, ZTP/P)", u: "https://www.arecenze.cz/clanky/poplatky-za-ct-a-rozhlas-2026-nizkoprijmove-domacnosti-je-platit-nemusi-od-rijna-dosahne-na-vyjimku-vic-lidi/" },
+    osvobozeni: { t: "aRecenze: osvobození od poplatků 2026 (příjmový limit)", u: "https://www.arecenze.cz/clanky/poplatky-za-ct-a-rozhlas-2026-nizkoprijmove-domacnosti-je-platit-nemusi-od-rijna-dosahne-na-vyjimku-vic-lidi/" },
     tisk231: { t: "Médiář, 24. 10. 2026: text návrhu a RIA (sněmovní tisk 231)", u: "https://www.mediar.cz/hrozi-vyssi-zavislost-ct-a-rozhlasu-na-statu-pripousti-samotny-klempiruv-navrh/" },
     ctk231: { t: "ČTK / České noviny, 24. 10. 2026: první čtení tisku 231", u: "https://www.ceskenoviny.cz/zpravy/koalice-poslala-do-druheho-cteni-navrh-zrusit-poplatky-pro-ct-a-cro/2891827" },
     ctRozpocet: { t: "Rozpočet České televize na rok 2026", u: "https://www.ceskatelevize.cz/vse-o-ct/api/media/documents/Rozpocet_Ceske_televize_na_rok_2026.pdf" },
@@ -45,9 +46,14 @@
 
   var P = {
     meta: {
-      version: "2026-10-26.2",
-      legalDate: "2026-10-26",
+      version: "2026-10-26.3",
+      /* Tři různá data, jediný zdroj. Statické texty v index.html (atribut data-cfg)
+         se s nimi kontrolují testem a lze je přepsat příkazem `npm run sync`. */
+      legalDate: "2026-10-26",            // ke kterému dni je legislativa ověřena
       legalDateLabel: "26. 10. 2026",
+      effectiveLabel: "1. 5. 2025",       // účinnost znění § 4 a § 6 zák. č. 348/2005 Sb. (novela č. 119/2025 Sb.)
+      zmEffectiveLabel: "1. 10. 2026",    // účinnost nových částek životního minima
+      dataCheckedLabel: "26. 10. 2026",   // poslední kontrola čísel a zdrojů
       dataNote: "Mzdy ISPV 2025 přepočtené růstem mezd 2026; důchody ČSSZ 6/2026; rozpočty ČT a ČRo 2026; tisk 231 ve znění po 1. čtení."
     },
     SRC: SRC,
@@ -57,7 +63,7 @@
       tvMonthly: { value: 150, unit: "Kč/měs.", cat: "fakt", src: SRC.zakon348, date: "od 1. 5. 2025" },
       radioMonthly: { value: 55, unit: "Kč/měs.", cat: "fakt", src: SRC.zakon348, date: "od 1. 5. 2025" },
       exemptMultiple: { value: 2.15, unit: "× životní minimum", cat: "fakt", src: SRC.zakon348pdf, note: "§ 4 odst. 2: čistý příjem osoby, resp. součet čistých příjmů osob v domácnosti, za uplynulé kalendářní čtvrtletí; příjmy se zjišťují podle zák. č. 110/2006 Sb. Osvobození nejdéle na 6 měsíců, na žádost." },
-      exemptSensory: { value: "úplná nebo praktická slepota obou očí, oboustranná úplná nebo praktická hluchota", cat: "fakt", src: SRC.ctOsvobozeni, note: "§ 4 odst. 1: osoba žijící osaměle nebo jen s osobami se stejným důvodem osvobození; nezaopatřené děti se nepočítají. Samotný průkaz ZTP/P nárok nezakládá, je jen dokladem." },
+      exemptSensory: { value: "úplná nebo praktická slepota obou očí, oboustranná úplná nebo praktická hluchota", cat: "fakt", src: SRC.zakon348mk, note: "§ 4 odst. 1 písm. g): osvobozena je osoba osaměle žijící, nebo když spolu v domácnosti žijí jen takové osoby. Nárok ze zákona od 1. dne měsíce po vzniku důvodu (§ 4 odst. 3), bez oznamovací povinnosti (§ 8 odst. 2). Děti zákon výslovně neřeší; nezapočítávání nezletilých a nezaopatřených dětí je výklad ČT. Průkaz (ZTP/P u nevidomých, ZTP u neslyšících) je podle ČT doklad, nárok nezakládá." },
       uncertaintyBand: { value: 0.15, cat: "model", note: "Pásmo ±15 % kolem limitu, ve kterém kalkulačka z odhadu čistého příjmu nárok nerozhoduje." },
       valorization: { value: { threshold: 0.06, step: 0.06, from: "1. 7. následujícího roku" }, cat: "fakt", src: SRC.novela119, note: "Zvýšení o 6 %, jakmile kumulovaná inflace od posledního zvýšení přesáhne 6 %." },
       collectionCostCT: { value: 109663000, unit: "Kč/rok", cat: "fakt", src: SRC.ctRozpocet, date: "plán 2026", note: "Správa a výběr TV poplatků vč. odměny České poště za SIPO." },

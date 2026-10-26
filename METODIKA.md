@@ -1,6 +1,6 @@
 # Jak by mohlo Česko platit: metodika
 
-Verze parametrů `2026-10-26.2`, právní stav k 26. 10. 2026. Kapitola 04 webu.
+Verze parametrů `2026-10-26.3`. Legislativa ověřena k 26. 10. 2026 proti úplnému znění MK (změny do č. 152/2025 Sb.); relevantní znění § 4 a § 6 účinné od 1. 5. 2025; částky životního minima od 1. 10. 2026; data zkontrolována 26. 10. 2026. Všechna tři data jsou v `lab/params.js` (`meta`) a do HTML se propisují staticky (`npm run sync`, hlídá test). Kapitola 04 webu.
 
 ## Architektura
 
@@ -25,7 +25,8 @@ Výpočty probíhají jen v prohlížeči. Příjmy se nikam neodesílají a neu
 
 - 150 Kč TV + 55 Kč rozhlas měsíčně, jednou za domácnost (zák. č. 348/2005 Sb. ve znění zák. č. 119/2025 Sb.).
 - Osvobození, když je průměrný měsíční čistý příjem domácnosti pod 2,15násobkem životního minima. Životní minimum se mění 1. 10. 2026: jednotlivec 5 500 Kč, první dospělý 5 000 Kč, další dospělý 3 750 Kč, děti 2 480 / 3 050 / 3 490 Kč. Kalkulačka umí oba právní stavy.
-- Zdravotní osvobození (§ 4 odst. 1): úplná nebo praktická slepota obou očí, nebo oboustranná úplná či praktická hluchota, pokud dotyčný žije sám nebo jen s osobami se stejným důvodem (nezaopatřené děti se nepočítají). Průkaz ZTP/P je doklad, ne podmínka.
+- Zdravotní osvobození (§ 4 odst. 1 písm. g): úplná nebo praktická slepota obou očí, nebo oboustranná úplná či praktická hluchota, pokud dotyčný žije osaměle nebo jen s osobami se stejným důvodem. Definice postižení odkazuje poznámkou 9 na přílohu vyhlášky č. 207/1995 Sb. (kap. IV, smyslové orgány). Nárok vzniká ze zákona od 1. dne měsíce po vzniku důvodu (§ 4 odst. 3), bez žádosti, bez lhůty 6 měsíců a bez oznamovací povinnosti (§ 8 odst. 2). Kdo už je v evidenci poplatníků, důvod ČT a ČRo doloží; ČT žádá kopii průkazu ZTP/P u nevidomých a ZTP u neslyšících. Průkaz je doklad, ne podmínka, a ne každý držitel ZTP/P podmínku splňuje (např. tělesné postižení). Zákon výslovně neřeší děti; nezapočítávání nezletilých a nezaopatřených dětí je výklad ČT, proto kalkulačka v takové domácnosti ukazuje jen „pravděpodobně“.
+  - Příklady: nevidomá žena žijící sama s platem 60 000 Kč: osvobozena. Dva neslyšící manželé: osvobozeni. Nevidomý s vidící partnerkou: platí (pokud nesplní příjmový důvod). Držitel ZTP/P po amputaci: zdravotní důvod nemá. Nevidomý rodič s malým dítětem: podle ČT osvobozen, zákon to výslovně neříká.
 - Příjmové osvobození (§ 4 odst. 2): čistý příjem za uplynulé kalendářní čtvrtletí, příjmy podle zák. č. 110/2006 Sb., na žádost, nejdéle 6 měsíců.
 - Čistý příjem je orientační: pojistné 11,6 %, daň 15 % (23 % nad 146 901 Kč měsíčně), sleva na poplatníka 2 570 Kč, bez slev na děti. Proto kalkulačka v pásmu ±15 % kolem limitu nárok nerozhoduje a pod ním ukáže jen „pravděpodobně“. S ručně zadaným čistým příjmem je výsledek přesný, ale stále na žádost.
 
@@ -91,4 +92,4 @@ npm run audit    # nezávislý přepočet v Pythonu
 npm run e2e      # regresní testy stránky (Playwright + Chromium)
 ```
 
-Testy pokrývají nulový příjem, hranici, překročení stropu, zákonná osvobození (příjmový limit před a po 1. 10. 2026, děti, ZTP/P, bez zařízení, ruční čistý příjem), individuální výpočet místo příjmu domácnosti, nulové náklady rozpočtového modelu, shodu rozdělení se zveřejněnými kvantily a průměrem, bilanci simulátoru, kalibraci a valorizaci v projekci.
+Testy pokrývají nulový příjem, hranici, překročení stropu, zákonná osvobození (příjmový limit před a po 1. 10. 2026, děti, slepota či hluchota s konkrétními příklady oprávněných a neoprávněných osob, bez zařízení, ruční čistý příjem), individuální výpočet místo příjmu domácnosti, nulové náklady rozpočtového modelu, shodu rozdělení se zveřejněnými kvantily a průměrem, bilanci simulátoru, kalibraci a valorizaci v projekci.

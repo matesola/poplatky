@@ -7,7 +7,9 @@
     "typecheck": "tsc -p tsconfig.json",
     "check": "npm run typecheck && npm test",
     "e2e": "node tests/e2e.js",
-    "audit": "python3 audit/recompute.py"
+    "audit": "python3 audit/recompute.py && python3 audit/reference_cases.py",
+    "reference": "python3 audit/reference_cases.py",
+    "sync": "node scripts/sync-static.js"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

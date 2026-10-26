@@ -439,6 +439,26 @@
         nav.toc a { padding: 11px 11px; font-size: 12px; }
       }
       @media (prefers-reduced-motion: reduce) { .grow { transform: none; } .czc svg path.ln { stroke-dashoffset: 0; } }
+      /* Úzké mobily (320 až 414 px): nic nesmí rozšířit stránku do strany. */
+      .ch-head > *, .cz-grid > *, .tl-grid > *, .tl-counter .c { min-width: 0; }
+      .tl-counter .c .l { overflow-wrap: anywhere; }
+      .tl-ctrl input { min-width: 0; }
+      .adult .inc { grid-template-columns: minmax(0, 1fr) minmax(96px, 130px); }
+      .adult .inc input { min-width: 0; }
+      .tl-ctrl { flex-wrap: wrap; }
+      /* Dotykové cíle aspoň 24 px (WCAG 2.5.8): posuvníky a rozbalovací souhrny. */
+      input[type=range] { min-height: 28px; }
+      .data-table summary { padding: 6px 0; min-height: 24px; }
+      .ch-head h2, .cz-grid .mono { overflow-wrap: anywhere; }
+      #methodBody, .data-table { overflow-x: auto; max-width: 100%; }
+      /* iOS Safari přibližuje stránku při ťuknutí do pole s písmem pod 16 px. */
+      @media (max-width: 640px) { input:not([type=range]):not([type=checkbox]):not([type=radio]), select, textarea { font-size: 16px !important; } }
+      @media (max-width: 380px) { .hero h1 { font-size: 12.5vw; } }
+      @media (max-width: 480px) {
+        .ch-head h2 { font-size: clamp(25px, 8.2vw, 32px); }
+        .big-fee .total .amt { font-size: 34px; }
+        .avg-line span { top: auto; bottom: 100%; white-space: normal; width: max-content; max-width: 44vw; font-size: 10px; }
+      }
     </style>
   </head>
   <body>
@@ -581,7 +601,7 @@
               <div class="row"><span>Televizní poplatek (Česká televize)</span><span class="amt">150 Kč<span style="font-size:14px;font-family:Archivo">/měs.</span></span></div>
               <div class="row"><span>Rozhlasový poplatek (Český rozhlas)</span><span class="amt">55 Kč<span style="font-size:14px;font-family:Archivo">/měs.</span></span></div>
               <div class="total"><span>Domácnost platící oba</span><span class="amt">2 460 Kč<span style="font-size:15px;font-family:Archivo"> / rok</span></span></div>
-              <p class="small" style="margin:16px 0 0">Platí se jednou za společnou domácnost bez ohledu na počet přijímačů, od května 2025 i za mobil, tablet či počítač připojený k internetu. Poplatek si vybírají sami vysílatelé (ČT, ČRo, často přes SIPO), není to příjem státního rozpočtu. Osvobozeni jsou lidé s těžkým zrakovým nebo sluchovým postižením a domácnosti s příjmem pod 2,15násobkem životního minima. Žádná obecná sleva pro důchodce či studenty neexistuje.</p>
+              <p class="small" style="margin:16px 0 0">Platí se jednou za společnou domácnost bez ohledu na počet přijímačů, od května 2025 i za mobil, tablet či počítač připojený k internetu. Poplatek si vybírají sami vysílatelé (ČT, ČRo, často přes SIPO), není to příjem státního rozpočtu. Osvobozeni jsou lidé s úplnou nebo praktickou slepotou obou očí či oboustrannou úplnou nebo praktickou hluchotou, pokud žijí sami nebo jen s lidmi se stejným postižením (samotný průkaz ZTP/P nestačí), a domácnosti s příjmem pod 2,15násobkem životního minima. Žádná obecná sleva pro důchodce či studenty neexistuje.</p>
               <p class="src" style="margin:10px 0 0">Zdroj: <a href="https://www.mk.gov.cz/488.html" target="_blank" rel="noopener">Ministerstvo kultury, Rozhlasové a televizní poplatky</a> · <a href="https://data.atlascloud.cz/LCR/Rejstrik/Sb/2025/sb119-2025/119_2025/119_2025.pdf" target="_blank" rel="noopener">zákon č. 119/2025 Sb. (PDF)</a></p>
             </div>
 
@@ -723,7 +743,7 @@
               <h3>Dnešní poplatek</h3>
               <p class="scen-big">205 Kč <small>měsíčně přímo za domácnost; výběr 2026 plán 9,21 mld. Kč</small></p>
               <p>Platí se jednou za domácnost bez ohledu na příjem a počet lidí. Peníze jdou přímo ČT a ČRo, mimo státní rozpočet.</p>
-              <p class="src">Zákon č. 348/2005 Sb., stav k <span data-legal-date></span></p>
+              <p class="src">Zákon č. 348/2005 Sb., znění účinné od <span data-cfg="effectiveLabel">1. 5. 2025</span>; legislativa ověřena k <time datetime="2026-10-26" data-cfg="legalDateLabel">26. 10. 2026</time>.</p>
             </article>
             <article class="scen" role="listitem">
               <div class="scen-k"><span class="scen-l">B</span><span class="tag navrh">Legislativní návrh</span></div>
@@ -833,7 +853,7 @@
                       <option value="plan2026">Plán výběru ČT + ČRo 2026: 9,21 mld. Kč</option>
                       <option value="custom">Vlastní částka</option>
                     </select>
-                    <input type="number" id="pTargetCustom" min="0" step="0.1" value="8" hidden aria-label="Vlastní cílový výnos v mld. Kč" />
+                    <input type="number" id="pTargetCustom" min="0" step="0.1" inputmode="decimal" value="8" hidden aria-label="Vlastní cílový výnos v mld. Kč" />
                   </div>
                 <div class="calib">
                   <span class="small">Kalibrace na cíl (centrální scénář, s kontrolou v pesimistickém):</span>

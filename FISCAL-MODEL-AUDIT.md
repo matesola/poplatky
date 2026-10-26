@@ -1,6 +1,6 @@
 # Audit fiskálního modelu účelového odvodu
 
-Stav: 26. 10. 2026, verze parametrů `2026-10-26.2`. Týká se kapitoly 04, části „Vybere odvod dost peněz?“.
+Stav: 26. 10. 2026, verze parametrů `2026-10-26.3` (finální opravné kolo, větev `final`). Týká se kapitoly 04, části „Vybere odvod dost peněz?“.
 
 **Shrnutí.** Model je deterministická aproximace postavená na zveřejněných kvantilech mezd. Nezávislý přepočet v Pythonu se s aplikací shoduje na 0,00 %, takže aritmetika je správná. Hlavní nejistota je metodická: tvar rozdělení mezi zveřejněnými kvantily, souběhy příjmů a chybějící data o OSVČ. Strukturní nejistota jen z tvaru rozdělení mezd je zhruba −6 až +4 %. Výsledky proto nejsou přesný fiskální výpočet a aplikace je tak ani neprezentuje.
 
@@ -158,9 +158,71 @@ Kvůli stropu je odvod v horních decilech regresivní. Model to ukazuje a nezak
 
 **Závěr:** model se hodí ke srovnání řádů a citlivosti parametrů, ne k rozpočtovému plánování. Pro skutečnou kalibraci by byla potřeba mikrodata MF nebo GFŘ o rozdělení daňových základů fyzických osob včetně souběhů.
 
+## 8. Finální kolo: nezávislá referenční kontrola (26. 10. 2026)
+
+Skript `audit/reference_cases.py` (`npm run reference`) neporovnává aplikaci samu se sebou. Každý případ má:
+
+1. **ručně odvozenou hodnotu** zapsanou jako literál se vzorcem v komentáři,
+2. **vlastní implementaci pravidel** v Pythonu nad `Decimal`, psanou podle textu metodiky a zákona; zákonné konstanty (150 + 55 Kč, 2,15 × ŽM, částky ŽM) jsou přepsané ze zdrojů, ne načtené z `params.js`,
+3. **výstup aplikace** (`lab/engine.js` volaný přes Node jako černá skříňka).
+
+Případ projde, jen když se všechny tři hodnoty shodují (tolerance 1e‑6 Kč). Výsledek: **43 případů a 20 celostátních kontrol, 0 rozdílů** (`audit/reference-results.json`).
+
+| Povinný případ | Vstup | Ručně | Aplikace |
+|---|---|---|---|
+| Nulový příjem | 0 Kč | 0 | 0 |
+| Přesně na hranici | 25 000 Kč/měs. = 300 000 Kč/rok | 0 | 0 |
+| Těsně pod / nad | 24 999 / 25 001 Kč/měs. | 0 / 0,132 | 0 / 0,132 |
+| Pod stropem | 40 000 Kč/měs.: 180 000 × 1,1 % | 1 980 | 1 980 |
+| Roční strop | 1 000 000 Kč/rok: 7 700 → strop | 3 000 | 3 000 |
+| Extrémní příjem | 1 mld. Kč/měs. | 3 000 | 3 000 |
+| Více dospělých | 40 000 + 60 000 + bez příjmu | 4 980 | 4 980 |
+| Nulová sazba, nulový strop | 80 000 Kč/měs. | 0 | 0 |
+| Výjimka: důchody mimo okruh | důchod 30 000 Kč/měs. | 0 | 0 |
+| Souběh mzdy a důchodu | 30 000 + 20 000, strop 10 000 | 3 300 | 3 300 |
+| Souběh, důchod mimo okruh | 30 000 + 20 000 | 660 | 660 |
+| Varianta z celého příjmu | 400 000 Kč/rok, strop 5 000 | 4 400 | 4 400 |
+| Limit osvobození jednotlivce | 2,15 × 5 500 | 11 825 | 11 825 |
+| Přesně na limitu | čistý 11 825 Kč | platí 205 | platí 205 |
+| Limit do 30. 9. 2026 | 2,15 × 4 860 | 10 449 | 10 449 |
+| Pár s dítětem 6 až 15 let | 2,15 × (5 000 + 3 750 + 3 050) | 25 370 | 25 370 |
+| Slepota, žije sama | | osvobozena | osvobozena |
+| Slepota, s vidící partnerkou | | platí | platí |
+| Slepota, s dítětem | výklad ČT | pravděpodobně | pravděpodobně |
+| Správní náklady 0 % | čistý = hrubý | ano | ano |
+| Správa + rezerva ≥ 100 % | | odmítnuto | odmítnuto |
+| Nedosažitelná kalibrace | cíl 50 mld., sazba nejvýš 3 % | neúspěch | neúspěch (max 9,68 mld.) |
+| Dosažitelná kalibrace | cíl 7,81 mld. | dosaženo | sazba 1,081 %, 7,8100 mld. |
+
+### Celostátní simulace: co je ověřené a co ne
+
+| Kontrola | Výsledek | Ověřeno? |
+|---|---|---|
+| Populační váhy | součet vah = (3 010 200 + 683 868) × koeficient scénáře + 2 333 762 + 420 880 ve všech scénářích | aritmeticky ano |
+| Součty skupin | součet skupin = celek na 1 Kč ve všech scénářích | ano |
+| Bilance | hrubý = čistý + 1 % správa + 2 % rezerva | ano |
+| Horní mez | výnos ≤ strop × počet osob | ano |
+| Pořadí scénářů | 7,48 < 8,10 < 8,66 mld. | ano |
+| **Dvojí započtení osob** | pracující důchodci jsou v ISPV i v ČSSZ. Výnos tím **není** nadsazen (každý díl příjmu má vlastní hranici, výnos je spíš podhodnocen), ale **počet osob 6,45 mil. je nadsazen** o neznámý počet pracujících důchodců | **neověřitelné** z použitých zdrojů |
+| **OSVČ** | ve výchozím stavu vyloučeny; po zapnutí +0,82 mld. z neověřeného předpokladu (medián zisku 300 000 Kč, σ = 0,9) | **neověřeno**, v aplikaci označeno |
+| **Mzda a základ daně** | ISPV měří hrubou mzdu; u zaměstnanců je od roku 2021 základem daně hrubá mzda, takže pojem sedí. Ale ISPV je v přepočtených osobách a ×12 nadhodnocuje příjem lidí, kteří nepracovali celý rok | **částečně**; nejcitlivější vstup modelu |
+| **Důchody** | průměr starobního důchodu ČSSZ 6/2026 ověřen; průměr invalidních 14 500 Kč je vážený odhad; tvar (lognormála, cv 0,2 a 0,25) je předpoklad. Při hranici 300 000 Kč ročně (25 000 Kč měsíčně) přispívají důchody jen 0,2 mld., takže chyba tvaru má malý dopad. Scénáře důchody **nemění** (počet ani výši), takže rozpětí scénářů jejich nejistotu nezachycuje | částečně |
+| **Konstrukce scénářů** | pesimistický a optimistický scénář kombinují všechny krajní předpoklady najednou (počet ±5 %, růst ±1 p. b., dolní chvost, výběr). Jde o rohy prostoru předpokladů, ne o pravděpodobnostní interval; tvar rozdělení posouvá výnos o dalších −6 až +4 % mimo toto rozpětí | konstrukce ověřena, interpretace v aplikaci opravena v kole 2.0 |
+
+**Co zelené testy nedokazují.** Testy dokazují, že aplikace počítá přesně to, co metodika popisuje. Nedokazují, že vstupy odpovídají skutečnosti. Neověřené vstupy jsou:
+
+- rozdělení příjmů nad P90 (Paretův chvost),
+- celoroční příjem přepočtených osob ISPV,
+- souběhy příjmů,
+- OSVČ,
+- tvar rozdělení důchodů.
+
+Nepřidal jsem žádnou skupinu s vymyšleným počtem, aby výnos vyšel.
+
 ## Reprodukce
 
 ```
-npm install && npm run check   # typová kontrola + 47 jednotkových testů
-npm run audit                  # nezávislý přepočet (Python 3, numpy, scipy)
+npm install && npm run check   # typová kontrola + 55 jednotkových testů
+npm run audit                  # nezávislý přepočet výnosu + referenční případy (Python 3, numpy, scipy)
+npm run reference              # jen referenční případy kalkulačky a celostátní kontroly
 ```

@@ -22,7 +22,8 @@
   function srcLink(s) { return s ? '<a class="src" href="' + esc(s.u) + '" target="_blank" rel="noopener">' + esc(s.t) + "</a>" : ""; }
   function debounce(fn, ms) { var t; return function () { clearTimeout(t); t = setTimeout(fn, ms); }; }
 
-  document.querySelectorAll("[data-legal-date]").forEach(function (el) { el.textContent = P.meta.legalDateLabel; });
+  /* Statické texty v HTML (data-cfg) už obsahují hodnoty; skript je jen srovná s params.js, kdyby se rozešly. */
+  document.querySelectorAll("[data-cfg]").forEach(function (el) { var v = P.meta[el.getAttribute("data-cfg")]; if (typeof v === "string" && v) el.textContent = v; });
 
   /* ---------- stav ---------- */
   var TYPES = [["emp", "Zaměstnanec"], ["self", "OSVČ"], ["pens", "Důchodce"], ["emppens", "Pracující důchodce"], ["none", "Bez příjmu z práce"]];
@@ -115,16 +116,15 @@
   });
 
   var STATUS = {
-    plati: ["Platíte", "fakt"], osvobozen: ["Nárok na osvobození, na žádost", "fakt"], pravdepodobne: ["Pravděpodobně osvobozeni, ověřte", "model"],
+    plati: ["Platíte", "fakt"], osvobozen: ["Nárok na osvobození, na žádost", "fakt"], osvobozenSmysly: ["Zákonné osvobození ze zdravotního důvodu", "fakt"], pravdepodobne: ["Pravděpodobně osvobozeni, ověřte", "model"],
     hranice: ["Na hranici, nelze určit", "model"], neplati: ["Bez přijímače se neplatí", "fakt"]
   };
   function updateHH() {
     var h = household(), c = E.compareHousehold(P, h, st.lp), cur = c.current, lv = c.levy, bo = c.budget.orientation;
-    var dateLbl = st.date < "2026-10-01" ? "30. 9. 2026" : P.meta.legalDateLabel;
     var limitTxt = "Limit osvobození " + kc(cur.limit) + " čistého měsíčně; " + (st.netOn ? "zadaný" : "orientačně odhadnutý") + " čistý příjem domácnosti " + kc(cur.netMonthly) + ".";
     var dCls = lv.diffVsCurrent > 0.5 ? "up" : lv.diffVsCurrent < -0.5 ? "down" : "eq";
     var dTxt = lv.diffVsCurrent > 0.5 ? "více" : lv.diffVsCurrent < -0.5 ? "méně" : "stejně";
-    var stt = STATUS[cur.status];
+    var stt = STATUS[cur.status === "osvobozen" && cur.basis === "smysly" ? "osvobozenSmysly" : cur.status];
     var bigA = cur.status === "hranice" ? kc(cur.monthly) + '<small>nebo 0 Kč měsíčně</small>' : kc(cur.monthly) + "<small>měsíčně</small>";
     var per = st.adults.map(function (a, i) {
       var note = a.type === "none" ? "bez příjmu z práce" : (a.type === "pens" && !st.lp.includePensions) ? "důchod mimo okruh" : "";
@@ -135,8 +135,8 @@
       + '<div class="status s-' + cur.status + '">' + esc(stt[0]) + "</div>"
       + '<div class="res-nums"><span class="res-big">' + bigA + "</span>"
       + '<span class="res-mid">' + (cur.status === "hranice" ? "2 460 Kč nebo 0 Kč" : kc(cur.annual)) + " <small>ročně, přímá platba</small></span></div>"
-      + "<p>" + esc(cur.reason) + (cur.status === "neplati" || (cur.status === "osvobozen" && !st.netOn) ? "" : " " + esc(limitTxt)) + "</p>"
-      + '<p class="src">Právní stav k ' + dateLbl + ", § 4 zák. č. 348/2005 Sb. Kalkulačka nárok nepřiznává, jen ukazuje podmínky.</p></div>"
+      + "<p>" + esc(cur.reason) + (cur.status === "neplati" || cur.basis === "smysly" || (cur.status === "osvobozen" && !st.netOn) ? "" : " " + esc(limitTxt)) + "</p>"
+      + '<p class="src">§ 4 zák. č. 348/2005 Sb., znění účinné od ' + esc(P.meta.effectiveLabel) + "; životní minimum " + (st.date < "2026-10-01" ? "do 30. 9. 2026" : "od " + esc(P.meta.zmEffectiveLabel)) + "; ověřeno " + esc(P.meta.legalDateLabel) + ". Kalkulačka nárok nepřiznává, jen ukazuje podmínky.</p></div>"
 
       + '<div class="res b"><div class="res-h"><b>B · Ze státního rozpočtu</b>' + tag("navrh") + "</div>"
       + '<div class="res-nums"><span class="res-mid">Přímá platba 0 Kč</span><span class="res-mid">Nepřímo: nelze určit</span></div>'
@@ -429,14 +429,14 @@
     ];
     var G = P.groups;
     function v(x) { var val = x.value; if (typeof val === "number") return val < 1 ? pct(val, 1) : num(val) + (x.unit ? " " + x.unit.replace("Kč/měs.", "Kč/měs.") : ""); return esc(typeof val === "object" ? JSON.stringify(val) : String(val)); }
-    var html = '<p class="small">Verze parametrů ' + esc(P.meta.version) + ", právní stav " + esc(P.meta.legalDateLabel) + ". " + esc(P.meta.dataNote) + "</p>"
+    var html = '<p class="small">Verze parametrů ' + esc(P.meta.version) + ". Legislativa ověřena k " + esc(P.meta.legalDateLabel) + " (znění § 4 a § 6 zák. č. 348/2005 Sb. účinné od " + esc(P.meta.effectiveLabel) + ", životní minimum od " + esc(P.meta.zmEffectiveLabel) + "); data naposledy zkontrolována " + esc(P.meta.dataCheckedLabel) + ". " + esc(P.meta.dataNote) + "</p>"
       + "<h4>Klíčové parametry</h4><table class=\"ptab\"><thead><tr><th>Údaj</th><th>Hodnota</th><th>Typ</th><th class=\"hide-m\">Zdroj a poznámka</th></tr></thead><tbody>"
       + rows.map(function (r) { var x = r[1]; return "<tr><td>" + esc(r[0]) + (x.date ? '<br /><span class="small">' + esc(x.date) + "</span>" : "") + '</td><td class="v">' + v(x) + "</td><td>" + tag(x.cat) + '</td><td class="hide-m">' + srcLink(x.src) + (x.note ? '<br /><span class="small">' + esc(x.note) + "</span>" : "") + "</td></tr>"; }).join("")
       + Object.keys(G).map(function (k) { var g = G[k]; return "<tr><td>" + esc(g.label) + '<br /><span class="small">' + g.year + '</span></td><td class="v">' + num(g.count) + " osob" + (g.mean ? "<br />průměr " + kc(g.mean) : "") + (g.medianAnnual ? "<br />medián " + kc(g.medianAnnual) + "/rok" : "") + "</td><td>" + tag(g.cat) + '</td><td class="hide-m">' + srcLink(g.src) + (g.note ? '<br /><span class="small">' + esc(g.note) + "</span>" : "") + "</td></tr>"; }).join("")
       + "</tbody></table>"
       + "<h4>Jak se počítá</h4><ul>"
-      + "<li><b>Osvobození (§ 4 zák. č. 348/2005 Sb.):</b> zdravotní důvod jen při úplné nebo praktické slepotě obou očí nebo oboustranné úplné či praktické hluchotě, a to pokud dotyčný žije sám nebo jen s osobami se stejným důvodem (nezaopatřené děti se nepočítají); průkaz ZTP/P je doklad, ne podmínka. Příjmový důvod: čistý příjem domácnosti za uplynulé kalendářní čtvrtletí pod 2,15násobkem životního minima, příjmy podle zák. č. 110/2006 Sb.; na žádost, nejdéle 6 měsíců. Z hrubého příjmu kalkulačka nárok nerozhoduje: pod 85 % limitu ukáže „pravděpodobně“, mezi 85 a 115 % „nelze určit“.</li>"
-      + "<li><b>Dnešní poplatek:</b> 150 + 55 Kč měsíčně jednou za domácnost. Osvobození, pokud je čistý měsíční příjem domácnosti pod 2,15násobkem životního minima (podle složení domácnosti a data právního stavu), při ZTP/P se zrakovým nebo sluchovým postižením a bez zařízení schopného příjmu. Čistý příjem je orientační (pojistné 11,6 %, daň 15 % minus sleva 2 570 Kč, bez slev na děti); lze zadat přesně.</li>"
+      + "<li><b>Osvobození (§ 4 zák. č. 348/2005 Sb.):</b> zdravotní důvod (odst. 1 písm. g) jen při úplné nebo praktické slepotě obou očí nebo oboustranné úplné či praktické hluchotě, a to pokud dotyčný žije osaměle nebo jen s osobami se stejným důvodem. Nárok vzniká ze zákona od měsíce po vzniku důvodu, bez žádosti a bez omezení na 6 měsíců; kdo je v evidenci, důvod doloží. Že se nezletilé a nezaopatřené děti nezapočítávají, je výklad ČT, zákon to výslovně neříká; kalkulačka proto u domácnosti s dětmi ukáže „pravděpodobně“. Průkaz ZTP/P (u neslyšících ZTP) je podle ČT doklad; sám o sobě nárok nezakládá a ne každý držitel ZTP/P splňuje zákonnou podmínku. Příjmový důvod: čistý příjem domácnosti za uplynulé kalendářní čtvrtletí pod 2,15násobkem životního minima, příjmy podle zák. č. 110/2006 Sb.; na žádost, nejdéle 6 měsíců. Z hrubého příjmu kalkulačka nárok nerozhoduje: pod 85 % limitu ukáže „pravděpodobně“, mezi 85 a 115 % „nelze určit“.</li>"
+      + "<li><b>Dnešní poplatek:</b> 150 + 55 Kč měsíčně jednou za domácnost. Osvobození, pokud je čistý měsíční příjem domácnosti pod 2,15násobkem životního minima (podle složení domácnosti a data právního stavu), ze zdravotního důvodu (viz výše) a bez zařízení schopného příjmu. Čistý příjem je orientační (pojistné 11,6 %, daň 15 % minus sleva 2 570 Kč, bez slev na děti); lze zadat přesně.</li>"
       + "<li><b>Rozpočtový model:</b> přímá platba 0 Kč. Přepočet na obyvatele a domácnost je jen ilustrace velikosti částky, ne platba jednotlivce. Osobní dopad financování z obecných daní nelze spolehlivě určit bez znalosti konkrétní rozpočtové a daňové konstrukce (které daně, dluh nebo úspory by výdaj kryly).</li>"
       + "<li><b>Odvod:</b> pro každou osobu zvlášť min(strop, sazba × (roční hrubý příjem − hranice)), u varianty „z celého příjmu“ sazba × příjem nad hranicí. Domácnost = součet osob v okruhu.</li>"
       + "<li><b>Celostátní simulace:</b> syntetická populace ze zveřejněných kvantilů ISPV 2025 (log-lineární interpolace, lineární dolní chvost, Paretův horní chvost kalibrovaný na zveřejněný průměr), přepočteno růstem mezd 2026. Důchody lognormálně kolem průměru ČSSZ. Rozpětí scénářů (ne interval spolehlivosti): " + esc(P.sim.scenarioNote) + "</li>"
